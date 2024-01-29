@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: ENC(wEolLcEd0JsyUAZ+fI2kdORHn8Jy1m5XIv4O4Vi+osY99pnq6OjQoq6cA/YMxf0XOe/7VQl9xTXOkriCKIdjVw==)
+    username: ENC(0hEgKCaUbJNV2ahkEYg5IpctJu6JijZW)
+    password: ENC(+ooqAAaQf/Xt3Qq6IVT7uPLFtiOgYaC4)
+
+  jpa:
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+    show-sql: true
+
+oauth:
+  kakao:
+    client-id: ENC(EsfXRVa2XsZTVTJruQdsj0B6vAA4GfSfDJ6Ow60HGBjP2lniOC7Q383lCKJutTie)
+    client-secret: ENC(EsfXRVa2XsZTVTJruQdsj0B6vAA4GfSfDJ6Ow60HGBjP2lniOC7Q383lCKJutTie)
+    oauth-endpoint-uri: https://kauth.kakao.com/oauth/authorize
+    oauth-token-issue-uri: https://kauth.kakao.com/oauth/token
+    token-issue-uri: https://api.itthatcat.xyz/auth/kakao/token
+    oauth-userinfo-uri: https://kapi.kakao.com/v2/user/me
+    response-type: code
