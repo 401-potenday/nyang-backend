@@ -1,4 +1,4 @@
-package potenday.app.api.common;
+package potenday.app.global.error;
 
 public record ErrorContent(
     String code,
