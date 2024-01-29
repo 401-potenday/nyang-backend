@@ -13,6 +13,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import potenday.app.api.auth.TokenRequest;
+import potenday.app.domain.auth.AuthenticationService;
 
 @Component
 public class KakaoOAuthClient implements OAuthClient{
@@ -22,7 +23,7 @@ public class KakaoOAuthClient implements OAuthClient{
   private final ObjectMapper objectMapper;
 
   public KakaoOAuthClient(KakaoProperties kakaoProperties, RestTemplateBuilder restTemplate,
-      ObjectMapper objectMapper) {
+      ObjectMapper objectMapper, AuthenticationService authenticationService) {
     this.kakaoProperties = kakaoProperties;
     this.restTemplate = restTemplate.build();
     this.objectMapper = objectMapper;
@@ -30,12 +31,13 @@ public class KakaoOAuthClient implements OAuthClient{
 
   @Override
   public OAuthMember findOAuthMember(TokenRequest tokenRequest) {
-    OAuthTokenResponse oAuthTokenResponse = getOAuthToken(tokenRequest.getCode());
-    return getOAuthMember(oAuthTokenResponse.getAccessToken());
+    OAuthTokenResponse oAuthTokenResponse = requestKakaoToken(tokenRequest.getCode());
+    OAuthMember oAuthMember = requestKakaoMember(oAuthTokenResponse.getAccessToken());
+    return oAuthMember;
   }
 
   @Override
-  public OAuthTokenResponse getOAuthToken(String code) {
+  public OAuthTokenResponse requestKakaoToken(String code) {
     // set header
     HttpHeaders headers = tokenRequestHeaders();
 
@@ -71,7 +73,7 @@ public class KakaoOAuthClient implements OAuthClient{
   }
 
   @Override
-  public OAuthMember getOAuthMember(String accessToken) {
+  public OAuthMember requestKakaoMember(String accessToken) {
     // set header
     HttpHeaders headers = oAuthUserRequestHeader(accessToken);
 
@@ -89,9 +91,12 @@ public class KakaoOAuthClient implements OAuthClient{
   private OAuthMember createOAuthMember(ResponseEntity<String> response) {
     try {
       JsonNode jsonNode = objectMapper.readTree(response.getBody());
+      System.out.println(response.getBody());
       long id = jsonNode.get("id").asLong();
+      String nickname = jsonNode.get("kakao_account").get("profile").get("nickname").asText();
 
       return OAuthMember.builder()
+          .nickname(nickname)
           .id(id)
           .build();
 
@@ -108,7 +113,7 @@ public class KakaoOAuthClient implements OAuthClient{
 
   private static MultiValueMap<String, String> oAuthUserRequestBody() {
     MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-    map.add("property_keys", "[\"kakao_account.email\"]");
+    map.add("property_keys", "[\"kakao_account.profile\"]");
     return map;
   }
 

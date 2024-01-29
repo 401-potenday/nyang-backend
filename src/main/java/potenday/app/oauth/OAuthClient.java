@@ -6,7 +6,7 @@ public interface OAuthClient {
 
   OAuthMember findOAuthMember(TokenRequest tokenRequest);
 
-  OAuthTokenResponse getOAuthToken(String code);
+  OAuthTokenResponse requestKakaoToken(String code);
 
-  OAuthMember getOAuthMember(String accessToken);
+  OAuthMember requestKakaoMember(String accessToken);
 }

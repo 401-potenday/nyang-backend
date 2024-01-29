@@ -1,17 +1,18 @@
-package potenday.app.domain.common;
+package potenday.app.domain.auth;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import java.time.LocalDateTime;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import potenday.app.domain.BaseTimeEntity;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "TOKEN")
 public class Token extends BaseTimeEntity {
 
   @Id
@@ -29,10 +30,4 @@ public class Token extends BaseTimeEntity {
 
   @Column(name = "oauth_user_uid", nullable = false)
   private String socialUid;
-
-  @Column(name = "oauth_token_issued_at", nullable = false, columnDefinition = "NOW()")
-  private LocalDateTime oauthRefreshIssuedAt;
-
-  @Column(name = "app_refresh_issued_at", nullable = false, columnDefinition = "NOW()")
-  private LocalDateTime appRefreshIssuedAt;
 }

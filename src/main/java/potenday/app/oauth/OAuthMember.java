@@ -17,9 +17,9 @@ public class OAuthMember {
 
   public User toUser(String userOAuthProvider) {
     return User.builder()
-        .id(id)
+        .oAuthUid(String.valueOf(id))
         .nickname(nickname)
-        .userOAuthProvider(UserOAuthProvider.valueOf(userOAuthProvider))
+        .userOAuthProvider(UserOAuthProvider.from(userOAuthProvider))
         .build();
   }
 

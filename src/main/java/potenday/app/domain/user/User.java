@@ -52,4 +52,12 @@ public class User extends BaseTimeEntity {
     this.userOAuthProvider = userOAuthProvider;
     this.isWithDraw = false;
   }
+
+  public String getNickname() {
+    return nickname;
+  }
+
+  public Long getId() {
+    return id;
+  }
 }
