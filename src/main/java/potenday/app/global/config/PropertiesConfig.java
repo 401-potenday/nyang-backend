@@ -2,10 +2,9 @@ package potenday.app.global.config;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import potenday.app.global.property.KakaoProperties;
-import potenday.app.global.property.NaverProperties;
+import potenday.app.oauth.KakaoProperties;
 
 @Configuration
-@EnableConfigurationProperties({KakaoProperties.class, NaverProperties.class})
+@EnableConfigurationProperties({KakaoProperties.class})
 public class PropertiesConfig {
 }
