@@ -4,8 +4,8 @@ import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import potenday.app.api.common.ApiResponse;
-import potenday.app.api.common.ErrorCode;
-import potenday.app.api.common.ErrorContent;
+import potenday.app.global.error.ErrorCode;
+import potenday.app.global.error.ErrorContent;
 import potenday.app.api.common.PageContent;
 
 @RestController

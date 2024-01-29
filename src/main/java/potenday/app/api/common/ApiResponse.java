@@ -2,6 +2,7 @@ package potenday.app.api.common;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import potenday.app.global.error.ErrorContent;
 
 @JsonInclude(value = Include.NON_NULL)
 public record ApiResponse<T>(
