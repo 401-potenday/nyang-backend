@@ -1,5 +1,5 @@
 package potenday.app.domain.user;
 
-public enum OAuthProvider {
+public enum UserOAuthProvider {
   NAVER, KAKAO
 }

@@ -33,7 +33,7 @@ public class User extends BaseTimeEntity {
 
   @Enumerated(value = EnumType.STRING)
   @Column(name = "provider", nullable = false, columnDefinition = "CHAR(10)")
-  private OAuthProvider oAuthProvider;
+  private UserOAuthProvider userOAuthProvider;
 
   @Column(name = "is_withdraw", columnDefinition = "TINYINT")
   private boolean isWithDraw = false;
@@ -45,11 +45,11 @@ public class User extends BaseTimeEntity {
   private String picUrl;
 
   @Builder
-  public User(final Long id, final String nickname, final String oAuthUid, final OAuthProvider oAuthProvider) {
+  public User(final Long id, final String nickname, final String oAuthUid, final UserOAuthProvider userOAuthProvider) {
     this.id = id;
     this.nickname = nickname;
     this.oAuthUid = oAuthUid;
-    this.oAuthProvider = oAuthProvider;
+    this.userOAuthProvider = userOAuthProvider;
     this.isWithDraw = false;
   }
 }
