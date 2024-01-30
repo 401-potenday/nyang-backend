@@ -13,11 +13,13 @@ import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 import potenday.app.domain.BaseTimeEntity;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "USERS")
+@DynamicUpdate
 public class User extends BaseTimeEntity {
 
   @Id
@@ -68,5 +70,11 @@ public class User extends BaseTimeEntity {
 
   public String getoAuthUid() {
     return oAuthUid;
+  }
+
+  public void update(String nickname) {
+    if (this.nickname != nickname) {
+      this.nickname = nickname;
+    }
   }
 }
