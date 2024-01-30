@@ -14,7 +14,7 @@ import potenday.app.domain.auth.AuthenticationTokenService;
 import potenday.app.domain.auth.TokenProvider;
 
 @Configuration
-@Profile("dev")
+@Profile({"local", "dev"})
 public class WebConfig implements WebMvcConfigurer {
 
   private final AuthenticationTokenService authenticationTokenService;
