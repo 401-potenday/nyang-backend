@@ -12,7 +12,7 @@ public enum ErrorCode {
   // 유저 닉네임
   U001("U001", "이미 사용 중인 닉네임 입니다.", HttpStatus.CONFLICT),
   U002("U002", "닉네임은 3 ~ 15자 사이 이어야 합니다.", HttpStatus.BAD_REQUEST),
-  U003("U003", "닉네임에는 비어있을 수 없습니다.", HttpStatus.BAD_REQUEST),
+  U003("U003", "닉네임에는 공백이 있을 수 없습니다.", HttpStatus.BAD_REQUEST),
   U004("U004", "닉네임을 입력하세요", HttpStatus.BAD_REQUEST),
   U005("U005", "한글과 영문 문자만 허용됩니다.", HttpStatus.BAD_REQUEST),
 
