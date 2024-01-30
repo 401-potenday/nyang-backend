@@ -15,6 +15,9 @@ spring:
 
     show-sql: true
 
+client:
+  redirect-uri: "http://localhost:8080"
+
 oauth:
   kakao:
     client-id: ENC(EsfXRVa2XsZTVTJruQdsj0B6vAA4GfSfDJ6Ow60HGBjP2lniOC7Q383lCKJutTie)
