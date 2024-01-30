@@ -15,9 +15,6 @@ spring:
 
     show-sql: true
 
-client:
-  redirect-uri: "http://localhost:8080"
-
 oauth:
   kakao:
     client-id: ENC(EsfXRVa2XsZTVTJruQdsj0B6vAA4GfSfDJ6Ow60HGBjP2lniOC7Q383lCKJutTie)
@@ -32,3 +29,6 @@ oauth:
 sentry:
   dsn: https://25cf3f99285ebea612c50d5db8be16c1@o4506655666864128.ingest.sentry.io/4506655671844864
   traces-sample-rate: 1.0
+
+
+client.redirect-uri: http://localhost:8080

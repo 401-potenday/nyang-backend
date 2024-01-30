@@ -27,7 +27,7 @@ public class AuthenticationService {
     User user = findUser(oAuthMember, oauthProvider);
     String accessToken = tokenProvider.issueAccessToken(user.getId());
     String refreshToken = tokenProvider.issueRefreshToken(user.getId());
-    return new LoginResponse(accessToken, refreshToken, user.getNickname());
+    return new LoginResponse(accessToken, refreshToken, user.getoAuthUid());
   }
 
   @Transactional

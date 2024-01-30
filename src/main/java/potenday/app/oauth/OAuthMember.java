@@ -18,14 +18,12 @@ public class OAuthMember {
   public User toUser(String userOAuthProvider) {
     return User.builder()
         .oAuthUid(String.valueOf(id))
-        .nickname(nickname)
         .userOAuthProvider(UserOAuthProvider.from(userOAuthProvider))
         .build();
   }
 
   @Builder
-  public OAuthMember(final long id, final String nickname) {
+  public OAuthMember(final long id) {
     this.id = id;
-    this.nickname = nickname;
   }
 }

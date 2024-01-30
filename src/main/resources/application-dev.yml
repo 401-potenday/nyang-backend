@@ -15,9 +15,6 @@ spring:
 
     show-sql: true
 
-client:
-  redirect-uri: "http://localhost:3000"
-
 oauth:
   kakao:
     client-id: ENC(EsfXRVa2XsZTVTJruQdsj0B6vAA4GfSfDJ6Ow60HGBjP2lniOC7Q383lCKJutTie)
@@ -27,3 +24,5 @@ oauth:
     token-issue-uri: https://api.itthatcat.xyz/auth/kakao/token
     oauth-userinfo-uri: https://kapi.kakao.com/v2/user/me
     response-type: code
+
+client.redirect-uri: http://localhost:3000

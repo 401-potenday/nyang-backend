@@ -93,10 +93,8 @@ public class KakaoOAuthClient implements OAuthClient{
       JsonNode jsonNode = objectMapper.readTree(response.getBody());
       System.out.println(response.getBody());
       long id = jsonNode.get("id").asLong();
-      String nickname = jsonNode.get("kakao_account").get("profile").get("nickname").asText();
 
       return OAuthMember.builder()
-          .nickname(nickname)
           .id(id)
           .build();
 

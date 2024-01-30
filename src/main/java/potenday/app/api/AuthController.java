@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import potenday.app.api.auth.LoginResponse;
 import potenday.app.api.auth.TokenRequest;
 import potenday.app.domain.auth.AuthenticationService;
+import potenday.app.domain.user.UserService;
 import potenday.app.oauth.OAuthClient;
 import potenday.app.oauth.OAuthMember;
 import potenday.app.oauth.OAuthUri;
@@ -25,15 +26,17 @@ public class AuthController {
   private final OAuthUri oAuthUri;
   private final OAuthClient oAuthClient;
   private final AuthenticationService authenticationService;
+  private final UserService userService;
 
-  @Value("${client.redirect-url}")
-  private String recirectUri;
+  @Value("${client.redirect-uri}")
+  private String redirectUri;
 
   public AuthController(OAuthUri oAuthUri, OAuthClient oAuthClient,
-      AuthenticationService authenticationService) {
+      AuthenticationService authenticationService, UserService userService) {
     this.oAuthUri = oAuthUri;
     this.oAuthClient = oAuthClient;
     this.authenticationService = authenticationService;
+    this.userService = userService;
   }
 
   @GetMapping("/auth/{oAuthProvider}/signin")
@@ -57,7 +60,7 @@ public class AuthController {
 
     setCookie(httpServletResponse, loginResponse);
     return ResponseEntity.status(302)
-        .location(URI.create(recirectUri))
+        .location(URI.create(redirectUri))
         .build();
   }
 

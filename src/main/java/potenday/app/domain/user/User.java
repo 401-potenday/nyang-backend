@@ -25,7 +25,7 @@ public class User extends BaseTimeEntity {
   private Long id;
 
   @Size(max = 15)
-  @Column(name = "nickname", nullable = false, columnDefinition = "VARCHAR(15)")
+  @Column(name = "nickname", columnDefinition = "VARCHAR(15)")
   private String nickname;
 
   @Column(name = "oauth_user_uid", nullable = false)
@@ -44,13 +44,18 @@ public class User extends BaseTimeEntity {
   @Column(name = "pic_url", columnDefinition = "VARCHAR(255)")
   private String picUrl;
 
+  @Enumerated(value = EnumType.STRING)
+  @Column(name = "activate_status", columnDefinition = "CHAR(10)")
+  private UserActivateStatus activateStatus;
+
   @Builder
-  public User(final Long id, final String nickname, final String oAuthUid, final UserOAuthProvider userOAuthProvider) {
+  public User(final Long id, final String oAuthUid,
+      final UserOAuthProvider userOAuthProvider) {
     this.id = id;
-    this.nickname = nickname;
     this.oAuthUid = oAuthUid;
     this.userOAuthProvider = userOAuthProvider;
     this.isWithDraw = false;
+    this.activateStatus = UserActivateStatus.PENDING;
   }
 
   public String getNickname() {
@@ -59,5 +64,9 @@ public class User extends BaseTimeEntity {
 
   public Long getId() {
     return id;
+  }
+
+  public String getoAuthUid() {
+    return oAuthUid;
   }
 }
