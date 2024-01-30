@@ -13,7 +13,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import potenday.app.api.auth.TokenRequest;
-import potenday.app.domain.auth.AuthenticationService;
+import potenday.app.domain.auth.OAuthAuthenticationService;
 
 @Component
 public class KakaoOAuthClient implements OAuthClient{
@@ -23,7 +23,7 @@ public class KakaoOAuthClient implements OAuthClient{
   private final ObjectMapper objectMapper;
 
   public KakaoOAuthClient(KakaoProperties kakaoProperties, RestTemplateBuilder restTemplate,
-      ObjectMapper objectMapper, AuthenticationService authenticationService) {
+      ObjectMapper objectMapper, OAuthAuthenticationService OAuthAuthenticationService) {
     this.kakaoProperties = kakaoProperties;
     this.restTemplate = restTemplate.build();
     this.objectMapper = objectMapper;
