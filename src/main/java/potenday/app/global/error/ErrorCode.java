@@ -15,6 +15,7 @@ public enum ErrorCode {
   U003("U003", "닉네임에는 공백이 있을 수 없습니다.", HttpStatus.BAD_REQUEST),
   U004("U004", "닉네임을 입력하세요", HttpStatus.BAD_REQUEST),
   U005("U005", "한글과 영문 문자만 허용됩니다.", HttpStatus.BAD_REQUEST),
+  U006("U006", "존재하지 않는 유저입니다.", HttpStatus.NOT_FOUND),
 
 
   // 정의되지 않는 에러

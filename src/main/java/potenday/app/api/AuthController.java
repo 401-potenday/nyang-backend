@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import potenday.app.api.auth.LoginResponse;
 import potenday.app.api.auth.TokenRequest;
-import potenday.app.domain.auth.AuthenticationService;
+import potenday.app.domain.auth.OAuthAuthenticationService;
 import potenday.app.domain.user.UserService;
 import potenday.app.oauth.OAuthClient;
 import potenday.app.oauth.OAuthMember;
@@ -25,17 +25,17 @@ public class AuthController {
 
   private final OAuthUri oAuthUri;
   private final OAuthClient oAuthClient;
-  private final AuthenticationService authenticationService;
+  private final OAuthAuthenticationService OAuthAuthenticationService;
   private final UserService userService;
 
   @Value("${client.redirect-uri}")
   private String redirectUri;
 
   public AuthController(OAuthUri oAuthUri, OAuthClient oAuthClient,
-      AuthenticationService authenticationService, UserService userService) {
+      OAuthAuthenticationService OAuthAuthenticationService, UserService userService) {
     this.oAuthUri = oAuthUri;
     this.oAuthClient = oAuthClient;
-    this.authenticationService = authenticationService;
+    this.OAuthAuthenticationService = OAuthAuthenticationService;
     this.userService = userService;
   }
 
@@ -56,7 +56,7 @@ public class AuthController {
     OAuthMember oAuthMember = oAuthClient.findOAuthMember(tokenRequest);
 
     // 2. 토큰 생성
-    LoginResponse loginResponse = authenticationService.generateToken(oAuthMember, oauthProvider);
+    LoginResponse loginResponse = OAuthAuthenticationService.generateToken(oAuthMember, oauthProvider);
 
     setCookie(httpServletResponse, loginResponse);
     return ResponseEntity.status(302)

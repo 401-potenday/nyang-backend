@@ -16,4 +16,8 @@ public class UserNicknameRequest {
   @Pattern(regexp = "\\S+", message = "U003", groups = NotWhiteSpaceGroup.class)
   @Size(min = 3, max = 15, message = "U002", groups = SizeGroup.class)
   private String nickname;
+
+  public String toNickname() {
+    return nickname;
+  }
 }

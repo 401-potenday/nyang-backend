@@ -1,10 +1,14 @@
 package potenday.app.domain.auth;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import jakarta.servlet.http.HttpServletRequest;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -55,6 +59,17 @@ public class TokenProvider {
     return generate(userId, TokenType.REFRESH);
   }
 
+  public boolean isValidToken(String token) {
+    try {
+      JWTVerifier verifier = JWT.require(AL)
+          .build();
+      verifier.verify(token);
+      return true;
+    } catch (JWTVerificationException exception){
+      return false;
+    }
+  }
+
   public long parseUserId(String token) {
     return JWT.decode(token).getClaim(UID).asLong();
   }
@@ -64,5 +79,12 @@ public class TokenProvider {
       case ACCESS -> this.jwtProperties.getTokenLifeTime();
       default -> this.jwtProperties.getTokenRefreshTime();
     };
+  }
+
+  public String parseTokenFromHeader(HttpServletRequest httpServletRequest) {
+    final String authorization = httpServletRequest.getHeader("Authorization");
+    if (Objects.isNull(authorization) || !authorization.startsWith("Bearer")) {
+    }
+    return authorization.substring(7);
   }
 }
