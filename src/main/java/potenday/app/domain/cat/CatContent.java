@@ -1,6 +1,7 @@
 package potenday.app.domain.cat;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -14,6 +15,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import potenday.app.domain.BaseTimeEntity;
+import potenday.app.domain.cat.status.CatFriends;
+import potenday.app.domain.cat.status.CatNeuter;
+import potenday.app.domain.cat.status.CatPersonality;
+import potenday.app.domain.cat.vo.Coordinate;
+import potenday.app.domain.cat.vo.JibunAddress;
 
 @Getter
 @Entity
@@ -29,45 +35,25 @@ public class CatContent extends BaseTimeEntity {
   private String name;
 
   @Column(name = "has_friends", nullable = false, columnDefinition = "CHAR(10)")
-  private String hasFriends;
+  @Enumerated(value = EnumType.STRING)
+  private CatFriends hasFriends;
 
   @Column(name = "description", nullable = false, columnDefinition = "VARCHAR(255)")
   private String description;
 
-  @Column(name = "personality",nullable = false, columnDefinition = "CHAR(20)")
+  @Column(name = "personality", nullable = false, columnDefinition = "CHAR(20)")
   @Enumerated(value = EnumType.STRING)
   private CatPersonality catPersonality;
-
-  @Column(name = "lat", nullable = false)
-  private double lat;
-
-  @Column(name = "lon", nullable = false)
-  private double lon;
-
-  @Column(name = "road_address")
-  private String roadAddress;
-
-  @Column(name = "jibun_addr_name")
-  private String jibunAddrName;
-
-  @Column(name = "jibun_main_addr_no")
-  private String jibunMainAddrNo;
-
-  @Column(name = "jibun_sido")
-  private String jibunSido;
-
-  @Column(name = "jibun_sigungu")
-  private String jibunSigungu;
-
-  @Column(name = "jibun_dong")
-  private String jibunDong;
-
-  @Column(name = "jibun_sub_addr_no")
-  private String jibunSubAddrNo;
 
   @Column(name = "neuter", nullable = false, columnDefinition = "CHAR(10)")
   @Enumerated(value = EnumType.STRING)
   private CatNeuter neuter;
+
+  @Embedded
+  private JibunAddress jibunAddress;
+
+  @Embedded
+  private Coordinate coordinate;
 
   @Column(name = "user_id")
   private Long userId;
@@ -79,27 +65,23 @@ public class CatContent extends BaseTimeEntity {
   private boolean isDeleted;
 
   @Builder
-  public CatContent(final Long id, final String name, final String hasFriends,
-      final String description,
-      final String catPersonalityCode, final double lat, final double lon,
-      final String roadAddress,
-      final String jibunAddrName, final String jibunMainAddrNo, final String jibunSido,
-      final String jibunSigungu,
-      final String jibunDong, final String jibunSubAddrNo, final String neuter) {
+  public CatContent(final Long id, final String name, final CatFriends hasFriends, final String description,
+      final CatPersonality catPersonality, final CatNeuter neuter, final JibunAddress jibunAddress,
+      final Coordinate coordinate) {
     this.id = id;
     this.name = name;
     this.hasFriends = hasFriends;
     this.description = description;
-    this.catPersonality = CatPersonality.from(catPersonalityCode);
-    this.lat = lat;
-    this.lon = lon;
-    this.roadAddress = roadAddress;
-    this.jibunAddrName = jibunAddrName;
-    this.jibunMainAddrNo = jibunMainAddrNo;
-    this.jibunSido = jibunSido;
-    this.jibunSigungu = jibunSigungu;
-    this.jibunDong = jibunDong;
-    this.jibunSubAddrNo = jibunSubAddrNo;
-    this.neuter = CatNeuter.from(neuter);
+    this.catPersonality = catPersonality;
+    this.neuter = neuter;
+    this.jibunAddress = jibunAddress;
+    this.coordinate = coordinate;
+  }
+
+  public void setOwner(final long userId) {
+    if (this.userId != null && this.userId != userId) {
+      return; // 이미 있는 사용자인 경우 처리하지 않음. 예외 처리
+    }
+    this.userId = userId;
   }
 }

@@ -72,9 +72,18 @@ public class User extends BaseTimeEntity {
     return oAuthUid;
   }
 
-  public void update(String nickname) {
+  public void updateNickname(String nickname) {
     if (this.nickname != nickname) {
       this.nickname = nickname;
+      setActive();
     }
+  }
+
+  private void setActive() {
+    this.activateStatus = UserActivateStatus.ACTIVATE;
+  }
+
+  public boolean active() {
+    return activateStatus == UserActivateStatus.ACTIVATE;
   }
 }

@@ -1,4 +1,4 @@
-package potenday.app.domain.cat;
+package potenday.app.domain.cat.status;
 
 import java.util.Arrays;
 import java.util.List;
