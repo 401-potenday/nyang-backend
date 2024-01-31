@@ -1,14 +1,19 @@
 package potenday.app.api.auth;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
-@NoArgsConstructor
+@AllArgsConstructor
 public class TokenRequest {
 
+  @NotNull(message = "L003")
+  @NotEmpty(message = "L003")
   private String code;
-  private String state;
+
+  @NotNull(message = "L004")
+  @NotEmpty(message = "L004")
+  private String redirectUri;
 }

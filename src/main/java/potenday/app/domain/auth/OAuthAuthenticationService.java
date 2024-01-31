@@ -3,7 +3,7 @@ package potenday.app.domain.auth;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import potenday.app.api.auth.LoginResponse;
+import potenday.app.api.auth.AccessRefreshTokenResponse;
 import potenday.app.domain.user.User;
 import potenday.app.domain.user.UserRepository;
 import potenday.app.oauth.OAuthMember;
@@ -23,16 +23,20 @@ public class OAuthAuthenticationService {
     this.tokenProvider = tokenProvider;
   }
 
-  public LoginResponse generateToken(OAuthMember oAuthMember, String oauthProvider) {
+
+  public AccessRefreshTokenResponse generateAccessRefreshToken(OAuthMember oAuthMember, String oauthProvider) {
     User user = findUser(oAuthMember, oauthProvider);
     String accessToken = tokenProvider.issueAccessToken(user.getId());
     String refreshToken = tokenProvider.issueRefreshToken(user.getId());
-    return new LoginResponse(accessToken, refreshToken, user.getoAuthUid());
+    if (user.getNickname() == null) {
+      return AccessRefreshTokenResponse.newUser(accessToken, refreshToken);
+    }
+    return AccessRefreshTokenResponse.of(accessToken, refreshToken, user.getNickname());
   }
 
   @Transactional
   public User findUser(OAuthMember oAuthMember, String oauthProvider) {
-    Optional<User> user = userRepository.findUser(String.valueOf(oAuthMember.getId()));
+    Optional<User> user = userRepository.findOauthUser(oAuthMember.oauthUid());
     if (!user.isPresent()) {
       return userRepository.save(oAuthMember.toUser(oauthProvider));
     }

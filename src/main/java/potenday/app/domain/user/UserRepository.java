@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface UserRepository extends JpaRepository<User, Long> {
 
   @Query(value = "select u from User u where u.oAuthUid = :oauthUid")
-  Optional<User> findUser(String oauthUid);
+  Optional<User> findOauthUser(String oauthUid);
 
   boolean existsByNickname(String nickname);
 

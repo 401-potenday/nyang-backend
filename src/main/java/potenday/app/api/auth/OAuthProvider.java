@@ -26,4 +26,7 @@ public enum OAuthProvider {
     return result;
   }
 
+  public String getProviderName() {
+    return providerName;
+  }
 }
