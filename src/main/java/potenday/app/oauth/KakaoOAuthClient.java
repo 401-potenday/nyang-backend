@@ -91,18 +91,6 @@ public class KakaoOAuthClient implements OAuthClient {
     return map;
   }
 
-  private OAuthMember createOAuthMember(ResponseEntity<String> response) {
-    try {
-      JsonNode jsonNode = objectMapper.readTree(response.getBody());
-      System.out.println(response.getBody());
-      long id = jsonNode.get("id").asLong();
-      return OAuthMember.from(String.valueOf(id));
-
-    } catch (JsonProcessingException e) {
-      throw new RuntimeException(e);
-    }
-  }
-
   private ResponseEntity<String> kakaoUserRequest(
       HttpEntity<MultiValueMap<String, String>> requestEntity) {
     String url = kakaoProperties.getOauthUserInfoUri();

@@ -1,8 +1,8 @@
 package potenday.app.domain.auth;
 
+import jakarta.transaction.Transactional;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import potenday.app.api.auth.AccessRefreshTokenResponse;
 import potenday.app.domain.user.User;
 import potenday.app.domain.user.UserRepository;
@@ -12,13 +12,11 @@ import potenday.app.oauth.OAuthMember;
 @Service
 public class OAuthAuthenticationService {
 
-  private final TokenRepository tokenRepository;
   private final UserRepository userRepository;
   private final TokenProvider tokenProvider;
 
-  public OAuthAuthenticationService(TokenRepository tokenRepository, UserRepository userRepository,
+  public OAuthAuthenticationService(UserRepository userRepository,
       TokenProvider tokenProvider) {
-    this.tokenRepository = tokenRepository;
     this.userRepository = userRepository;
     this.tokenProvider = tokenProvider;
   }
@@ -37,7 +35,7 @@ public class OAuthAuthenticationService {
   @Transactional
   public User findUser(OAuthMember oAuthMember, String oauthProvider) {
     Optional<User> user = userRepository.findOauthUser(oAuthMember.oauthUid());
-    if (!user.isPresent()) {
+    if (user.isEmpty()) {
       return userRepository.save(oAuthMember.toUser(oauthProvider));
     }
     return user.get();
