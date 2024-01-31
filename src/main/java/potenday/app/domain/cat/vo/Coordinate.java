@@ -4,13 +4,15 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class GeoLocation {
+public class Coordinate {
 
-  private final static int MIN_DECIMAL_PLACES = 5;
+  private static final int MIN_DECIMAL_PLACES = 5;
   private static final double MIN_LATITUDE = -90.0;
   private static final double MAX_LATITUDE = 90.0;
   private static final double MIN_LONGITUDE = -180.0;
@@ -23,7 +25,7 @@ public class GeoLocation {
   private double lon;
 
   @Builder
-  public GeoLocation(final double lat, final double lon) {
+  public Coordinate(final double lat, final double lon) {
     validateGeolocationRange(lat, lon);
     this.lat = lat;
     this.lon = lon;

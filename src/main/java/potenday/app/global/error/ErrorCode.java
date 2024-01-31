@@ -27,6 +27,15 @@ public enum ErrorCode {
   C001("C001", "존재하지 않는 고양이 성격입니다.", HttpStatus.BAD_REQUEST),
   C002("C002", "잘못된 요청입니다. (YES, NO, UNSURE) 만 가능)", HttpStatus.BAD_REQUEST),
 
+  // 컨텐츠 - 위도,경도
+  CG01("CG01", "위도(lat)는 -90과 90 사이어야 합니다.", HttpStatus.BAD_REQUEST),
+  CG02("CG02", "경도(lon)는 -180과 180 사이어야 합니다.", HttpStatus.BAD_REQUEST),
+  CG03("CG03", "위도(lat)는 최소 소수점 5자리 이어야합니다.", HttpStatus.BAD_REQUEST),
+  CG04("CG04", "경도(lon)는 최소 소수점 5자리 이어야합니다.", HttpStatus.BAD_REQUEST),
+
+
+  // 인증, 권한
+  A001("A001", "잘못된 접근입니다. ", HttpStatus.UNAUTHORIZED),
 
   // 정의되지 않는 에러
   X001("X001", "서버에 문제가 발생하였습니다. 관리자에게 연락해주세요", HttpStatus.INTERNAL_SERVER_ERROR);
