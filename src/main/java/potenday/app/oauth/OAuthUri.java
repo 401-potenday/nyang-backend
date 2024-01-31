@@ -2,5 +2,5 @@ package potenday.app.oauth;
 
 public interface OAuthUri {
 
-  String generateUri(String oauthProvider, String uuid);
+  String generateUri(String redirectUri);
 }

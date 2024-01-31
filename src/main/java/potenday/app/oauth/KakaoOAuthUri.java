@@ -12,11 +12,11 @@ public class KakaoOAuthUri implements OAuthUri {
   }
 
   @Override
-  public String generateUri(String oauthProvider, String uuid) {
+  public String generateUri(String redirectUri) {
     return kakaoProperties.getOauthEndpointUri()
         + "?response_type=code"
         + "&client_id=" + kakaoProperties.getClientId()
-        + "&redirect_uri=" + kakaoProperties.getTokenIssueUri()
-        + "&prompt=select_account&state=" + uuid;
+        + "&redirect_uri=" + redirectUri
+        + "&prompt=select_account";
   }
 }
