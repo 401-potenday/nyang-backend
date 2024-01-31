@@ -23,6 +23,9 @@ public enum ErrorCode {
   L003("L003", "code 는 필수입니다.", HttpStatus.BAD_REQUEST),
   L004("L004", "redirectUri 는 필수입니다. ", HttpStatus.BAD_REQUEST),
 
+  // 컨텐츠
+  C001("C001", "존재하지 않는 고양이 성격입니다.", HttpStatus.BAD_REQUEST),
+
 
   // 정의되지 않는 에러
   X001("X001", "서버에 문제가 발생하였습니다. 관리자에게 연락해주세요", HttpStatus.INTERNAL_SERVER_ERROR);
