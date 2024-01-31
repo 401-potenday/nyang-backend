@@ -16,7 +16,7 @@ class CatContentTest {
         .name("Fluffy")
         .hasFriends("Y")
         .description("Fluffy is a cute and cuddly cat.")
-        .personality("Fluffy is always up for a playful nap.")
+        .catPersonalityCode("LIKES_PEOPLE")
         .lat(37.7749)
         .lon(122.4194)
         .roadAddress("123 Main St")
@@ -34,7 +34,7 @@ class CatContentTest {
     assertEquals("Fluffy", catContent.getName());
     assertEquals("Y", catContent.getHasFriends());
     assertEquals("Fluffy is a cute and cuddly cat.", catContent.getDescription());
-    assertEquals("Fluffy is always up for a playful nap.", catContent.getPersonality());
+    assertEquals("Fluffy is always up for a playful nap.", catContent.getCatPersonality());
     assertEquals(37.7749, catContent.getLat());
     assertEquals(122.4194, catContent.getLon());
     assertEquals("123 Main St", catContent.getRoadAddress());

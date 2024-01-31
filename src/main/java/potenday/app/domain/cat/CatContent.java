@@ -2,6 +2,8 @@ package potenday.app.domain.cat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -33,7 +35,8 @@ public class CatContent extends BaseTimeEntity {
   private String description;
 
   @Column(name = "personality",nullable = false, columnDefinition = "CHAR(20)")
-  private String personality;
+  @Enumerated(value = EnumType.STRING)
+  private CatPersonality catPersonality;
 
   @Column(name = "lat", nullable = false)
   private double lat;
@@ -77,7 +80,7 @@ public class CatContent extends BaseTimeEntity {
   @Builder
   public CatContent(final Long id, final String name, final String hasFriends,
       final String description,
-      final String personality, final double lat, final double lon,
+      final String catPersonalityCode, final double lat, final double lon,
       final String roadAddress,
       final String jibunAddrName, final String jibunMainAddrNo, final String jibunSido,
       final String jibunSigungu,
@@ -86,7 +89,7 @@ public class CatContent extends BaseTimeEntity {
     this.name = name;
     this.hasFriends = hasFriends;
     this.description = description;
-    this.personality = personality;
+    this.catPersonality = CatPersonality.from(catPersonalityCode);
     this.lat = lat;
     this.lon = lon;
     this.roadAddress = roadAddress;
