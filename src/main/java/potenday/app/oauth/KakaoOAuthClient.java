@@ -13,17 +13,18 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import potenday.app.api.auth.TokenRequest;
-import potenday.app.domain.auth.OAuthAuthenticationService;
+import potenday.app.global.error.ErrorCode;
+import potenday.app.global.error.PotendayException;
 
 @Component
-public class KakaoOAuthClient implements OAuthClient{
+public class KakaoOAuthClient implements OAuthClient {
 
   private final KakaoProperties kakaoProperties;
   private final RestTemplate restTemplate;
   private final ObjectMapper objectMapper;
 
   public KakaoOAuthClient(KakaoProperties kakaoProperties, RestTemplateBuilder restTemplate,
-      ObjectMapper objectMapper, OAuthAuthenticationService OAuthAuthenticationService) {
+      ObjectMapper objectMapper) {
     this.kakaoProperties = kakaoProperties;
     this.restTemplate = restTemplate.build();
     this.objectMapper = objectMapper;
@@ -31,18 +32,35 @@ public class KakaoOAuthClient implements OAuthClient{
 
   @Override
   public OAuthMember findOAuthMember(TokenRequest tokenRequest) {
-    OAuthTokenResponse oAuthTokenResponse = requestKakaoToken(tokenRequest.getCode());
-    OAuthMember oAuthMember = requestKakaoMember(oAuthTokenResponse.getAccessToken());
-    return oAuthMember;
+    OAuthTokenResponse token = getKakaoToken(tokenRequest.getCode(), tokenRequest.getRedirectUri());
+    return findKakaoMember(token.getAccessToken());
+  }
+
+  private OAuthMember findKakaoMember(String accessToken){
+    HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(
+        kakaoUserRequestBody(), kakaoUserRequestHeader(accessToken));
+    ResponseEntity<String> response = kakaoUserRequest(httpEntity);
+    try {
+      JsonNode jsonNode = objectMapper.readTree(response.getBody());
+      long id = jsonNode.get("id").asLong();
+      return OAuthMember.from(String.valueOf(id));
+    } catch (JsonProcessingException e) {
+      throw new PotendayException(ErrorCode.L002);
+    }
   }
 
   @Override
-  public OAuthTokenResponse requestKakaoToken(String code) {
+  public OAuthTokenResponse getToken(String code, String redirectUri) {
+    return getKakaoToken(code, redirectUri);
+  }
+
+
+  private OAuthTokenResponse getKakaoToken(String code, String redirectUri) {
     // set header
     HttpHeaders headers = tokenRequestHeaders();
 
     // set body
-    MultiValueMap<String, String> map = tokenRequestBody(code);
+    MultiValueMap<String, String> map = tokenRequestBody(code, redirectUri);
 
     // request
     HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(map, headers);
@@ -52,7 +70,8 @@ public class KakaoOAuthClient implements OAuthClient{
     return response.getBody();
   }
 
-  private ResponseEntity<OAuthTokenResponse> tokenRequest(HttpEntity<MultiValueMap<String, String>> requestEntity) {
+  private ResponseEntity<OAuthTokenResponse> tokenRequest(
+      HttpEntity<MultiValueMap<String, String>> requestEntity) {
     String tokenIssueUri = kakaoProperties.getOauthTokenIssueUri();
     return restTemplate.postForEntity(tokenIssueUri, requestEntity, OAuthTokenResponse.class);
   }
@@ -63,59 +82,28 @@ public class KakaoOAuthClient implements OAuthClient{
     return headers;
   }
 
-  private MultiValueMap<String, String> tokenRequestBody(String code) {
+  private MultiValueMap<String, String> tokenRequestBody(String code, String redirectUri) {
     MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
     map.add("grant_type", "authorization_code");
     map.add("client_id", kakaoProperties.getClientId());
-    map.add("redirect_uri", kakaoProperties.getTokenIssueUri());
+    map.add("redirect_uri", redirectUri);
     map.add("code", code);
     return map;
   }
 
-  @Override
-  public OAuthMember requestKakaoMember(String accessToken) {
-    // set header
-    HttpHeaders headers = oAuthUserRequestHeader(accessToken);
-
-    // set body
-    MultiValueMap<String, String> body = oAuthUserRequestBody();
-
-    // request
-    HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(body, headers);
-
-    // response
-    ResponseEntity<String> response = userRequest(requestEntity);
-    return createOAuthMember(response);
-  }
-
-  private OAuthMember createOAuthMember(ResponseEntity<String> response) {
-    try {
-      JsonNode jsonNode = objectMapper.readTree(response.getBody());
-      System.out.println(response.getBody());
-      long id = jsonNode.get("id").asLong();
-
-      return OAuthMember.builder()
-          .id(id)
-          .build();
-
-    } catch (JsonProcessingException e) {
-      throw new RuntimeException(e);
-    }
-  }
-
-  private ResponseEntity<String> userRequest(
+  private ResponseEntity<String> kakaoUserRequest(
       HttpEntity<MultiValueMap<String, String>> requestEntity) {
     String url = kakaoProperties.getOauthUserInfoUri();
     return restTemplate.postForEntity(url, requestEntity, String.class);
   }
 
-  private static MultiValueMap<String, String> oAuthUserRequestBody() {
+  private static MultiValueMap<String, String> kakaoUserRequestBody() {
     MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
     map.add("property_keys", "[\"kakao_account.profile\"]");
     return map;
   }
 
-  private static HttpHeaders oAuthUserRequestHeader(String accessToken) {
+  private static HttpHeaders kakaoUserRequestHeader(String accessToken) {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
     headers.set("Authorization", "Bearer " + accessToken);

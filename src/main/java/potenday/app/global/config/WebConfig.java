@@ -48,8 +48,8 @@ public class WebConfig implements WebMvcConfigurer {
   public void addInterceptors(InterceptorRegistry registry) {
     registry.addInterceptor(authenticationInterceptor())
         .excludePathPatterns(
-            "/auth/kakao/signin/**",
-            "/auth/kakao/token/**",
+            "/auth/**/oauth-uri",
+            "/auth/**/token",
             "/user/nickname/available-check/**"
         );
   }

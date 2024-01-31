@@ -19,16 +19,7 @@ oauth:
   kakao:
     client-id: ENC(EsfXRVa2XsZTVTJruQdsj0B6vAA4GfSfDJ6Ow60HGBjP2lniOC7Q383lCKJutTie)
     client-secret: ENC(EsfXRVa2XsZTVTJruQdsj0B6vAA4GfSfDJ6Ow60HGBjP2lniOC7Q383lCKJutTie)
-    oauth-endpoint-uri: https://kauth.kakao.com/oauth/authorize # client -> oauth server
+    oauth-endpoint-uri: https://kauth.kakao.com/oauth/authorize
     oauth-token-issue-uri: https://kauth.kakao.com/oauth/token
-    token-issue-uri: http://localhost:8080/auth/kakao/token
     oauth-userinfo-uri: https://kapi.kakao.com/v2/user/me
     response-type: code
-
-
-sentry:
-  dsn: https://25cf3f99285ebea612c50d5db8be16c1@o4506655666864128.ingest.sentry.io/4506655671844864
-  traces-sample-rate: 1.0
-
-
-client.redirect-uri: http://localhost:8080
