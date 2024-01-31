@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import potenday.app.domain.cat.status.CatFriends;
+import potenday.app.domain.cat.status.CatNeuter;
+import potenday.app.domain.cat.status.CatPersonality;
 
 class CatContentTest {
 
@@ -14,37 +17,19 @@ class CatContentTest {
     CatContent catContent = CatContent.builder()
         .id(1L)
         .name("Fluffy")
-        .hasFriends("Y")
+        .hasFriends(CatFriends.YES)
         .description("Fluffy is a cute and cuddly cat.")
-        .catPersonalityCode("LIKES_PEOPLE")
-        .lat(37.7749)
-        .lon(122.4194)
-        .roadAddress("123 Main St")
-        .jibunAddrName("Jibun Address Name")
-        .jibunMainAddrNo("123")
-        .jibunSido("Seoul")
-        .jibunSigungu("Seoul")
-        .jibunDong("Jongmyeong")
-        .jibunSubAddrNo("456")
-        .neuter("UNSURE")
+        .catPersonality(CatPersonality.LIKES_PEOPLE)
+        .neuter(CatNeuter.UNSURE)
         .build();
 
     // check values
     assertEquals(1L, catContent.getId());
     assertEquals("Fluffy", catContent.getName());
-    assertEquals("Y", catContent.getHasFriends());
+    assertEquals(CatFriends.YES, catContent.getHasFriends());
     assertEquals("Fluffy is a cute and cuddly cat.", catContent.getDescription());
-    assertEquals("Fluffy is always up for a playful nap.", catContent.getCatPersonality());
-    assertEquals(37.7749, catContent.getLat());
-    assertEquals(122.4194, catContent.getLon());
-    assertEquals("123 Main St", catContent.getRoadAddress());
-    assertEquals("Jibun Address Name", catContent.getJibunAddrName());
-    assertEquals("123", catContent.getJibunMainAddrNo());
-    assertEquals("Seoul", catContent.getJibunSido());
-    assertEquals("Seoul", catContent.getJibunSigungu());
-    assertEquals("Jongmyeong", catContent.getJibunDong());
-    assertEquals("456", catContent.getJibunSubAddrNo());
-    assertEquals("UNSURE", catContent.getNeuter());
+    assertEquals(CatPersonality.LIKES_PEOPLE, catContent.getCatPersonality());
+    assertEquals(CatNeuter.UNSURE, catContent.getNeuter());
   }
 
 }

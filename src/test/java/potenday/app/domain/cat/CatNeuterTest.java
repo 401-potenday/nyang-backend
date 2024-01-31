@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import potenday.app.domain.cat.status.CatNeuter;
 import potenday.app.global.error.ErrorCode;
 import potenday.app.global.exception.ExternalException;
 
