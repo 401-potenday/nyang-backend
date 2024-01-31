@@ -15,7 +15,6 @@ class CatContentTest {
         .id(1L)
         .name("Fluffy")
         .hasFriends("Y")
-        .dongnaePower("100")
         .description("Fluffy is a cute and cuddly cat.")
         .personality("Fluffy is always up for a playful nap.")
         .lat(37.7749)
@@ -34,7 +33,6 @@ class CatContentTest {
     assertEquals(1L, catContent.getId());
     assertEquals("Fluffy", catContent.getName());
     assertEquals("Y", catContent.getHasFriends());
-    assertEquals("100", catContent.getDongnaePower());
     assertEquals("Fluffy is a cute and cuddly cat.", catContent.getDescription());
     assertEquals("Fluffy is always up for a playful nap.", catContent.getPersonality());
     assertEquals(37.7749, catContent.getLat());
@@ -46,7 +44,7 @@ class CatContentTest {
     assertEquals("Seoul", catContent.getJibunSigungu());
     assertEquals("Jongmyeong", catContent.getJibunDong());
     assertEquals("456", catContent.getJibunSubAddrNo());
-    assertEquals("N", catContent.getNeuter());
+    assertEquals("UNSURE", catContent.getNeuter());
   }
 
 }

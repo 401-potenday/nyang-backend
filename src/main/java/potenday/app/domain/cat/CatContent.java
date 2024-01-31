@@ -29,9 +29,6 @@ public class CatContent extends BaseTimeEntity {
   @Column(name = "has_friends", nullable = false, columnDefinition = "CHAR(10)")
   private String hasFriends;
 
-  @Column(name = "dongnae_power", nullable = false, columnDefinition = "CHAR")
-  private String dongnaePower;
-
   @Column(name = "description", nullable = false, columnDefinition = "VARCHAR(255)")
   private String description;
 
@@ -79,7 +76,6 @@ public class CatContent extends BaseTimeEntity {
 
   @Builder
   public CatContent(final Long id, final String name, final String hasFriends,
-      final String dongnaePower,
       final String description,
       final String personality, final double lat, final double lon,
       final String roadAddress,
@@ -89,7 +85,6 @@ public class CatContent extends BaseTimeEntity {
     this.id = id;
     this.name = name;
     this.hasFriends = hasFriends;
-    this.dongnaePower = dongnaePower;
     this.description = description;
     this.personality = personality;
     this.lat = lat;
