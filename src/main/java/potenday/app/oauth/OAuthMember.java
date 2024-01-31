@@ -1,29 +1,18 @@
 package potenday.app.oauth;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 import potenday.app.domain.user.User;
 import potenday.app.domain.user.UserOAuthProvider;
 
-@Setter
-@Getter
-@ToString
-public class OAuthMember {
+public record OAuthMember(String oauthUid) {
 
-  private long id;
-  private String nickname;
-
-  public User toUser(String userOAuthProvider) {
+  public User toUser(final String userOAuthProvider) {
     return User.builder()
-        .oAuthUid(String.valueOf(id))
+        .oAuthUid(oauthUid)
         .userOAuthProvider(UserOAuthProvider.from(userOAuthProvider))
         .build();
   }
 
-  @Builder
-  public OAuthMember(final long id) {
-    this.id = id;
+  public static OAuthMember from(final String oauthUid) {
+    return new OAuthMember(oauthUid);
   }
 }
