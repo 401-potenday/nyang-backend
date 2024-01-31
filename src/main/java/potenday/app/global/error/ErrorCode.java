@@ -19,6 +19,7 @@ public enum ErrorCode {
 
   // 로그인
   L001("L001","지원하지 않는 OAuth Provider", HttpStatus.BAD_REQUEST),
+  L002("L002", "내부 사용자 정보를 가져오는 데 문제가 발생하였습니다. ", HttpStatus.INTERNAL_SERVER_ERROR),
 
 
   // 정의되지 않는 에러
