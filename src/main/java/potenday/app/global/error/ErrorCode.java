@@ -25,6 +25,7 @@ public enum ErrorCode {
 
   // 컨텐츠
   C001("C001", "존재하지 않는 고양이 성격입니다.", HttpStatus.BAD_REQUEST),
+  C002("C002", "잘못된 요청입니다. (YES, NO, UNSURE) 만 가능)", HttpStatus.BAD_REQUEST),
 
 
   // 정의되지 않는 에러

@@ -66,7 +66,8 @@ public class CatContent extends BaseTimeEntity {
   private String jibunSubAddrNo;
 
   @Column(name = "neuter", nullable = false, columnDefinition = "CHAR(10)")
-  private String neuter;
+  @Enumerated(value = EnumType.STRING)
+  private CatNeuter neuter;
 
   @Column(name = "user_id")
   private Long userId;
@@ -99,6 +100,6 @@ public class CatContent extends BaseTimeEntity {
     this.jibunSigungu = jibunSigungu;
     this.jibunDong = jibunDong;
     this.jibunSubAddrNo = jibunSubAddrNo;
-    this.neuter = neuter;
+    this.neuter = CatNeuter.from(neuter);
   }
 }
