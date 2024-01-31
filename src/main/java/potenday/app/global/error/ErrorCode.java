@@ -33,6 +33,9 @@ public enum ErrorCode {
   CG03("CG03", "위도(lat)는 최소 소수점 5자리 이어야합니다.", HttpStatus.BAD_REQUEST),
   CG04("CG04", "경도(lon)는 최소 소수점 5자리 이어야합니다.", HttpStatus.BAD_REQUEST),
 
+  // 컨텐츠 - 주소
+  CA01("CA01", "주소 입력은 필수입니다.", HttpStatus.BAD_REQUEST),
+
 
   // 인증, 권한
   A001("A001", "잘못된 접근입니다. ", HttpStatus.UNAUTHORIZED),
