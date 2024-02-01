@@ -32,19 +32,19 @@ public class Coordinate {
   }
 
   private void validateGeolocationRange(double lat, double lon) {
-    checkGeolocationValidRange(lat, lon);
+//    checkGeolocationValidRange(lat, lon);
     checkCoordinatePrecision(lat, lon);
   }
 
-  private void checkGeolocationValidRange(double lat, double lon) {
-    if (lat < MIN_LATITUDE || lat > MAX_LATITUDE) {
-      throw new IllegalArgumentException("CG01");
-    }
-
-    if (lon < MIN_LONGITUDE || lon > MAX_LONGITUDE) {
-      throw new IllegalArgumentException("CG02");
-    }
-  }
+//  private void checkGeolocationValidRange(double lat, double lon) {
+//    if (lat < MIN_LATITUDE || lat > MAX_LATITUDE) {
+//      throw new IllegalArgumentException("CG01");
+//    }
+//
+//    if (lon < MIN_LONGITUDE || lon > MAX_LONGITUDE) {
+//      throw new IllegalArgumentException("CG02");
+//    }
+//  }
 
   private void checkCoordinatePrecision(double lat, double lon) {
     // MIN_DECIMAL_PLACES 만큼 소수점이 최소 있어야 한다.

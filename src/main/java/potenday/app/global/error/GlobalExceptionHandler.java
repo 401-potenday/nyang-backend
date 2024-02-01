@@ -19,8 +19,13 @@ public class GlobalExceptionHandler {
       PotendayException e
   ) {
     ErrorCode ec = e.getErrorCode();
-    log.info("[potenday error] errCode = {}, message = {}, status = {}, instance = {}",
-        ec.getCode(), ec.getMessage(), ec.getHttpStatus().value(), req.getRequestURI());
+    if (ec.equals(ErrorCode.X001)) {
+      log.error("[uncaught error] errCode = {}, message = {}, status = {}, instance = {}",
+          ec.getCode(), ec.getMessage(), ec.getHttpStatus().value(), req.getRequestURI());
+    } else {
+      log.info("[potenday error] errCode = {}, message = {}, status = {}, instance = {}",
+          ec.getCode(), ec.getMessage(), ec.getHttpStatus().value(), req.getRequestURI());
+    }
     return ResponseEntity.status(ec.getHttpStatus()).body(ApiResponse.error(ErrorContent.from(ec)));
   }
 

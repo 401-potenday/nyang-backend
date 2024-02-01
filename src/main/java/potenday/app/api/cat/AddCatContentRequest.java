@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import potenday.app.domain.cat.AddCatContent;
@@ -15,6 +16,7 @@ import potenday.app.domain.image.AddCatContentImages;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 public class AddCatContentRequest {
 
   @NotNull(message = "C010")
@@ -25,17 +27,17 @@ public class AddCatContentRequest {
   private String description;
 
   @NotNull(message = "C002")
-  private CatFriends hasFriends;
+  private CatFriends group;
 
   @NotNull(message = "C013")
-  private List<CatPersonality> catPersonality;
+  private List<CatPersonality> catPersonalities;
 
-  @NotNull(message = "CG02")
+  @NotNull(message = "CG05")
   @Pattern(regexp = "^-?\\d+\\.\\d{5,}$", message = "CG03")
   private String lat;
 
-  @NotNull(message = "CG03")
-  @Pattern(regexp = "^-?\\d+\\.\\d{5,}$", message = "CG03")
+  @NotNull(message = "CG06")
+  @Pattern(regexp = "^-?\\d+\\.\\d{5,}$", message = "CG04")
   private String lon;
 
   @NotNull(message = "CA01")
@@ -66,12 +68,12 @@ public class AddCatContentRequest {
         .jibunMainAddrNo(jibunMainAddrNo)
         .lat(Double.parseDouble(lat))
         .lon(Double.parseDouble(lon))
-        .hasFriends(hasFriends.name())
+        .hasFriends(group.name())
         .neuter(neuter.name())
         .jibunAddrName(jibunAddrName)
         .name(name)
         .description(description)
-        .catPersonality(catPersonality)
+        .catPersonality(catPersonalities)
         .build();
   }
 
