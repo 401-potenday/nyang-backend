@@ -10,6 +10,10 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate:
+        jdbc.batch_size: 10
+        order_inserts: true
+        order_updates: true
+        generate_statistics: true
         format_sql: true
         dialect: org.hibernate.dialect.MySQL8Dialect
 
