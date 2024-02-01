@@ -11,6 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import potenday.app.domain.auth.AuthenticationInterceptor;
 import potenday.app.domain.auth.AuthenticationPrincipalArgumentResolver;
 import potenday.app.domain.auth.AuthenticationTokenService;
+import potenday.app.domain.auth.OptionalAuthenticationPrincipalArgumentResolver;
 import potenday.app.domain.auth.TokenProvider;
 
 @Configuration
@@ -43,12 +44,18 @@ public class WebConfig implements WebMvcConfigurer {
     return new AuthenticationPrincipalArgumentResolver(authenticationTokenService, tokenProvider);
   }
 
+  @Bean
+  public OptionalAuthenticationPrincipalArgumentResolver optionalAuthenticationPrincipalArgumentResolver() {
+    return new OptionalAuthenticationPrincipalArgumentResolver(authenticationTokenService);
+  }
+
   // register interceptor
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
     registry.addInterceptor(authenticationInterceptor())
         .excludePathPatterns(
             "/auth/**/oauth-uri",
+            "/contents/**",
             "/auth/**/token",
             "/user/nickname/available-check/**"
         );
@@ -57,5 +64,6 @@ public class WebConfig implements WebMvcConfigurer {
   @Override
   public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
     resolvers.add(authenticationPrincipalArgumentResolver());
+    resolvers.add(optionalAuthenticationPrincipalArgumentResolver());
   }
 }

@@ -1,6 +1,4 @@
-package potenday.app.global.exception;
-
-import potenday.app.global.error.ErrorCode;
+package potenday.app.global.error;
 
 public class ExternalException extends IllegalArgumentException{
 

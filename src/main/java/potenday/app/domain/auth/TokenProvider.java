@@ -10,6 +10,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.stereotype.Component;
+import potenday.app.global.error.AuthenticationException;
+import potenday.app.global.error.ErrorCode;
 
 @Component
 public class TokenProvider {
@@ -84,6 +86,7 @@ public class TokenProvider {
   public String parseTokenFromHeader(HttpServletRequest httpServletRequest) {
     final String authorization = httpServletRequest.getHeader("Authorization");
     if (Objects.isNull(authorization) || !authorization.startsWith("Bearer")) {
+      throw new AuthenticationException(ErrorCode.A002);
     }
     return authorization.substring(7);
   }

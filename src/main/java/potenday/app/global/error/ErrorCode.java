@@ -27,6 +27,7 @@ public enum ErrorCode {
   C001("C001", "존재하지 않는 고양이 성격입니다.", HttpStatus.BAD_REQUEST),
   C002("C002", "무리여부를 선택해주세요!. 잘못된 요청입니다. (YES, NO, UNSURE) 만 가능)", HttpStatus.BAD_REQUEST),
   C003("C003", "중성화여부를 선택해주세요! ", HttpStatus.BAD_REQUEST),
+  C004("C004", "해당 컨텐츠는 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
   C010("C010",  "고양이 이름이 없어요. 고양이 이름은 필수입니다.", HttpStatus.BAD_REQUEST),
   C011("C011", "고양이 이름은 최소 2 글자, 최대 10 글자 사이어야 합니다.", HttpStatus.BAD_REQUEST),
   C016("C016", "글은 300자를 넘을 수 없습니다.", HttpStatus.BAD_REQUEST),
@@ -50,6 +51,8 @@ public enum ErrorCode {
 
   // 인증, 권한
   A001("A001", "잘못된 접근입니다. ", HttpStatus.UNAUTHORIZED),
+  A002("A002", "리소스에 접근 권한이 없습니다. ", HttpStatus.UNAUTHORIZED),
+  A003("A003", "유효하지 않은 토큰 값입니다. 다시 로그인 바랍니다.", HttpStatus.UNAUTHORIZED),
 
   // 정의되지 않는 에러
   X001("X001", "서버에 문제가 발생하였습니다. 관리자에게 연락해주세요", HttpStatus.INTERNAL_SERVER_ERROR);
