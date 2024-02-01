@@ -2,11 +2,12 @@ package potenday.app.domain.cat;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import potenday.app.domain.cat.status.CatFriends;
 import potenday.app.domain.cat.status.CatNeuter;
-import potenday.app.domain.cat.status.CatPersonality;
+import potenday.app.domain.cat.status.CatPersonalities;
 
 class CatContentTest {
 
@@ -19,7 +20,7 @@ class CatContentTest {
         .name("Fluffy")
         .hasFriends(CatFriends.YES)
         .description("Fluffy is a cute and cuddly cat.")
-        .catPersonality(CatPersonality.LIKES_PEOPLE)
+        .catPersonalities(CatPersonalities.of(List.of("LIKES_PEOPLE")))
         .neuter(CatNeuter.UNSURE)
         .build();
 
@@ -28,7 +29,7 @@ class CatContentTest {
     assertEquals("Fluffy", catContent.getName());
     assertEquals(CatFriends.YES, catContent.getHasFriends());
     assertEquals("Fluffy is a cute and cuddly cat.", catContent.getDescription());
-    assertEquals(CatPersonality.LIKES_PEOPLE, catContent.getCatPersonality());
+    assertEquals("LIKES_PEOPLE", catContent.getCatPersonalities());
     assertEquals(CatNeuter.UNSURE, catContent.getNeuter());
   }
 
