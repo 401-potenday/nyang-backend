@@ -1,6 +1,8 @@
 package potenday.app.domain.cat.status;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -10,19 +12,22 @@ public class CatPersonalities {
   private final Set<CatPersonality> personalities;
   public static final CatPersonality DEFAULT_PERSONALITY = CatPersonality.UNSURE;
 
-  private CatPersonalities(List<String> personalities) {
-    this.personalities = personalities.stream()
-        .map(CatPersonality::from)
-        .collect(Collectors.toSet());
+  public CatPersonalities(List<CatPersonality> personalities) {
+    this.personalities = new HashSet<>(personalities);
   }
 
   public static CatPersonalities of(List<String> personalities) {
-    return new CatPersonalities(personalities);
+    List<CatPersonality> collect = personalities.stream()
+        .map(CatPersonality::from)
+        .toList();
+    return new CatPersonalities(collect);
   }
 
   public static CatPersonalities fromSting(String personalities) {
-    return new CatPersonalities(List.of(personalities.split(", ")));
+    List<String> split = List.of(personalities.split(", "));
+    return CatPersonalities.of(split);
   }
+
 
   public String concatenateCatPersonalitiesWithComma() {
     return personalities.stream()
@@ -34,4 +39,24 @@ public class CatPersonalities {
     return personalities;
   }
 
+  public boolean equal(CatPersonalities catPersonalities) {
+    return this.personalities.containsAll(catPersonalities.personalities);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    CatPersonalities that = (CatPersonalities) o;
+    return this.personalities.containsAll(that.personalities);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(personalities);
+  }
 }

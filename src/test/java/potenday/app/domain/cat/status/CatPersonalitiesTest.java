@@ -11,7 +11,8 @@ class CatPersonalitiesTest {
   @Test
   @DisplayName("String 성격 코드 리스트를 이용해 실제 성격 코드가 담신 CatPersonalities 를 생성한다. - 성공")
   void create() {
-    CatPersonalities catPersonalities = CatPersonalities.of(List.of("LIKES_PEOPLE", "LOVES_TO_CUDDLE"));
+    CatPersonalities catPersonalities = CatPersonalities.of(
+        List.of("LIKES_PEOPLE", "LOVES_TO_CUDDLE"));
 
     assertThat(catPersonalities.getPersonalities().size()).isEqualTo(2);
     assertThat(catPersonalities.getPersonalities()).contains(CatPersonality.LIKES_PEOPLE,
@@ -29,7 +30,17 @@ class CatPersonalitiesTest {
     String personalitiesWithComma = catPersonalities.concatenateCatPersonalitiesWithComma();
 
     // then
-    assertThat(personalitiesWithComma).isIn("LIKES_PEOPLE, LOVES_TO_CUDDLE", "LOVES_TO_CUDDLE, LIKES_PEOPLE");
+    assertThat(personalitiesWithComma).isIn("LIKES_PEOPLE, LOVES_TO_CUDDLE",
+        "LOVES_TO_CUDDLE, LIKES_PEOPLE");
 
   }
-}
+
+  @Test
+  @DisplayName("같은 요소의 성격이 있는 지 확인한다. - 성공")
+  void isEqualIfHasSameElements() {
+    CatPersonalities catPersonalities = CatPersonalities.of(List.of("LIKES_PEOPLE", "LOVES_TO_CUDDLE"));
+    CatPersonalities catPersonalities2 = CatPersonalities.of(List.of("LIKES_PEOPLE", "LOVES_TO_CUDDLE"));
+
+    assertThat(catPersonalities).isEqualTo(catPersonalities2);
+    }
+  }
