@@ -5,6 +5,7 @@ import lombok.Builder;
 import potenday.app.domain.cat.status.CatFriends;
 import potenday.app.domain.cat.status.CatNeuter;
 import potenday.app.domain.cat.status.CatPersonalities;
+import potenday.app.domain.cat.status.CatPersonality;
 import potenday.app.domain.cat.vo.Coordinate;
 import potenday.app.domain.cat.vo.JibunAddress;
 
@@ -17,7 +18,7 @@ public class AddCatContent {
 
   private String description;
 
-  private List<String> catPersonality;
+  private List<CatPersonality> catPersonality;
 
   private double lat;
 
@@ -50,7 +51,7 @@ public class AddCatContent {
             .jibunSigungu(jibunSigungu)
             .jibunSubAddrNo(jibunSubAddrNo)
             .build())
-        .catPersonalities(CatPersonalities.of(catPersonality))
+        .catPersonalities(new CatPersonalities(catPersonality))
         .coordinate(Coordinate.builder()
             .lat(lat)
             .lon(lon)
