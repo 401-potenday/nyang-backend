@@ -1,6 +1,7 @@
 package potenday.app.domain.cat;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,10 +15,12 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import potenday.app.domain.BaseTimeEntity;
 import potenday.app.domain.cat.status.CatFriends;
 import potenday.app.domain.cat.status.CatNeuter;
-import potenday.app.domain.cat.status.CatPersonality;
+import potenday.app.domain.cat.status.CatPersonalities;
 import potenday.app.domain.cat.vo.Coordinate;
 import potenday.app.domain.cat.vo.JibunAddress;
 
@@ -25,6 +28,8 @@ import potenday.app.domain.cat.vo.JibunAddress;
 @Entity
 @Table(name = "CAT_CONTENT")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicInsert
+@DynamicUpdate
 public class CatContent extends BaseTimeEntity {
 
   @Id
@@ -41,9 +46,9 @@ public class CatContent extends BaseTimeEntity {
   @Column(name = "description", nullable = false, columnDefinition = "VARCHAR(255)")
   private String description;
 
-  @Column(name = "personality", nullable = false, columnDefinition = "CHAR(20)")
-  @Enumerated(value = EnumType.STRING)
-  private CatPersonality catPersonality;
+  @Column(name = "cat_personalities", nullable = false, columnDefinition = "VARCHAR(255)")
+  @Convert(converter = CatPersonalitiesConverter.class)
+  private CatPersonalities catPersonalities;
 
   @Column(name = "neuter", nullable = false, columnDefinition = "CHAR(10)")
   @Enumerated(value = EnumType.STRING)
@@ -66,13 +71,13 @@ public class CatContent extends BaseTimeEntity {
 
   @Builder
   public CatContent(final Long id, final String name, final CatFriends hasFriends, final String description,
-      final CatPersonality catPersonality, final CatNeuter neuter, final JibunAddress jibunAddress,
+      final CatPersonalities catPersonalities, final CatNeuter neuter, final JibunAddress jibunAddress,
       final Coordinate coordinate) {
     this.id = id;
     this.name = name;
     this.hasFriends = hasFriends;
     this.description = description;
-    this.catPersonality = catPersonality;
+    this.catPersonalities = catPersonalities;
     this.neuter = neuter;
     this.jibunAddress = jibunAddress;
     this.coordinate = coordinate;

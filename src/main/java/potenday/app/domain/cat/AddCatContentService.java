@@ -31,7 +31,7 @@ public class AddCatContentService {
   public long addContent(AppUser appUser, AddCatContent addCatcontent, AddCatContentImages addCatContentImages) {
     User user = findUser(appUser);
     CatContent savedCatContent = catContentRepository.save(createContent(user, addCatcontent));
-    catContentImageRepository.saveAllAndFlush(createCatContentImages(savedCatContent.getId(), addCatContentImages));
+    catContentImageRepository.saveAll(createCatContentImages(savedCatContent.getId(), addCatContentImages));
     return savedCatContent.getId();
   }
 
