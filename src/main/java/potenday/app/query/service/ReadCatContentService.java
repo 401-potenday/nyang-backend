@@ -7,7 +7,7 @@ import potenday.app.domain.cat.CatContent;
 import potenday.app.domain.image.CatContentImage;
 import potenday.app.global.error.ErrorCode;
 import potenday.app.global.error.PotendayException;
-import potenday.app.query.model.CatContentDetails;
+import potenday.app.query.model.content.CatContentDetails;
 import potenday.app.query.model.user.UserNickname;
 import potenday.app.query.repository.CatContentQuery;
 import potenday.app.query.repository.UserQuery;

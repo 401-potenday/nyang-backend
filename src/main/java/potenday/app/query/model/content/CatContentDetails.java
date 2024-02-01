@@ -1,4 +1,4 @@
-package potenday.app.query.model;
+package potenday.app.query.model.content;
 
 import java.util.Comparator;
 import java.util.List;

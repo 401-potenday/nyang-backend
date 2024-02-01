@@ -1,4 +1,4 @@
-package potenday.app.api.cat;
+package potenday.app.api.content;
 
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +11,7 @@ import potenday.app.domain.auth.AppUser;
 import potenday.app.domain.auth.AuthenticationPrincipal;
 import potenday.app.domain.auth.OptionalAuthenticationPrincipal;
 import potenday.app.domain.cat.AddCatContentService;
-import potenday.app.query.model.CatContentDetails;
+import potenday.app.query.model.content.CatContentDetails;
 import potenday.app.query.service.ReadCatContentService;
 
 @RestController
