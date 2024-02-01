@@ -64,4 +64,15 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(ec.getHttpStatus())
         .body(ApiResponse.error(ErrorContent.from(ec)));
   }
+
+  @ExceptionHandler(AuthenticationException.class)
+   public ResponseEntity<ApiResponse<ErrorContent>> handleAuthenticationException(
+      HttpServletRequest req,
+      AuthenticationException e) {
+    ErrorCode ec = e.getErrorCode();
+    log.info("AuthenticationException, errCode = {}, message = {}, status = {}, instance = {}",
+        ec.getCode(), ec.getMessage(), ec.getHttpStatus().value(), req.getRequestURI());
+    return ResponseEntity.status(ec.getHttpStatus())
+        .body(ApiResponse.error(ErrorContent.from(ec)));
+  }
 }
