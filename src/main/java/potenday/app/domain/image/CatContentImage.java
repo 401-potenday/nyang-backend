@@ -48,11 +48,8 @@ public class CatContentImage extends BaseTimeEntity {
   }
 
   void validateImageHttpUri(String imageUri) {
-    if (imageUri == null) {
-      throw new IllegalArgumentException("imageUri is required");
-    }
     if (!imageUri.startsWith("http://") && !imageUri.startsWith("https://")) {
-      throw new IllegalArgumentException("imageUri must start with 'http://' or 'https://'");
+      throw new IllegalArgumentException("CI01");
     }
   }
 }

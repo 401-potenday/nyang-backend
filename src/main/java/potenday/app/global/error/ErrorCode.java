@@ -36,6 +36,8 @@ public enum ErrorCode {
   // 컨텐츠 - 주소
   CA01("CA01", "주소 입력은 필수입니다.", HttpStatus.BAD_REQUEST),
 
+  // 컨텐츠 - 이미지
+  CI01("CI01", "잘못된 형식의 이미지 업로드입니다. 이미지의 uri 주소는 http:// 또는 https:// 로 시작해야 합니다.", HttpStatus.BAD_REQUEST),
 
   // 인증, 권한
   A001("A001", "잘못된 접근입니다. ", HttpStatus.UNAUTHORIZED),
