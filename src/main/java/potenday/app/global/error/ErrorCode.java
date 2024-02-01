@@ -51,6 +51,8 @@ public enum ErrorCode {
 
   // 인증, 권한
   A001("A001", "잘못된 접근입니다. ", HttpStatus.UNAUTHORIZED),
+  A002("A002", "리소스에 접근 권한이 없습니다. ", HttpStatus.UNAUTHORIZED),
+  A003("A003", "유효하지 않은 토큰 값입니다. 다시 로그인 바랍니다.", HttpStatus.UNAUTHORIZED),
 
   // 정의되지 않는 에러
   X001("X001", "서버에 문제가 발생하였습니다. 관리자에게 연락해주세요", HttpStatus.INTERNAL_SERVER_ERROR);

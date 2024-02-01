@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import potenday.app.global.error.ErrorCode;
-import potenday.app.global.exception.ExternalException;
+import potenday.app.global.error.ExternalException;
 
 public enum CatPersonality {
   LIKES_PEOPLE("사람을 좋아해요"),

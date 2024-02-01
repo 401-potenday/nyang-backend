@@ -9,7 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import potenday.app.domain.cat.status.CatPersonality;
 import potenday.app.global.error.ErrorCode;
-import potenday.app.global.exception.ExternalException;
+import potenday.app.global.error.ExternalException;
 
 class CatPersonalityTest {
 

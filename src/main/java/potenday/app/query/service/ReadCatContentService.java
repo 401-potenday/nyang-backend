@@ -33,4 +33,15 @@ public class ReadCatContentService {
     UserNickname userNickname = userQuery.fetchUserSimpleInfo(catContent.getUserId());
     return CatContentDetails.of(catContent, catContentImages, userNickname);
   }
+
+  @Transactional(readOnly = true)
+  public CatContentDetails fetchContentDetails(long contentId, long id) {
+    CatContent catContent = catContentQuery.fetchContent(contentId);
+    if (catContent == null) {
+      throw new PotendayException(ErrorCode.C004);
+    }
+    List<CatContentImage> catContentImages = catContentQuery.fetchContentImages(contentId);
+    UserNickname userNickname = userQuery.fetchUserSimpleInfo(catContent.getUserId());
+    return CatContentDetails.of(catContent, catContentImages, userNickname);
+  }
 }

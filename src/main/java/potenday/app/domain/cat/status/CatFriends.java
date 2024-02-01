@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Arrays;
 import java.util.List;
 import potenday.app.global.error.ErrorCode;
-import potenday.app.global.exception.ExternalException;
+import potenday.app.global.error.ExternalException;
 
 public enum CatFriends {
   YES("yes"), NO("no"), UNSURE("unsure");

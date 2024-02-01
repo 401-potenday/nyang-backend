@@ -35,6 +35,7 @@ public class CatContentDetails {
   private CatNeuter neuter;
   private String createdAt;
   private String updatedAt;
+  private int catEmoji;
 
   // 다른 곳에서!
   private boolean isBookMark;
@@ -63,6 +64,7 @@ public class CatContentDetails {
         .jibunSigungu(content.getJibunAddress().getJibunSigungu())
         .jibunDong(content.getJibunAddress().getJibunDong())
         .jibunSubAddrNo(content.getJibunAddress().getJibunSubAddrNo())
+        .catEmoji(content.getCatEmoji())
         .images(catContentImages.stream()
             .sorted(Comparator.comparingInt(CatContentImage::getImageOrder))
             .map(CatContentImage::getImageUri)

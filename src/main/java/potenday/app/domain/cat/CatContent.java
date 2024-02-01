@@ -63,6 +63,9 @@ public class CatContent extends BaseTimeEntity {
   @Column(name = "user_id")
   private Long userId;
 
+  @Column(name = "cat_emoji")
+  private int catEmoji;
+
   @Column(name = "deleted_at")
   private LocalDateTime deletedAt;
 
@@ -81,6 +84,7 @@ public class CatContent extends BaseTimeEntity {
     this.neuter = neuter;
     this.jibunAddress = jibunAddress;
     this.coordinate = coordinate;
+    this.catEmoji = 1;
   }
 
   public void setOwner(final long userId) {
