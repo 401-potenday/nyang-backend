@@ -19,8 +19,13 @@ public class GlobalExceptionHandler {
       PotendayException e
   ) {
     ErrorCode ec = e.getErrorCode();
-    log.info("[potenday error] errCode = {}, message = {}, status = {}, instance = {}",
-        ec.getCode(), ec.getMessage(), ec.getHttpStatus().value(), req.getRequestURI());
+    if (ec.equals(ErrorCode.X001)) {
+      log.error("[uncaught error] errCode = {}, message = {}, status = {}, instance = {}",
+          ec.getCode(), ec.getMessage(), ec.getHttpStatus().value(), req.getRequestURI());
+    } else {
+      log.info("[potenday error] errCode = {}, message = {}, status = {}, instance = {}",
+          ec.getCode(), ec.getMessage(), ec.getHttpStatus().value(), req.getRequestURI());
+    }
     return ResponseEntity.status(ec.getHttpStatus()).body(ApiResponse.error(ErrorContent.from(ec)));
   }
 
@@ -45,4 +50,18 @@ public class GlobalExceptionHandler {
         .body(ApiResponse.error(ErrorContent.from(ec)));
   }
 
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResponseEntity<ApiResponse<ErrorContent>> handleIllegalArgumentException(
+      HttpServletRequest req,
+      IllegalArgumentException e) {
+    ErrorCode ec = ErrorCode.findCode(e.getMessage());
+    if (ec == ErrorCode.X001) {
+      log.error("Uncaught IllegalArgumentException occur,  message = {}", e.getMessage(), e.getCause().fillInStackTrace());
+    } else{
+      log.info("[external error], errCode = {}, message = {}, status = {}, instance = {}",
+          ec.getCode(), ec.getMessage(), ec.getHttpStatus().value(), req.getRequestURI());
+    }
+    return ResponseEntity.status(ec.getHttpStatus())
+        .body(ApiResponse.error(ErrorContent.from(ec)));
+  }
 }

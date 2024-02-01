@@ -26,7 +26,7 @@ public class UserService {
     if (!checkAvailableNickname(nickname)) {
       throw new PotendayException(ErrorCode.U001);
     }
-    user.update(nickname);
+    user.updateNickname(nickname);
     return user.getNickname();
   }
 

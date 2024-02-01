@@ -23,6 +23,33 @@ public enum ErrorCode {
   L003("L003", "code 는 필수입니다.", HttpStatus.BAD_REQUEST),
   L004("L004", "redirectUri 는 필수입니다. ", HttpStatus.BAD_REQUEST),
 
+  // 컨텐츠
+  C001("C001", "존재하지 않는 고양이 성격입니다.", HttpStatus.BAD_REQUEST),
+  C002("C002", "무리여부를 선택해주세요!. 잘못된 요청입니다. (YES, NO, UNSURE) 만 가능)", HttpStatus.BAD_REQUEST),
+  C003("C003", "중성화여부를 선택해주세요! ", HttpStatus.BAD_REQUEST),
+  C010("C010",  "고양이 이름이 없어요. 고양이 이름은 필수입니다.", HttpStatus.BAD_REQUEST),
+  C011("C011", "고양이 이름은 최소 2 글자, 최대 10 글자 사이어야 합니다.", HttpStatus.BAD_REQUEST),
+  C016("C016", "글은 300자를 넘을 수 없습니다.", HttpStatus.BAD_REQUEST),
+
+  // 컨텐츠 - 위도,경도
+  CG01("CG01", "위도(lat)는 -90과 90 사이어야 합니다.", HttpStatus.BAD_REQUEST),
+  CG02("CG02", "경도(lon)는 -180과 180 사이어야 합니다.", HttpStatus.BAD_REQUEST),
+  CG03("CG03", "위도(lat)는 최소 소수점 5자리 이어야합니다.", HttpStatus.BAD_REQUEST),
+  CG04("CG04", "경도(lon)는 최소 소수점 5자리 이어야합니다.", HttpStatus.BAD_REQUEST),
+  CG05("CG05", "위도(lat)는 필수입니다.", HttpStatus.BAD_REQUEST),
+  CG06("CG06", "경도(lon)는 필수입니다.", HttpStatus.BAD_REQUEST),
+
+  // 컨텐츠 - 주소
+  CA01("CA01", "주소 입력은 필수입니다.", HttpStatus.BAD_REQUEST),
+  CA02("CA02", "위도 입력은 필수입니다.", HttpStatus.BAD_REQUEST),
+  CA03("CA03", "경도 입력은 필수입니다.", HttpStatus.BAD_REQUEST),
+
+  // 컨텐츠 - 이미지
+  CI01("CI01", "잘못된 형식의 이미지 업로드입니다. 이미지의 uri 주소는 http:// 또는 https:// 로 시작해야 합니다.", HttpStatus.BAD_REQUEST),
+  CI02("CI02", "최소 하나 이상의 고양이 사진이 필요합니다.", HttpStatus.BAD_REQUEST),
+
+  // 인증, 권한
+  A001("A001", "잘못된 접근입니다. ", HttpStatus.UNAUTHORIZED),
 
   // 정의되지 않는 에러
   X001("X001", "서버에 문제가 발생하였습니다. 관리자에게 연락해주세요", HttpStatus.INTERNAL_SERVER_ERROR);
