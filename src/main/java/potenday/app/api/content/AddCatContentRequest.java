@@ -1,4 +1,4 @@
-package potenday.app.api.cat;
+package potenday.app.api.content;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
