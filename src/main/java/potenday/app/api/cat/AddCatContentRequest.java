@@ -1,14 +1,15 @@
 package potenday.app.api.cat;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Pattern;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import potenday.app.domain.cat.AddCatContent;
+import potenday.app.domain.cat.status.CatFriends;
+import potenday.app.domain.cat.status.CatNeuter;
 import potenday.app.domain.cat.status.CatPersonality;
 import potenday.app.domain.image.AddCatContentImages;
 
@@ -17,26 +18,27 @@ import potenday.app.domain.image.AddCatContentImages;
 public class AddCatContentRequest {
 
   @NotNull(message = "C010")
-  @Size(min = 2, max = 10, message = "C010")
+  @Length(min = 2, max = 10, message = "C011")
   private String name;
 
-  @NotNull(message = "C012")
   @Length(max = 300, message = "C016")
   private String description;
 
-  @NotNull(message = "C011")
-  private String hasFriends;
+  @NotNull(message = "C002")
+  private CatFriends hasFriends;
 
   @NotNull(message = "C013")
   private List<CatPersonality> catPersonality;
 
-  @NotNull
-  private double lat;
+  @NotNull(message = "CG02")
+  @Pattern(regexp = "^-?\\d+\\.\\d{5,}$", message = "CG03")
+  private String lat;
 
-  @NotNull
-  private double lon;
+  @NotNull(message = "CG03")
+  @Pattern(regexp = "^-?\\d+\\.\\d{5,}$", message = "CG03")
+  private String lon;
 
-  @NotNull(message = "C014")
+  @NotNull(message = "CA01")
   private String jibunAddrName;
 
   private String jibunMainAddrNo;
@@ -49,12 +51,11 @@ public class AddCatContentRequest {
 
   private String jibunSubAddrNo;
 
-  @NotEmpty
-  @Valid
+  @NotEmpty(message = "CI02")
   private List<String> images;
 
-  @NotNull(message = "C015")
-  private String neuter;
+  @NotNull(message = "C003")
+  private CatNeuter neuter;
 
   public AddCatContent toAddCatContent() {
     return AddCatContent.builder()
@@ -63,10 +64,10 @@ public class AddCatContentRequest {
         .jibunDong(jibunDong)
         .jibunSubAddrNo(jibunSubAddrNo)
         .jibunMainAddrNo(jibunMainAddrNo)
-        .lat(lat)
-        .lon(lon)
-        .hasFriends(hasFriends)
-        .neuter(neuter)
+        .lat(Double.parseDouble(lat))
+        .lon(Double.parseDouble(lon))
+        .hasFriends(hasFriends.name())
+        .neuter(neuter.name())
         .jibunAddrName(jibunAddrName)
         .name(name)
         .description(description)

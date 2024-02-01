@@ -1,5 +1,6 @@
 package potenday.app.domain.cat.status;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Arrays;
 import java.util.List;
 import potenday.app.global.error.ErrorCode;
@@ -19,5 +20,13 @@ public enum CatNeuter {
   public static CatNeuter from(String desc) {
     return values.stream().filter(it -> it.desc.equals(desc.toLowerCase().trim())).findFirst()
         .orElseThrow(() -> new ExternalException(ErrorCode.C002));
+  }
+
+  @JsonCreator
+  public static CatNeuter parsing(String inputValue) {
+    return values.stream()
+        .filter(it -> it.desc.equals(inputValue.toLowerCase().trim()))
+        .findFirst()
+        .orElse(null);
   }
 }
