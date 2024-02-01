@@ -5,11 +5,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 // 고양이 성격 관리하는 클래스
-// List<String> personalities => List<Personality> 으로 변경 필요
-// A, B, C => List<Personality> 으로 변경 필요
 public class CatPersonalities {
 
   private final Set<CatPersonality> personalities;
+  public static final CatPersonality DEFAULT_PERSONALITY = CatPersonality.UNSURE;
 
   private CatPersonalities(List<String> personalities) {
     this.personalities = personalities.stream()
@@ -19,6 +18,10 @@ public class CatPersonalities {
 
   public static CatPersonalities of(List<String> personalities) {
     return new CatPersonalities(personalities);
+  }
+
+  public static CatPersonalities fromSting(String personalities) {
+    return new CatPersonalities(List.of(personalities.split(", ")));
   }
 
   public String concatenateCatPersonalitiesWithComma() {
