@@ -48,4 +48,8 @@ public class JibunAddress {
       throw new IllegalArgumentException("CA01");
     }
   }
+
+  public String toString() {
+    return jibunAddrName;
+  }
 }
