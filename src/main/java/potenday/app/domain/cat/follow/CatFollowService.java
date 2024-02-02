@@ -1,7 +1,6 @@
 package potenday.app.domain.cat.follow;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import potenday.app.domain.auth.AppUser;
 import potenday.app.domain.cat.content.CatContent;
 import potenday.app.domain.cat.content.CatContentRepository;
@@ -13,26 +12,48 @@ import potenday.app.global.error.PotendayException;
 @Service
 public class CatFollowService {
 
-  private final CatFollowRespository catFollowRespository;
+  private final CatFollowRepository catFollowRepository;
   private final UserRepository userRepository;
   private final CatContentRepository catContentRepository;
 
-  public CatFollowService(CatFollowRespository catFollowRespository, UserRepository userRepository,
+  public CatFollowService(CatFollowRepository catFollowRepository, UserRepository userRepository,
       CatContentRepository catContentRepository) {
-    this.catFollowRespository = catFollowRespository;
+    this.catFollowRepository = catFollowRepository;
     this.userRepository = userRepository;
     this.catContentRepository = catContentRepository;
   }
 
-  @Transactional
-  public void catfollow(AppUser appUser, AddCatFollow addCatFollow) {
+  public void catFollow(AppUser appUser, AddCatFollow addCatFollow) {
+    if (isFollowed(appUser, addCatFollow.catContentId())) {
+      throw new PotendayException(ErrorCode.C006);
+    }
     User user = findUser(appUser);
-    CatContent catContent = findContent(addCatFollow);
-    catFollowRespository.save(new CatFollow(user.getId(), catContent.getUserId()));
+    CatContent catContent = findContent(addCatFollow.catContentId());
+    saveFollow(user, catContent);
   }
 
-  private CatContent findContent(AddCatFollow addCatFollow) {
-    CatContent catContent = catContentRepository.findById(addCatFollow.catContentId())
+  public void cancelCatFollow(AppUser appUser, CancelCatFollow cancelCatFollow) {
+    User user = findUser(appUser);
+    CatContent catContent = findContent(cancelCatFollow.catContentId());
+    if (isFollowed(appUser, cancelCatFollow.catContentId())) {
+      deleteFollow(user, catContent);
+    }
+  }
+
+  private void saveFollow(User user, CatContent catContent) {
+    catFollowRepository.save(new CatFollow(user.getId(), catContent.getUserId()));
+  }
+
+  private void deleteFollow(User user, CatContent catContent) {
+    catFollowRepository.deleteByUserIdAndCatContentId(user.getId(), catContent.getId());
+  }
+
+  private boolean isFollowed(AppUser appUser, long contentId) {
+    return catFollowRepository.existsByUserIdAndAndCatContentId(appUser.id(), contentId);
+  }
+
+  private CatContent findContent(long contentId) {
+    CatContent catContent = catContentRepository.findById(contentId)
         .orElseThrow(() -> new PotendayException(ErrorCode.C004));
     if (catContent.isDeleted()) {
       throw new PotendayException(ErrorCode.C004);

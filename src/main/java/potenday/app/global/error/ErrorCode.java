@@ -28,6 +28,7 @@ public enum ErrorCode {
   C002("C002", "무리여부를 선택해주세요!. 잘못된 요청입니다. (YES, NO, UNSURE) 만 가능)", HttpStatus.BAD_REQUEST),
   C003("C003", "중성화여부를 선택해주세요! ", HttpStatus.BAD_REQUEST),
   C004("C004", "해당 컨텐츠는 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+  C006("C006", "이미 팔로우를 했어요", HttpStatus.BAD_REQUEST),
 
   C010("C010",  "고양이 이름이 없어요. 고양이 이름은 필수입니다.", HttpStatus.BAD_REQUEST),
   C011("C011", "고양이 이름은 최소 2 글자, 최대 10 글자 사이어야 합니다.", HttpStatus.BAD_REQUEST),
