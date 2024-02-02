@@ -35,6 +35,9 @@ public enum ErrorCode {
   C007("C007", "최대 3장의 사진까지 업로드 가능합니다.", HttpStatus.BAD_REQUEST),
   C008("C008", "최대 글자수(300)를 초과하였습니다", HttpStatus.BAD_REQUEST),
 
+  // 컨텐츠 - 댓글 - 좋아요
+  C009("C009", "이미 좋아요를 누르셨습니다.", HttpStatus.BAD_REQUEST),
+
   C010("C010",  "고양이 이름이 없어요. 고양이 이름은 필수입니다.", HttpStatus.BAD_REQUEST),
   C011("C011", "고양이 이름은 최소 2 글자, 최대 10 글자 사이어야 합니다.", HttpStatus.BAD_REQUEST),
   C016("C016", "글은 300자를 넘을 수 없습니다.", HttpStatus.BAD_REQUEST),
