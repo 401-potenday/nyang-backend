@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import potenday.app.api.content.search.ContentSearchCondition;
 import potenday.app.domain.auth.AppUser;
-import potenday.app.domain.cat.CatContent;
+import potenday.app.domain.cat.content.CatContent;
 import potenday.app.domain.image.CatContentImage;
 import potenday.app.global.error.ErrorCode;
 import potenday.app.global.error.PotendayException;

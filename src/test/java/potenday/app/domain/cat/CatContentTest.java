@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import potenday.app.domain.cat.content.CatContent;
 import potenday.app.domain.cat.status.CatFriends;
 import potenday.app.domain.cat.status.CatNeuter;
 import potenday.app.domain.cat.status.CatPersonalities;

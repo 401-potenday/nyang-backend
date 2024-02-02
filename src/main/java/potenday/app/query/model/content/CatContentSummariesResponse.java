@@ -2,7 +2,7 @@ package potenday.app.query.model.content;
 
 import java.util.List;
 import org.springframework.data.domain.Page;
-import potenday.app.domain.cat.CatContent;
+import potenday.app.domain.cat.content.CatContent;
 
 public record CatContentSummariesResponse(
     List<CatContentSummary> items,

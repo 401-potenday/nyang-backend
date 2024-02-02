@@ -1,4 +1,4 @@
-package potenday.app.domain.cat;
+package potenday.app.domain.cat.content;
 
 import java.util.List;
 import org.springframework.stereotype.Service;

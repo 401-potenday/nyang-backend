@@ -14,7 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import potenday.app.api.content.search.ContentSearchCondition;
 import potenday.app.api.content.search.DistanceOrder;
-import potenday.app.domain.cat.CatContent;
+import potenday.app.domain.cat.content.CatContent;
 import potenday.app.domain.image.CatContentImage;
 
 @Component
