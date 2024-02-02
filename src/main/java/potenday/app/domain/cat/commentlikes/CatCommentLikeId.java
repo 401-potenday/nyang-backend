@@ -10,14 +10,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CatCommentLikeId implements Serializable {
 
-    @Column(name = "cat_comment_id", nullable = false, updatable = false, insertable = false)
-    private long catCommentId;
+  @Column(name = "cat_comment_id", nullable = false, updatable = false, insertable = false)
+  private long catCommentId;
 
-    @Column(name = "user_id", nullable = false, updatable = false, insertable = false)
-    private long userId;
+  @Column(name = "user_id", nullable = false, updatable = false, insertable = false)
+  private long userId;
 
-    public CatCommentLikeId(final long catCommentId,final long userId) {
-        this.catCommentId = catCommentId;
-        this.userId = userId;
-    }
+  public CatCommentLikeId(final long userId, final long catCommentId) {
+    this.userId = userId;
+    this.catCommentId = catCommentId;
+  }
 }

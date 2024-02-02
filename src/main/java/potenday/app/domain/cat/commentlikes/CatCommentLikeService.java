@@ -1,6 +1,7 @@
 package potenday.app.domain.cat.commentlikes;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import potenday.app.domain.auth.AppUser;
 import potenday.app.domain.cat.comment.CatComment;
 import potenday.app.domain.cat.comment.CatCommentRepository;
@@ -24,10 +25,10 @@ public class CatCommentLikeService {
     this.userRepository = userRepository;
   }
 
+  @Transactional
   public void addCommentLike(AppUser appUser, AddCatCommentLike addCatCommentLike) {
     User user = findUser(appUser);
-    CatComment catComment = findComment(addCatCommentLike);
-
+    CatComment catComment = findComment(addCatCommentLike.commentId());
     CatCommentLikeId commentLikeId = createCommentId(user.getId(), catComment.getId());
     if (alreadyLikedComment(commentLikeId)) {
       throw new PotendayException(ErrorCode.C009);
@@ -41,9 +42,9 @@ public class CatCommentLikeService {
     catCommentLikeRepository.save(catCommentLike);
   }
 
-  private CatComment findComment(AddCatCommentLike addCatCommentLike) {
-    return catCommentRepository.findById(addCatCommentLike.commentId())
-        .orElseThrow(() -> new PotendayException(ErrorCode.C006));
+  private CatComment findComment(long commentId) {
+    return catCommentRepository.findById(commentId)
+        .orElseThrow(() -> new PotendayException(ErrorCode.D003));
   }
 
   private static CatCommentLikeId createCommentId(long userId, long commentId) {
