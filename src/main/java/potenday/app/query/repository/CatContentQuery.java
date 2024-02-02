@@ -1,6 +1,6 @@
 package potenday.app.query.repository;
 
-import static potenday.app.domain.cat.QCatContent.catContent;
+import static potenday.app.domain.cat.content.QCatContent.catContent;
 import static potenday.app.domain.image.QCatContentImage.catContentImage;
 
 import com.querydsl.core.types.OrderSpecifier;

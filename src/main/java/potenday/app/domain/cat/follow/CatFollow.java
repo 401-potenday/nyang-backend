@@ -7,7 +7,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import potenday.app.domain.BaseTimeEntity;
@@ -23,15 +22,14 @@ public class CatFollow extends BaseTimeEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Column(name = "user_id", nullable = false)
+  private long userId;
+
   @Column(name = "cat_content_id", nullable = false)
   private long catContentId;
 
-  @Column(name = "userId", nullable = false)
-  private long userId;
-
-  @Builder
-  public CatFollow(long catContentId, long userId) {
-    this.catContentId = catContentId;
+  public CatFollow(long userId, long catContentId) {
     this.userId = userId;
+    this.catContentId = catContentId;
   }
 }

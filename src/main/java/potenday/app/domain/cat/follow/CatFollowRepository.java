@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CatFollowRepository extends JpaRepository<CatFollow, Long> {
 
-  boolean existsByUserIdAndAndCatContentId(long userId, long contentId);
+  boolean existsCatFollowByUserIdAndCatContentId(long userId, long contentId);
 
-  boolean deleteByUserIdAndCatContentId(long userId, long contentId);
+  void deleteByUserIdAndCatContentId(long userId, long contentId);
 }
