@@ -40,6 +40,7 @@ public enum ErrorCode {
 
   C010("C010",  "고양이 이름이 없어요. 고양이 이름은 필수입니다.", HttpStatus.BAD_REQUEST),
   C011("C011", "고양이 이름은 최소 2 글자, 최대 10 글자 사이어야 합니다.", HttpStatus.BAD_REQUEST),
+  C012("C012", "이모지 번호는 필수입니다. 이모지 번호 1 ~ 18", HttpStatus.BAD_REQUEST),
   C016("C016", "글은 300자를 넘을 수 없습니다.", HttpStatus.BAD_REQUEST),
 
   // 컨텐츠 - 위도,경도
