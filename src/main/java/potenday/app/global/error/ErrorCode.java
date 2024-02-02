@@ -29,6 +29,12 @@ public enum ErrorCode {
   C003("C003", "중성화여부를 선택해주세요! ", HttpStatus.BAD_REQUEST),
   C004("C004", "해당 컨텐츠는 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 
+  // 컨텐츠 - 댓글
+  C005("C005", "최대 3개의 이미지를 등록할 수 있습니다.", HttpStatus.BAD_REQUEST),
+  C006("C006", "고양이 사진은 필수입니다.", HttpStatus.BAD_REQUEST),
+  C007("C007", "최대 3장의 사진까지 업로드 가능합니다.", HttpStatus.BAD_REQUEST),
+  C008("C008", "최대 글자수(300)를 초과하였습니다", HttpStatus.BAD_REQUEST),
+
   C010("C010",  "고양이 이름이 없어요. 고양이 이름은 필수입니다.", HttpStatus.BAD_REQUEST),
   C011("C011", "고양이 이름은 최소 2 글자, 최대 10 글자 사이어야 합니다.", HttpStatus.BAD_REQUEST),
   C016("C016", "글은 300자를 넘을 수 없습니다.", HttpStatus.BAD_REQUEST),

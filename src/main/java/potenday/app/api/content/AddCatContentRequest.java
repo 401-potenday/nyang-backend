@@ -12,7 +12,7 @@ import potenday.app.domain.cat.content.AddCatContent;
 import potenday.app.domain.cat.status.CatFriends;
 import potenday.app.domain.cat.status.CatNeuter;
 import potenday.app.domain.cat.status.CatPersonality;
-import potenday.app.domain.image.AddCatContentImages;
+import potenday.app.domain.cat.content.AddCatContentImages;
 
 @AllArgsConstructor
 @NoArgsConstructor
