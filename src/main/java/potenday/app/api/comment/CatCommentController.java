@@ -1,6 +1,7 @@
 package potenday.app.api.comment;
 
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,6 +45,16 @@ public class CatCommentController {
       @Valid @RequestBody AddCatCommentLikeRequest addCatCommentLikeRequest
   ) {
     catCommentLikeService.addCommentLike(appUser, addCatCommentLikeRequest.toAddCatComment(contentId));
+    return ApiResponse.success("ok");
+  }
+
+  @DeleteMapping("/contents/{contentId}/comments/likes")
+  public ApiResponse<String> cancelCommentLike(
+      @AuthenticationPrincipal AppUser appUser,
+      @PathVariable long contentId,
+      @Valid @RequestBody CancelCommentLikeRequest cancelCommentLikeRequest
+  ) {
+    catCommentLikeService.cancelCommentLike(appUser, cancelCommentLikeRequest.toCancelComment(contentId));
     return ApiResponse.success("ok");
   }
 }
