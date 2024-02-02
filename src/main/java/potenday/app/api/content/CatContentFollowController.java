@@ -24,7 +24,6 @@ public class CatContentFollowController {
       @AuthenticationPrincipal AppUser appUser,
       @Valid @RequestBody CatFollowAndCancelRequest catFollowAndCancelRequest
   ) {
-    System.out.println("     catFollowAndCancelRequest.getContentId() :  " +     catFollowAndCancelRequest.getContentId());
     catFollowService.catFollow(appUser, catFollowAndCancelRequest.toAddFollow());
     return ApiResponse.success("ok");
   }

@@ -30,7 +30,7 @@ import potenday.app.domain.BaseTimeEntity;
 @Getter
 @Entity
 @Table(name = "CAT_CONTENT_COMMENT")
-@SQLRestriction("is_deleted <> false")
+@SQLRestriction("is_deleted=false")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CatComment extends BaseTimeEntity {
 

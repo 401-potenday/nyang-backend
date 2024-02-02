@@ -35,6 +35,9 @@ public enum ErrorCode {
   C007("C007", "최대 3장의 사진까지 업로드 가능합니다.", HttpStatus.BAD_REQUEST),
   C008("C008", "최대 글자수(300)를 초과하였습니다", HttpStatus.BAD_REQUEST),
 
+  // 컨텐츠 - 댓글 - 좋아요
+  C009("C009", "이미 좋아요를 누르셨습니다.", HttpStatus.BAD_REQUEST),
+
   C010("C010",  "고양이 이름이 없어요. 고양이 이름은 필수입니다.", HttpStatus.BAD_REQUEST),
   C011("C011", "고양이 이름은 최소 2 글자, 최대 10 글자 사이어야 합니다.", HttpStatus.BAD_REQUEST),
   C016("C016", "글은 300자를 넘을 수 없습니다.", HttpStatus.BAD_REQUEST),
@@ -56,8 +59,12 @@ public enum ErrorCode {
   CI01("CI01", "잘못된 형식의 이미지 업로드입니다. 이미지의 uri 주소는 http:// 또는 https:// 로 시작해야 합니다.", HttpStatus.BAD_REQUEST),
   CI02("CI02", "최소 하나 이상의 고양이 사진이 필요합니다.", HttpStatus.BAD_REQUEST),
 
-  F001("C006", "이미 팔로우를 했어요", HttpStatus.BAD_REQUEST),
+  F001("F001", "이미 팔로우를 했어요", HttpStatus.BAD_REQUEST),
   F002("F002", "컨텐츠 번호 (contentId) 는 필수입니다.", HttpStatus.BAD_REQUEST),
+
+  // 댓글
+  D002("D001", "댓글 번호 (commentId) 는 필수입니다.", HttpStatus.BAD_REQUEST),
+  D003("D002", "이미 삭제되었거나, 해당 댓글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 
   // 인증, 권한
   A001("A001", "잘못된 접근입니다. ", HttpStatus.UNAUTHORIZED),
