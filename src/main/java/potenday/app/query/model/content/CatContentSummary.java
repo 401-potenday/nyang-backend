@@ -9,6 +9,7 @@ import potenday.app.domain.cat.content.CatContent;
 @Builder
 public class CatContentSummary {
 
+  private long catContentId;
   private String catName;
   private String catAddress;
   private double catLat;
@@ -21,6 +22,7 @@ public class CatContentSummary {
 
   public static CatContentSummary of(CatContent content) {
     return CatContentSummary.builder()
+        .catContentId(content.getId())
         .catName(content.getName())
         .catAddress(content.getJibunAddress().toString())
         .catLat(content.getCoordinate().getLat())
