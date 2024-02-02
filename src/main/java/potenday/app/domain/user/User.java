@@ -15,6 +15,8 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 import potenday.app.domain.BaseTimeEntity;
+import potenday.app.global.error.ErrorCode;
+import potenday.app.global.error.PotendayException;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -83,7 +85,17 @@ public class User extends BaseTimeEntity {
     this.activateStatus = UserActivateStatus.ACTIVATE;
   }
 
-  public boolean active() {
+  public boolean isActive() {
     return activateStatus == UserActivateStatus.ACTIVATE;
+  }
+
+  public void authorizationCheck() {
+    if (!isActive() || this.nickname == null) {
+      throw new PotendayException(ErrorCode.A005);
+    }
+
+    if (isWithDraw) {
+      throw new PotendayException(ErrorCode.A004);
+    }
   }
 }
