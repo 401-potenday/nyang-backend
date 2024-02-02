@@ -30,12 +30,22 @@ public class CatCommentLikeService {
     User user = findUser(appUser);
     CatComment catComment = findComment(addCatCommentLike.commentId());
     CatCommentLikeId commentLikeId = createCommentId(user.getId(), catComment.getId());
-    if (alreadyLikedComment(commentLikeId)) {
+    if (isCommentLiked(commentLikeId)) {
       throw new PotendayException(ErrorCode.C009);
     }
-
     CatCommentLike catCommentLike = new CatCommentLike(commentLikeId);
     saveLike(catCommentLike);
+  }
+
+  @Transactional
+  public void cancelCommentLike(AppUser appUser, CancelCommentLike cancelCommentLike) {
+    User user = findUser(appUser);
+    CatComment catComment = findComment(cancelCommentLike.commentId());
+    CatCommentLikeId commentLikeId = createCommentId(user.getId(), catComment.getId());
+    if (!isCommentLiked(commentLikeId)) {
+      return;
+    }
+    catCommentLikeRepository.deleteByCatCommentLikeId(commentLikeId);
   }
 
   private void saveLike(CatCommentLike catCommentLike) {
@@ -51,7 +61,7 @@ public class CatCommentLikeService {
     return new CatCommentLikeId(userId, commentId);
   }
 
-  private boolean alreadyLikedComment(CatCommentLikeId catCommentLikeId) {
+  private boolean isCommentLiked(CatCommentLikeId catCommentLikeId) {
     return catCommentLikeRepository.existsByCatCommentLikeId(catCommentLikeId);
   }
 
