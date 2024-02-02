@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
-import potenday.app.domain.cat.AddCatContent;
+import potenday.app.domain.cat.content.AddCatContent;
 import potenday.app.domain.cat.status.CatFriends;
 import potenday.app.domain.cat.status.CatNeuter;
 import potenday.app.domain.cat.status.CatPersonality;

@@ -3,7 +3,7 @@ package potenday.app.query.model.content;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
-import potenday.app.domain.cat.CatContent;
+import potenday.app.domain.cat.content.CatContent;
 
 @Getter
 @Builder

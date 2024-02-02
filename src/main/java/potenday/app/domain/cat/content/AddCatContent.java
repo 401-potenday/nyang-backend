@@ -1,7 +1,8 @@
-package potenday.app.domain.cat;
+package potenday.app.domain.cat.content;
 
 import java.util.List;
 import lombok.Builder;
+import potenday.app.domain.cat.content.CatContent;
 import potenday.app.domain.cat.status.CatFriends;
 import potenday.app.domain.cat.status.CatNeuter;
 import potenday.app.domain.cat.status.CatPersonalities;

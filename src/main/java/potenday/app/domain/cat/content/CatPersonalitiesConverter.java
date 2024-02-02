@@ -1,4 +1,4 @@
-package potenday.app.domain.cat;
+package potenday.app.domain.cat.content;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;

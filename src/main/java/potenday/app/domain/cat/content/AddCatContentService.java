@@ -1,4 +1,4 @@
-package potenday.app.domain.cat;
+package potenday.app.domain.cat.content;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -49,7 +49,7 @@ public class AddCatContentService {
   private User findUser(AppUser appUser) {
     User user = userRepository.findById(appUser.id())
         .orElseThrow(() -> new PotendayException(ErrorCode.A001));
-    if (!user.active()) {
+    if (!user.isActive()) {
       throw new PotendayException(ErrorCode.A001);
     }
     return user;

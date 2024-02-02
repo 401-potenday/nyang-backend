@@ -1,4 +1,4 @@
-package potenday.app.domain.cat;
+package potenday.app.domain.cat.content;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;

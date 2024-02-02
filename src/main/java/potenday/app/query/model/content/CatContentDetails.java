@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-import potenday.app.domain.cat.CatContent;
+import potenday.app.domain.cat.content.CatContent;
 import potenday.app.domain.cat.status.CatFriends;
 import potenday.app.domain.cat.status.CatNeuter;
 import potenday.app.domain.cat.status.CatPersonality;

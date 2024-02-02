@@ -17,7 +17,7 @@ import potenday.app.api.content.search.DistanceOrder;
 import potenday.app.domain.auth.AppUser;
 import potenday.app.domain.auth.AuthenticationPrincipal;
 import potenday.app.domain.auth.OptionalAuthenticationPrincipal;
-import potenday.app.domain.cat.AddCatContentService;
+import potenday.app.domain.cat.content.AddCatContentService;
 import potenday.app.query.model.content.CatContentDetails;
 import potenday.app.query.model.content.CatContentSummariesResponse;
 import potenday.app.query.repository.CoordinationCondition;

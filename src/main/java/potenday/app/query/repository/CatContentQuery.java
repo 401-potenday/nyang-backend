@@ -1,6 +1,6 @@
 package potenday.app.query.repository;
 
-import static potenday.app.domain.cat.QCatContent.catContent;
+import static potenday.app.domain.cat.content.QCatContent.catContent;
 import static potenday.app.domain.image.QCatContentImage.catContentImage;
 
 import com.querydsl.core.types.OrderSpecifier;
@@ -14,7 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import potenday.app.api.content.search.ContentSearchCondition;
 import potenday.app.api.content.search.DistanceOrder;
-import potenday.app.domain.cat.CatContent;
+import potenday.app.domain.cat.content.CatContent;
 import potenday.app.domain.image.CatContentImage;
 
 @Component
