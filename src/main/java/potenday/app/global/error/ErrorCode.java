@@ -61,7 +61,8 @@ public enum ErrorCode {
   A005("A005", "닉네임이 없습니다. 닉네임을 설정하세요.", HttpStatus.UNAUTHORIZED),
 
   // 정의되지 않는 에러
-  X001("X001", "서버에 문제가 발생하였습니다. 관리자에게 연락해주세요", HttpStatus.INTERNAL_SERVER_ERROR);
+  X001("X001", "서버에 문제가 발생하였습니다. 관리자에게 연락해주세요", HttpStatus.INTERNAL_SERVER_ERROR),
+  X002("X002", "옳지 못한 형식의 요청입니다.", HttpStatus.BAD_REQUEST);
 
   private final String code;
   private final String message;
