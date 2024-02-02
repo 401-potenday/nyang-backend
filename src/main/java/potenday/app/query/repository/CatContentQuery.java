@@ -1,7 +1,7 @@
 package potenday.app.query.repository;
 
 import static potenday.app.domain.cat.content.QCatContent.catContent;
-import static potenday.app.domain.image.QCatContentImage.catContentImage;
+import static potenday.app.domain.cat.content.QCatContentImage.catContentImage;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
