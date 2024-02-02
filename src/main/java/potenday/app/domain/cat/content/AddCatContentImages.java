@@ -1,4 +1,4 @@
-package potenday.app.domain.image;
+package potenday.app.domain.cat.content;
 
 import java.util.List;
 

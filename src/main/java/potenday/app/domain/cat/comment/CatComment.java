@@ -8,7 +8,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
@@ -54,7 +53,6 @@ public class CatComment extends BaseTimeEntity {
   @Column(name = "deleted_at")
   private LocalDateTime deletedAt;
 
-  @Builder
   public CatComment(final String comment,final Long catContentId,final Long userId) {
     this.comment = comment;
     this.catContentId = catContentId;

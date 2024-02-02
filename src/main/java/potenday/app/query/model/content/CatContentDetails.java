@@ -11,7 +11,7 @@ import potenday.app.domain.cat.content.CatContent;
 import potenday.app.domain.cat.status.CatFriends;
 import potenday.app.domain.cat.status.CatNeuter;
 import potenday.app.domain.cat.status.CatPersonality;
-import potenday.app.domain.image.CatContentImage;
+import potenday.app.domain.cat.content.CatContentImage;
 import potenday.app.query.model.user.UserNickname;
 
 @Builder
