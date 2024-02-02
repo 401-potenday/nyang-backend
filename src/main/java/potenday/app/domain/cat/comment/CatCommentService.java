@@ -3,8 +3,6 @@ package potenday.app.domain.cat.comment;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import potenday.app.domain.auth.AppUser;
-import potenday.app.domain.cat.content.AddCatContent;
-import potenday.app.domain.cat.content.CatContent;
 import potenday.app.domain.cat.content.CatContentRepository;
 import potenday.app.domain.user.User;
 import potenday.app.domain.user.UserRepository;
@@ -51,12 +49,6 @@ public class CatCommentService {
         .orElseThrow(() -> new PotendayException(ErrorCode.A001));
     user.authorizationCheck();
     return user;
-  }
-
-  private CatContent createContent(User user, AddCatContent addCatcontent) {
-    CatContent content = addCatcontent.toContent();
-    content.setOwner(user.getId());
-    return content;
   }
 
   private List<CatCommentImage> createCommentImages(User user, Long contentId, AddCatCommentImages addCatCommentImages) {
