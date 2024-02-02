@@ -64,7 +64,7 @@ public enum ErrorCode {
 
   // 댓글
   D002("D001", "댓글 번호 (commentId) 는 필수입니다.", HttpStatus.BAD_REQUEST),
-  D003("D002", "이미 삭제되었거나, 해당 댓글을 찾을 수 없습니다.", HttpStatus.BAD_REQUEST),
+  D003("D002", "이미 삭제되었거나, 해당 댓글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 
   // 인증, 권한
   A001("A001", "잘못된 접근입니다. ", HttpStatus.UNAUTHORIZED),
