@@ -45,9 +45,16 @@ public class CatCommentImage extends BaseTimeEntity {
 
   @Builder
   public CatCommentImage(Long catContentId, Long userId, String imageUri, int imageOrder) {
+    validateImageHttpUri(imageUri);
     this.catContentId = catContentId;
     this.userId = userId;
     this.imageUri = imageUri;
     this.imageOrder = imageOrder;
+  }
+
+  void validateImageHttpUri(String imageUri) {
+    if (!imageUri.startsWith("http://") && !imageUri.startsWith("https://")) {
+      throw new IllegalArgumentException("CI01");
+    }
   }
 }
