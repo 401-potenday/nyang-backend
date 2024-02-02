@@ -28,7 +28,6 @@ public enum ErrorCode {
   C002("C002", "무리여부를 선택해주세요!. 잘못된 요청입니다. (YES, NO, UNSURE) 만 가능)", HttpStatus.BAD_REQUEST),
   C003("C003", "중성화여부를 선택해주세요! ", HttpStatus.BAD_REQUEST),
   C004("C004", "해당 컨텐츠는 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
-  C006("C006", "이미 팔로우를 했어요", HttpStatus.BAD_REQUEST),
 
   C010("C010",  "고양이 이름이 없어요. 고양이 이름은 필수입니다.", HttpStatus.BAD_REQUEST),
   C011("C011", "고양이 이름은 최소 2 글자, 최대 10 글자 사이어야 합니다.", HttpStatus.BAD_REQUEST),
@@ -50,6 +49,9 @@ public enum ErrorCode {
   // 컨텐츠 - 이미지
   CI01("CI01", "잘못된 형식의 이미지 업로드입니다. 이미지의 uri 주소는 http:// 또는 https:// 로 시작해야 합니다.", HttpStatus.BAD_REQUEST),
   CI02("CI02", "최소 하나 이상의 고양이 사진이 필요합니다.", HttpStatus.BAD_REQUEST),
+
+  F001("C006", "이미 팔로우를 했어요", HttpStatus.BAD_REQUEST),
+  F002("F002", "컨텐츠 번호 (contentId) 는 필수입니다.", HttpStatus.BAD_REQUEST),
 
   // 인증, 권한
   A001("A001", "잘못된 접근입니다. ", HttpStatus.UNAUTHORIZED),
