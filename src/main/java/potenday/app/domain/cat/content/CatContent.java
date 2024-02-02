@@ -75,7 +75,7 @@ public class CatContent extends BaseTimeEntity {
   @Builder
   public CatContent(final Long id, final String name, final CatFriends hasFriends, final String description,
       final CatPersonalities catPersonalities, final CatNeuter neuter, final JibunAddress jibunAddress,
-      final Coordinate coordinate) {
+      final Coordinate coordinate, final int catEmoji) {
     this.id = id;
     this.name = name;
     this.hasFriends = hasFriends;
@@ -84,7 +84,7 @@ public class CatContent extends BaseTimeEntity {
     this.neuter = neuter;
     this.jibunAddress = jibunAddress;
     this.coordinate = coordinate;
-    this.catEmoji = 1;
+    this.catEmoji = catEmoji;
   }
 
   public void setOwner(final long userId) {

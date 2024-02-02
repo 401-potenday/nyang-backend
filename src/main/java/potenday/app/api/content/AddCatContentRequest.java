@@ -1,5 +1,7 @@
 package potenday.app.api.content;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -9,10 +11,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import potenday.app.domain.cat.content.AddCatContent;
+import potenday.app.domain.cat.content.AddCatContentImages;
 import potenday.app.domain.cat.status.CatFriends;
 import potenday.app.domain.cat.status.CatNeuter;
 import potenday.app.domain.cat.status.CatPersonality;
-import potenday.app.domain.cat.content.AddCatContentImages;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -59,8 +61,13 @@ public class AddCatContentRequest {
   @NotNull(message = "C003")
   private CatNeuter neuter;
 
+  @Min(value = 1, message = "C012")
+  @Max(value = 18, message = "C012")
+  private int catEmoji;
+
   public AddCatContent toAddCatContent() {
     return AddCatContent.builder()
+        .catEmoji(catEmoji)
         .jibunSigungu(jibunSigungu)
         .jibunSido(jibunSido)
         .jibunDong(jibunDong)

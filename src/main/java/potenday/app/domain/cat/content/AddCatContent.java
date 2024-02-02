@@ -2,7 +2,6 @@ package potenday.app.domain.cat.content;
 
 import java.util.List;
 import lombok.Builder;
-import potenday.app.domain.cat.content.CatContent;
 import potenday.app.domain.cat.status.CatFriends;
 import potenday.app.domain.cat.status.CatNeuter;
 import potenday.app.domain.cat.status.CatPersonalities;
@@ -39,9 +38,12 @@ public class AddCatContent {
 
   private String neuter;
 
+  private int catEmoji;
+
   public CatContent toContent() {
     return CatContent.builder()
         .name(name)
+        .catEmoji(catEmoji)
         .hasFriends(CatFriends.from(hasFriends))
         .neuter(CatNeuter.from(hasFriends))
         .jibunAddress(JibunAddress.builder()
