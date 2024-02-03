@@ -16,7 +16,7 @@ public class CatContentSummary {
   @JsonProperty("name")
   private String catName;
 
-  @JsonProperty("address")
+  @JsonProperty("jibunAddrName")
   private String catAddress;
 
   @JsonProperty("lat")
@@ -25,10 +25,10 @@ public class CatContentSummary {
   @JsonProperty("lng")
   private double catLon;
 
-  @JsonProperty("commentCount")
+  @JsonProperty("numberOfComments")
   private int catCommentCount;
 
-  @JsonProperty("followerCount")
+  @JsonProperty("numberOfCatSlaves")
   private int catFollowerCount;
 
   @JsonProperty("createdAt")
@@ -37,7 +37,7 @@ public class CatContentSummary {
   @JsonProperty("updatedAt")
   private LocalDateTime catUpdatedAt;
 
-  @JsonProperty("emoji")
+  @JsonProperty("catEmoji")
   private int catEmoji;
 
   public static CatContentSummary of(CatContent content) {
