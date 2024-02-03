@@ -1,5 +1,6 @@
 package potenday.app.domain.cat.support;
 
+import static potenday.app.global.cache.CacheConst.CAT_CONTENT_COMMENTS_COUNT;
 import static potenday.app.global.cache.CacheConst.CAT_CONTENT_COMMENT_LIKE_COUNT;
 
 import org.springframework.cache.annotation.Cacheable;
@@ -8,11 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 import potenday.app.query.repository.CatCommentQuery;
 
 @Component
-public class CatCommentLikesCountCalculator {
+public class CatCommentEngagementsCalculator {
 
   private final CatCommentQuery catCommentQuery;
 
-  public CatCommentLikesCountCalculator(
+  public CatCommentEngagementsCalculator(
       CatCommentQuery catCommentQuery) {
     this.catCommentQuery = catCommentQuery;
   }
@@ -24,5 +25,14 @@ public class CatCommentLikesCountCalculator {
       return 0;
     }
     return catCommentQuery.computeCommentLikesCount(catCommentId);
+  }
+
+  @Transactional(readOnly = true)
+  @Cacheable(cacheNames = CAT_CONTENT_COMMENTS_COUNT, key = "#catContentId")
+  public long countCommentsByContentId(Long catContentId) {
+    if (catContentId == null) {
+      return 0;
+    }
+    return catCommentQuery.countContentComments(catContentId);
   }
 }

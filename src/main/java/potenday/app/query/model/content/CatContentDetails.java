@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+import potenday.app.api.content.CatContentEngagementSummary;
 import potenday.app.domain.cat.content.CatContent;
 import potenday.app.domain.cat.status.CatFriends;
 import potenday.app.domain.cat.status.CatNeuter;
@@ -40,9 +41,8 @@ public class CatContentDetails {
 
   // 다른 곳에서!
   private boolean isBookMark;
-  private int countOfBookMark;
-  private int numberOfComments;
-  private int numberOfCatSlaves;
+  private long countOfFollowed;
+  private long countOfComments;
 
   private long userUid;
   private String nickname;
@@ -50,7 +50,8 @@ public class CatContentDetails {
   public static CatContentDetails of(
       CatContent content,
       List<CatContentImage> catContentImages,
-      UserNickname userNickname
+      UserNickname userNickname,
+      CatContentEngagementSummary contentEngagementSummary
   ) {
     return CatContentDetails.builder()
         .contentId(content.getId())
@@ -76,6 +77,11 @@ public class CatContentDetails {
         .nickname(userNickname.getNickname())
         .createdAt(content.getCreatedAt().toString())
         .updatedAt(content.getUpdatedAt().toString())
+
+        // content 통계
+        .countOfFollowed(contentEngagementSummary.countOfFollowed())
+        .countOfComments(contentEngagementSummary.countOfComments())
+
         .build();
   }
 }

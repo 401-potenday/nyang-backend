@@ -140,4 +140,16 @@ public class CatCommentQuery {
   private static BooleanExpression eqCommentId(Long catCommentId) {
     return catCommentLike.catCommentLikeId.catCommentId.eq(catCommentId);
   }
+
+  public long countContentComments(Long catContentId) {
+    Long fetchResult = queryFactory
+        .select(catComment.count())
+        .from(catComment)
+        .where(
+            catComment.isDeleted.isFalse(),
+            catComment.catContentId.eq(catContentId)
+        )
+        .fetchOne();
+    return fetchResult != null ? fetchResult : 0;
+  }
 }
