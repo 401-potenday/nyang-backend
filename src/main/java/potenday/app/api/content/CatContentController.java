@@ -61,7 +61,7 @@ public class CatContentController {
   public ApiResponse<CatContentSummariesResponse> getCatContents(
       @OptionalAuthenticationPrincipal AppUser appUser,
       @RequestParam(name = "lat") Double centerLat,
-      @RequestParam(name = "lon") Double centerLon,
+      @RequestParam(name = "lng") Double centerLon,
       @RequestParam(name = "follow", required = false, defaultValue = "false") Boolean follow,
       @RequestParam(name = "distance_order", required = false) DistanceOrder distanceOrder,
       @RequestParam(name = "range", required = false, defaultValue = "1000") Double range,
