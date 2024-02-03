@@ -40,7 +40,7 @@ public class AddCatContentRequest {
 
   @NotNull(message = "CG06")
   @Pattern(regexp = "^-?\\d+\\.\\d{5,}$", message = "CG04")
-  private String lon;
+  private String lng;
 
   @NotNull(message = "CA01")
   private String jibunAddrName;
@@ -74,7 +74,7 @@ public class AddCatContentRequest {
         .jibunSubAddrNo(jibunSubAddrNo)
         .jibunMainAddrNo(jibunMainAddrNo)
         .lat(Double.parseDouble(lat))
-        .lon(Double.parseDouble(lon))
+        .lon(Double.parseDouble(lng))
         .hasFriends(group.name())
         .neuter(neuter.name())
         .jibunAddrName(jibunAddrName)

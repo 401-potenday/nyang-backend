@@ -19,6 +19,7 @@ import potenday.app.query.model.user.UserNickname;
 @ToString
 public class CatContentDetails {
 
+  private long contentId;
   private String name;
   private String description;
   private CatFriends group;
@@ -52,6 +53,7 @@ public class CatContentDetails {
       UserNickname userNickname
   ) {
     return CatContentDetails.builder()
+        .contentId(content.getId())
         .name(content.getName())
         .description(content.getDescription())
         .group(content.getHasFriends())
