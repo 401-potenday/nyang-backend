@@ -92,4 +92,15 @@ public class CatContentQuery {
 
     return (catContent.coordinate.lat.between(south, north)).and(catContent.coordinate.lon.between(west, east));
   }
+
+  public boolean existsByContentId(long contentId) {
+    return queryFactory
+        .selectOne()
+        .from(catContent)
+        .where(
+            catContent.id.eq(contentId),
+            catContent.isDeleted.isFalse()
+        )
+        .fetchFirst() != null;
+  }
 }
