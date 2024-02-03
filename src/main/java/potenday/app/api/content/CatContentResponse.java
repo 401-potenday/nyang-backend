@@ -69,16 +69,13 @@ public class CatContentResponse {
   private int catEmoji;
 
   @JsonProperty(value = "isFollowed")
-  private Boolean isFollowed;
+  private boolean followed;
 
-  @JsonProperty(value = "countOfBookMark")
-  private int countOfBookMark;
+  @JsonProperty(value = "countOfFollowed")
+  private long countOfBookMark;
 
-  @JsonProperty(value = "numberOfComments")
-  private int numberOfComments;
-
-  @JsonProperty(value = "numberOfCatSlaves")
-  private int numberOfCatSlaves;
+  @JsonProperty(value = "countOfComments")
+  private long countOfComments;
 
   @JsonProperty(value = "userUid")
   private long userUid;
@@ -88,16 +85,21 @@ public class CatContentResponse {
 
   public static CatContentResponse from(CatContentDetails catContentDetails) {
     return CatContentResponse.builder()
+
+        // 통계
+        .countOfBookMark(catContentDetails.getCountOfFollowed())
+        .countOfComments(catContentDetails.getCountOfComments())
+        .followed(catContentDetails.isFollowed())
+
+        // 일반 데이터
         .contentId(catContentDetails.getContentId())
         .catEmoji(catContentDetails.getCatEmoji())
-        .countOfBookMark(catContentDetails.getCountOfBookMark())
         .description(catContentDetails.getDescription())
         .group(catContentDetails.getGroup())
         .catPersonalities(catContentDetails.getCatPersonalities())
         .lat(catContentDetails.getLat())
         .lng(catContentDetails.getLon())
         .images(catContentDetails.getImages())
-        .isFollowed(catContentDetails.isBookMark())
         .jibunAddrName(catContentDetails.getJibunAddrName())
         .jibunDong(catContentDetails.getJibunDong())
         .jibunMainAddrNo(catContentDetails.getJibunMainAddrNo())
@@ -106,8 +108,6 @@ public class CatContentResponse {
         .jibunSubAddrNo(catContentDetails.getJibunSubAddrNo())
         .name(catContentDetails.getName())
         .neuter(catContentDetails.getNeuter())
-        .numberOfCatSlaves(catContentDetails.getNumberOfCatSlaves())
-        .numberOfComments(catContentDetails.getNumberOfComments())
         .userUid(catContentDetails.getUserUid())
         .nickname(catContentDetails.getNickname())
         .updatedAt(catContentDetails.getUpdatedAt())
