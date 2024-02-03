@@ -1,5 +1,5 @@
 package potenday.app.api.content;
 
-public record AddCatContentResponse(long contendId) {
+public record AddCatContentResponse(long contentId) {
 
 }
