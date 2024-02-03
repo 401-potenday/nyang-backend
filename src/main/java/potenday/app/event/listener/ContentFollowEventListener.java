@@ -18,12 +18,12 @@ public class ContentFollowEventListener {
 
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
   public void onFollow(FollowEvent event) {
-
+    System.out.println("ContentFollowEventListener.onFollow");
   }
 
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
   public void onUnfollow(UnFollowEvent event) {
-
+    System.out.println("ContentFollowEventListener.onUnfollow");
   }
 
 }
