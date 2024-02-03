@@ -1,27 +1,64 @@
 package potenday.app.api.comment;
 
 import jakarta.validation.Valid;
+import java.util.List;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import potenday.app.api.common.ApiResponse;
+import potenday.app.api.common.PageContent;
 import potenday.app.domain.auth.AppUser;
 import potenday.app.domain.auth.AuthenticationPrincipal;
+import potenday.app.domain.auth.OptionalAuthenticationPrincipal;
 import potenday.app.domain.cat.comment.CatCommentService;
 import potenday.app.domain.cat.commentlikes.CatCommentLikeService;
+import potenday.app.query.service.ReadCatCommentService;
 
 @RestController
 public class CatCommentController {
 
   private final CatCommentService catCommentService;
   private final CatCommentLikeService catCommentLikeService;
+  private final ReadCatCommentService readCatCommentService;
 
   public CatCommentController(CatCommentService catCommentService,
-      CatCommentLikeService catCommentLikeService) {
+      CatCommentLikeService catCommentLikeService, ReadCatCommentService readCatCommentService) {
     this.catCommentService = catCommentService;
     this.catCommentLikeService = catCommentLikeService;
+    this.readCatCommentService = readCatCommentService;
+  }
+
+  @GetMapping("/contents/{contentId}/comments")
+  public ApiResponse<PageContent<CatCommentResponse>> getComments(
+      @OptionalAuthenticationPrincipal AppUser appUser,
+      @PathVariable long contentId,
+      @PageableDefault(page = 1) Pageable pageable
+  ) {
+    PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize());
+    var catCommentWithUserNicknameAndImages = readCatCommentService.findCatComments(contentId, pageRequest);
+
+    // TODO commentLikeCount, isCatCommentLiked <- 캐시에서 가져오기
+    List<CatCommentResponse> catCommentResponses = catCommentWithUserNicknameAndImages.stream()
+        .map(it -> CatCommentResponse.of(it, 0, false))
+        .toList();
+
+    // createResponse
+    PageContent<CatCommentResponse> pageContent = new PageContent<>(
+        catCommentResponses,
+        catCommentWithUserNicknameAndImages.getPageable().getPageNumber(),
+        catCommentWithUserNicknameAndImages.getPageable().getPageSize(),
+        catCommentWithUserNicknameAndImages.getTotalPages(),
+        catCommentWithUserNicknameAndImages.getTotalElements(),
+        catCommentWithUserNicknameAndImages.isLast()
+    );
+
+    return ApiResponse.success(pageContent);
   }
 
   @PostMapping("/contents/{contentId}/comments")
