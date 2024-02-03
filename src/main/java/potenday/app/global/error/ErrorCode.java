@@ -31,7 +31,7 @@ public enum ErrorCode {
 
   // 컨텐츠 - 댓글
   C005("C005", "최대 3개의 이미지를 등록할 수 있습니다.", HttpStatus.BAD_REQUEST),
-  C006("C006", "고양이 사진은 필수입니다.", HttpStatus.BAD_REQUEST),
+  C006("C006", "commentImageUris 필드는 필수입니다.", HttpStatus.BAD_REQUEST),
   C007("C007", "최대 3장의 사진까지 업로드 가능합니다.", HttpStatus.BAD_REQUEST),
   C008("C008", "최대 글자수(300)를 초과하였습니다", HttpStatus.BAD_REQUEST),
 
