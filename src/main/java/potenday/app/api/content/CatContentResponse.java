@@ -68,8 +68,8 @@ public class CatContentResponse {
   @JsonProperty(value = "catEmoji")
   private int catEmoji;
 
-  @JsonProperty(value = "isBookMark")
-  private boolean isBookMark;
+  @JsonProperty(value = "isFollowed")
+  private Boolean isFollowed;
 
   @JsonProperty(value = "countOfBookMark")
   private int countOfBookMark;
@@ -97,7 +97,7 @@ public class CatContentResponse {
         .lat(catContentDetails.getLat())
         .lng(catContentDetails.getLon())
         .images(catContentDetails.getImages())
-        .isBookMark(catContentDetails.isBookMark())
+        .isFollowed(catContentDetails.isBookMark())
         .jibunAddrName(catContentDetails.getJibunAddrName())
         .jibunDong(catContentDetails.getJibunDong())
         .jibunMainAddrNo(catContentDetails.getJibunMainAddrNo())
