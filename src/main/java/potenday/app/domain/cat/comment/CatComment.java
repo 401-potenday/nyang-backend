@@ -13,20 +13,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
 import potenday.app.domain.BaseTimeEntity;
 
-
-/**
- * create table CAT_CONTENT_COMMENT
- * (
- *     id             BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL,
- *     comment        varchar(255) NULL ,
- *     cat_content_id BIGINT                NULL ,
- *     user_id        BIGINT                NULL ,
- *     created_at     DATETIME              NOT NULL default now(),
- *     updated_at     DATETIME              NOT NULL default now(),
- *     deleted_at     DATETIME              NULL,
- *     is_deleted     TINYINT(1)            NOT NULL default false
- * );
- */
 @Getter
 @Entity
 @Table(name = "CAT_CONTENT_COMMENT")

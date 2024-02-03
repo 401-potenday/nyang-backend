@@ -22,13 +22,14 @@ public class CatCommentImages {
         .build();
   }
 
-  public List<CatCommentImage> toTargetImages(Long contentId, User userId) {
+  public List<CatCommentImage> toTargetImages(long contentId, long commentId, User userId) {
     return catCommentImages.stream().map(image ->
             CatCommentImage.builder()
+                .catContentId(contentId)
+                .catCommentId(commentId)
+                .userId(userId.getId())
                 .imageUri(image.getImageUri())
                 .imageOrder(image.getImageOrder())
-                .userId(userId.getId())
-                .catContentId(contentId)
                 .build())
         .toList();
   }

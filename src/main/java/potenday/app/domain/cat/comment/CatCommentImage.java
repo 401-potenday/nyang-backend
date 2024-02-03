@@ -28,6 +28,9 @@ public class CatCommentImage extends BaseTimeEntity {
   @Column(name = "cat_content_id", nullable = false)
   private Long catContentId;
 
+  @Column(name = "cat_comment_id", nullable = false)
+  private Long catCommentId;
+
   @Column(name = "user_id", nullable = false)
   private Long userId;
 
@@ -44,9 +47,16 @@ public class CatCommentImage extends BaseTimeEntity {
   private LocalDateTime deletedAt;
 
   @Builder
-  public CatCommentImage(Long catContentId, Long userId, String imageUri, int imageOrder) {
+  public CatCommentImage(
+      final long catContentId,
+      final long catCommentId,
+      final long userId,
+      final String imageUri,
+      final int imageOrder
+  ) {
     validateImageHttpUri(imageUri);
     this.catContentId = catContentId;
+    this.catCommentId = catCommentId;
     this.userId = userId;
     this.imageUri = imageUri;
     this.imageOrder = imageOrder;

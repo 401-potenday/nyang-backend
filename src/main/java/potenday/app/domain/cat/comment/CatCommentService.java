@@ -30,8 +30,8 @@ public class CatCommentService {
     User user = findUser(appUser);
     checkExisted(addCatComment.contentId());
     CatComment catComment = catCommentRepository.save(createCatComment(user, addCatComment));
-    catCommentImageRepository.saveAllAndFlush(createCommentImages(user, addCatComment.contentId(), addCatCommentImages));
-    return catComment.getCatContentId();
+    catCommentImageRepository.saveAllAndFlush(createCommentImages(addCatComment.contentId(), catComment.getId(), user, addCatCommentImages));
+    return catComment.getId();
   }
 
   private CatComment createCatComment(User user, AddCatComment addCatComment) {
@@ -39,7 +39,7 @@ public class CatCommentService {
   }
 
   private void checkExisted(Long contentId) {
-    if (catContentRepository.existsById(contentId)) {
+    if (!catContentRepository.existsById(contentId)) {
       throw new PotendayException(ErrorCode.C004);
     }
   }
@@ -51,8 +51,13 @@ public class CatCommentService {
     return user;
   }
 
-  private List<CatCommentImage> createCommentImages(User user, Long contentId, AddCatCommentImages addCatCommentImages) {
+  private List<CatCommentImage> createCommentImages(
+      Long contentId,
+      long commentId,
+      User user,
+      AddCatCommentImages addCatCommentImages
+  ) {
     CatCommentImages commentImages = addCatCommentImages.toContentImages();
-    return commentImages.toTargetImages(contentId, user);
+    return commentImages.toTargetImages(contentId, commentId, user);
   }
 }
