@@ -45,11 +45,11 @@ public enum ErrorCode {
 
   // 컨텐츠 - 위도,경도
   CG01("CG01", "위도(lat)는 -90과 90 사이어야 합니다.", HttpStatus.BAD_REQUEST),
-  CG02("CG02", "경도(lon)는 -180과 180 사이어야 합니다.", HttpStatus.BAD_REQUEST),
+  CG02("CG02", "경도(lng)는 -180과 180 사이어야 합니다.", HttpStatus.BAD_REQUEST),
   CG03("CG03", "위도(lat)는 최소 소수점 5자리 이어야합니다.", HttpStatus.BAD_REQUEST),
-  CG04("CG04", "경도(lon)는 최소 소수점 5자리 이어야합니다.", HttpStatus.BAD_REQUEST),
+  CG04("CG04", "경도(lng)는 최소 소수점 5자리 이어야합니다.", HttpStatus.BAD_REQUEST),
   CG05("CG05", "위도(lat)는 필수입니다.", HttpStatus.BAD_REQUEST),
-  CG06("CG06", "경도(lon)는 필수입니다.", HttpStatus.BAD_REQUEST),
+  CG06("CG06", "경도(lng)는 필수입니다.", HttpStatus.BAD_REQUEST),
 
   // 컨텐츠 - 주소
   CA01("CA01", "주소 입력은 필수입니다.", HttpStatus.BAD_REQUEST),
