@@ -38,8 +38,7 @@ public class ReadCatContentService {
   }
 
   @Transactional(readOnly = true)
-  public CatContentDetails fetchContentDetails(long contentId) {
-    // TODO 개선 요망. 매우 느립니다.
+  public CatContentDetails findContent(long contentId) {
     CatContent catContent = catContentQuery.fetchContent(contentId);
     if (catContent == null) {
       throw new PotendayException(ErrorCode.C004);
@@ -51,7 +50,8 @@ public class ReadCatContentService {
         catContent,
         catContentImages,
         userNickname,
-        createEngagementSummary(contentId)
+        createEngagementSummary(contentId),
+        false
     );
   }
 
@@ -62,8 +62,28 @@ public class ReadCatContentService {
   }
 
   @Transactional(readOnly = true)
-  public CatContentSummariesResponse findContentsWithSearchCondition(AppUser appUser, ContentSearchCondition searchCondition, Pageable pageable) {
-    Page<CatContent> catContents = catContentQuery.fetchContentsBySearchCondition(searchCondition, pageable);
+  public CatContentSummariesResponse findContentsWithSearchCondition(AppUser appUser,
+      ContentSearchCondition searchCondition, Pageable pageable) {
+    Page<CatContent> catContents = catContentQuery.fetchContentsBySearchCondition(searchCondition,
+        pageable);
     return CatContentSummariesResponse.of(catContents);
+  }
+
+  @Transactional(readOnly = true)
+  public CatContentDetails findContent(AppUser appUser, long contentId) {
+    CatContent catContent = catContentQuery.fetchContent(contentId);
+    if (catContent == null) {
+      throw new PotendayException(ErrorCode.C004);
+    }
+    List<CatContentImage> catContentImages = catContentQuery.fetchContentImages(contentId);
+    UserNickname userNickname = userQuery.fetchUserSimpleInfo(catContent.getUserId());
+    boolean followed = catContentQuery.isFollowed(appUser.id(), contentId);
+    return CatContentDetails.of(
+        catContent,
+        catContentImages,
+        userNickname,
+        createEngagementSummary(contentId),
+        followed
+    );
   }
 }

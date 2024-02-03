@@ -86,37 +86,12 @@ public class CatContentResponse {
   public static CatContentResponse from(CatContentDetails catContentDetails) {
     return CatContentResponse.builder()
 
+        // 통계
         .countOfBookMark(catContentDetails.getCountOfFollowed())
         .countOfComments(catContentDetails.getCountOfComments())
+        .followed(catContentDetails.isFollowed())
 
-        .contentId(catContentDetails.getContentId())
-        .catEmoji(catContentDetails.getCatEmoji())
-        .description(catContentDetails.getDescription())
-        .group(catContentDetails.getGroup())
-        .catPersonalities(catContentDetails.getCatPersonalities())
-        .lat(catContentDetails.getLat())
-        .lng(catContentDetails.getLon())
-        .images(catContentDetails.getImages())
-        .jibunAddrName(catContentDetails.getJibunAddrName())
-        .jibunDong(catContentDetails.getJibunDong())
-        .jibunMainAddrNo(catContentDetails.getJibunMainAddrNo())
-        .jibunSido(catContentDetails.getJibunSido())
-        .jibunSigungu(catContentDetails.getJibunSigungu())
-        .jibunSubAddrNo(catContentDetails.getJibunSubAddrNo())
-        .name(catContentDetails.getName())
-        .neuter(catContentDetails.getNeuter())
-        .userUid(catContentDetails.getUserUid())
-        .nickname(catContentDetails.getNickname())
-        .updatedAt(catContentDetails.getUpdatedAt())
-        .createdAt(catContentDetails.getCreatedAt())
-        .build();
-  }
-
-  public static CatContentResponse of(
-      CatContentDetails catContentDetails,
-      int isFollowed
-  ) {
-    return CatContentResponse.builder()
+        // 일반 데이터
         .contentId(catContentDetails.getContentId())
         .catEmoji(catContentDetails.getCatEmoji())
         .description(catContentDetails.getDescription())

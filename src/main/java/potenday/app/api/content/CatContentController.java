@@ -18,6 +18,7 @@ import potenday.app.domain.auth.AppUser;
 import potenday.app.domain.auth.AuthenticationPrincipal;
 import potenday.app.domain.auth.OptionalAuthenticationPrincipal;
 import potenday.app.domain.cat.content.AddCatContentService;
+import potenday.app.query.model.content.CatContentDetails;
 import potenday.app.query.model.content.CatContentSummariesResponse;
 import potenday.app.query.repository.CoordinationCondition;
 import potenday.app.query.service.ReadCatContentService;
@@ -52,9 +53,11 @@ public class CatContentController {
       @OptionalAuthenticationPrincipal AppUser appUser,
       @PathVariable long contentId) {
     if (appUser == null) {
-      return ApiResponse.success(CatContentResponse.from(readCatContentService.fetchContentDetails(contentId)));
+      CatContentDetails contentDetail = readCatContentService.findContent(contentId);
+      return ApiResponse.success(CatContentResponse.from(contentDetail));
     }
-    return ApiResponse.success(CatContentResponse.from(readCatContentService.fetchContentDetails(contentId)));
+    CatContentDetails content = readCatContentService.findContent(appUser, contentId);
+    return ApiResponse.success(CatContentResponse.from(content));
   }
 
   @GetMapping("/contents")

@@ -27,6 +27,17 @@ public class CatContentQuery {
     this.queryFactory = queryFactory;
   }
 
+  public boolean isFollowed(long userId, long contentId) {
+    return queryFactory
+        .selectOne()
+        .from(catFollow)
+        .where(
+            catFollow.catContentId.eq(contentId),
+            catFollow.userId.eq(userId)
+        )
+        .fetchFirst() != null;
+  }
+
   public CatContent fetchContent(long contentId) {
     return queryFactory
         .selectFrom(catContent)
@@ -49,7 +60,8 @@ public class CatContentQuery {
     return catContent.isDeleted.isFalse();
   }
 
-  public Page<CatContent> fetchContentsBySearchCondition(ContentSearchCondition searchCondition, Pageable pageable) {
+  public Page<CatContent> fetchContentsBySearchCondition(ContentSearchCondition searchCondition,
+      Pageable pageable) {
     var jpaQuery = queryFactory
         .selectFrom(catContent)
         .where(withInDistance(searchCondition.coordinationCondition()));
@@ -69,10 +81,13 @@ public class CatContentQuery {
   }
 
   private OrderSpecifier<Double> orderByDistance(ContentSearchCondition searchCondition) {
-    NumberExpression<Double> distance = catContent.coordinate.lat.subtract(searchCondition.coordinationCondition().centerLat())
-        .multiply(catContent.coordinate.lat.subtract(searchCondition.coordinationCondition().centerLat()))
+    NumberExpression<Double> distance = catContent.coordinate.lat.subtract(
+            searchCondition.coordinationCondition().centerLat())
+        .multiply(
+            catContent.coordinate.lat.subtract(searchCondition.coordinationCondition().centerLat()))
         .add(catContent.coordinate.lon.subtract(searchCondition.coordinationCondition().centerLon())
-            .multiply(catContent.coordinate.lon.subtract(searchCondition.coordinationCondition().centerLon())))
+            .multiply(catContent.coordinate.lon.subtract(
+                searchCondition.coordinationCondition().centerLon())))
         .sqrt();
 
     return searchCondition.distanceOrder() == DistanceOrder.ASC ? distance.asc() : distance.desc();
@@ -84,14 +99,16 @@ public class CatContentQuery {
     }
 
     double deltaLat = coordinationCondition.range() / (111.0 * 1000); // 위도 변화량 (m 단위)
-    double deltaLon = coordinationCondition.range() / (111.0 * 1000 * Math.cos(Math.toRadians(coordinationCondition.centerLat()))); // 경도 변화량 (m 단위)
+    double deltaLon = coordinationCondition.range() / (111.0 * 1000 * Math.cos(
+        Math.toRadians(coordinationCondition.centerLat()))); // 경도 변화량 (m 단위)
 
     double north = coordinationCondition.centerLat() + deltaLat;
     double south = coordinationCondition.centerLat() - deltaLat;
     double east = coordinationCondition.centerLon() + deltaLon;
     double west = coordinationCondition.centerLon() - deltaLon;
 
-    return (catContent.coordinate.lat.between(south, north)).and(catContent.coordinate.lon.between(west, east));
+    return (catContent.coordinate.lat.between(south, north)).and(
+        catContent.coordinate.lon.between(west, east));
   }
 
   public boolean existsByContentId(long contentId) {

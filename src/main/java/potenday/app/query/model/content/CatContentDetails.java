@@ -40,7 +40,7 @@ public class CatContentDetails {
   private int catEmoji;
 
   // 다른 곳에서!
-  private boolean isBookMark;
+  private boolean isFollowed;
   private long countOfFollowed;
   private long countOfComments;
 
@@ -51,7 +51,8 @@ public class CatContentDetails {
       CatContent content,
       List<CatContentImage> catContentImages,
       UserNickname userNickname,
-      CatContentEngagementSummary contentEngagementSummary
+      CatContentEngagementSummary contentEngagementSummary,
+      boolean isFollowed
   ) {
     return CatContentDetails.builder()
         .contentId(content.getId())
@@ -81,6 +82,7 @@ public class CatContentDetails {
         // content 통계
         .countOfFollowed(contentEngagementSummary.countOfFollowed())
         .countOfComments(contentEngagementSummary.countOfComments())
+        .isFollowed(isFollowed)
 
         .build();
   }
