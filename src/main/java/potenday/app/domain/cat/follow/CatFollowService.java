@@ -24,17 +24,17 @@ public class CatFollowService {
     this.catContentRepository = catContentRepository;
   }
 
-  public void catFollow(AppUser appUser, AddCatFollow addCatFollow) {
-    if (isFollowed(appUser, addCatFollow.catContentId())) {
+  public void followContent(AppUser appUser, addFollow addFollow) {
+    if (isFollowed(appUser, addFollow.catContentId())) {
       throw new PotendayException(ErrorCode.F001);
     }
     User user = findUser(appUser);
-    CatContent catContent = findContent(addCatFollow.catContentId());
+    CatContent catContent = findContent(addFollow.catContentId());
     saveFollow(user, catContent);
   }
 
   @Transactional
-  public void cancelCatFollow(AppUser appUser, UnFollow unFollow) {
+  public void unfollowContent(AppUser appUser, UnFollow unFollow) {
     User user = findUser(appUser);
     CatContent catContent = findContent(unFollow.catContentId());
     if (isFollowed(appUser, unFollow.catContentId())) {
