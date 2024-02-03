@@ -34,7 +34,10 @@ public class WebConfig implements WebMvcConfigurer {
   public void addCorsMappings(CorsRegistry registry) {
     registry.addMapping("/**")
         .allowedMethods("*")
-        .allowedOriginPatterns("http://localhost:3000");
+        .allowedOriginPatterns(
+            "http://localhost:3000",
+            "https://it-that-cat.vercel.app"
+        );
   }
 
   @Bean
