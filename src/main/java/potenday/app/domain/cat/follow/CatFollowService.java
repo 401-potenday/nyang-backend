@@ -34,10 +34,10 @@ public class CatFollowService {
   }
 
   @Transactional
-  public void cancelCatFollow(AppUser appUser, CancelCatFollow cancelCatFollow) {
+  public void cancelCatFollow(AppUser appUser, UnFollow unFollow) {
     User user = findUser(appUser);
-    CatContent catContent = findContent(cancelCatFollow.catContentId());
-    if (isFollowed(appUser, cancelCatFollow.catContentId())) {
+    CatContent catContent = findContent(unFollow.catContentId());
+    if (isFollowed(appUser, unFollow.catContentId())) {
       deleteFollow(user, catContent);
     }
   }

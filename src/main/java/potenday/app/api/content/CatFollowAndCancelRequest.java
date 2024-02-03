@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import potenday.app.domain.cat.follow.AddCatFollow;
-import potenday.app.domain.cat.follow.CancelCatFollow;
+import potenday.app.domain.cat.follow.UnFollow;
 
 @Getter
 @NoArgsConstructor
@@ -19,7 +19,7 @@ public class CatFollowAndCancelRequest {
     return new AddCatFollow(contentId);
   }
 
-  public CancelCatFollow toCancelFollow() {
-    return new CancelCatFollow(contentId);
+  public UnFollow toCancelFollow() {
+    return new UnFollow(contentId);
   }
 }
