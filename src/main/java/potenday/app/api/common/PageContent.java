@@ -7,6 +7,8 @@ public record PageContent<T>(
     int currentPage,
     int pageSize,
     int totalPages,
-    int totalItems
+    long totalItems,
+    boolean isEnd
 ) {
+
 }
