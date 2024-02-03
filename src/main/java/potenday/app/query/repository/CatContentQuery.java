@@ -2,6 +2,7 @@ package potenday.app.query.repository;
 
 import static potenday.app.domain.cat.content.QCatContent.catContent;
 import static potenday.app.domain.cat.content.QCatContentImage.catContentImage;
+import static potenday.app.domain.cat.follow.QCatFollow.catFollow;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -102,5 +103,14 @@ public class CatContentQuery {
             catContent.isDeleted.isFalse()
         )
         .fetchFirst() != null;
+  }
+
+  public long computeFollowerCount(Long catContentId) {
+    Long fetchResult = queryFactory
+        .select(catFollow.id.count())
+        .from(catFollow)
+        .where(catFollow.catContentId.eq(catContentId))
+        .fetchOne();
+    return fetchResult != null ? fetchResult : 0;
   }
 }

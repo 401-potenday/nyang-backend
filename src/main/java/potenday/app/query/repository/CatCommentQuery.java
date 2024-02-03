@@ -2,7 +2,9 @@ package potenday.app.query.repository;
 
 import static potenday.app.domain.cat.comment.QCatComment.catComment;
 import static potenday.app.domain.cat.comment.QCatCommentImage.catCommentImage;
+import static potenday.app.domain.cat.commentlikes.QCatCommentLike.catCommentLike;
 import static potenday.app.domain.cat.content.QCatContent.catContent;
+import static potenday.app.domain.cat.follow.QCatFollow.catFollow;
 import static potenday.app.domain.user.QUser.user;
 
 import com.querydsl.core.Tuple;
@@ -115,5 +117,27 @@ public class CatCommentQuery {
 
   private BooleanExpression activeUser() {
     return user.isWithDraw.isFalse().and(user.activateStatus.eq(UserActivateStatus.ACTIVATE));
+  }
+
+  public long computeFollowerCount(Long catContentId) {
+    Long fetchResult = queryFactory
+        .select(catFollow.id.count())
+        .from(catFollow)
+        .where(catFollow.catContentId.eq(catContentId))
+        .fetchOne();
+    return fetchResult != null ? fetchResult : 0;
+  }
+
+  public long computeCommentLikesCount(Long catCommentId) {
+    Long fetchResult = queryFactory
+        .select(catCommentLike.count())
+        .from(catCommentLike)
+        .where(eqCommentId(catCommentId))
+        .fetchOne();
+    return fetchResult != null ? fetchResult : 0;
+  }
+
+  private static BooleanExpression eqCommentId(Long catCommentId) {
+    return catCommentLike.catCommentLikeId.catCommentId.eq(catCommentId);
   }
 }
