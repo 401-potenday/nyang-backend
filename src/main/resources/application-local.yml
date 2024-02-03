@@ -27,3 +27,7 @@ oauth:
     oauth-token-issue-uri: https://kauth.kakao.com/oauth/token
     oauth-userinfo-uri: https://kapi.kakao.com/v2/user/me
     response-type: code
+
+logging:
+  level:
+    org.hibernate.orm.jdbc.bind: trace
