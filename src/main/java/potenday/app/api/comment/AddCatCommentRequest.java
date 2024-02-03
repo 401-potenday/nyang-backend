@@ -1,6 +1,5 @@
 package potenday.app.api.comment;
 
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.util.List;
@@ -15,7 +14,6 @@ import potenday.app.domain.cat.comment.AddCatCommentImages;
 public class AddCatCommentRequest {
 
   @NotNull(message = "C006")
-  @NotEmpty(message = "C006")
   @Size(max = 3, message = "C007")
   private List<String> commentImageUris;
 
