@@ -46,7 +46,8 @@ public class CatContentSummary {
 
   public static CatContentSummary of(
       CatContent content,
-      CatContentEngagementSummary catContentEngagementSummary
+      CatContentEngagementSummary catContentEngagementSummary,
+      boolean isFollowed
   ) {
     return CatContentSummary.builder()
         .catContentId(content.getId())
@@ -59,6 +60,7 @@ public class CatContentSummary {
         .catEmoji(content.getCatEmoji())
         .countOfFollowed(catContentEngagementSummary.countOfFollowed())
         .countOfComments(catContentEngagementSummary.countOfComments())
+        .follow(isFollowed)
         .build();
   }
 
