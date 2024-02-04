@@ -1,7 +1,7 @@
 package potenday.app.global.config;
 
 import static potenday.app.global.cache.CacheConst.CAT_CONTENT_COMMENTS_COUNT;
-import static potenday.app.global.cache.CacheConst.CAT_CONTENT_COMMENTS_LIST_WITH_PAGE;
+import static potenday.app.global.cache.CacheConst.CAT_CONTENT_COMMENTS;
 import static potenday.app.global.cache.CacheConst.CAT_CONTENT_COMMENT_LIKE_COUNT;
 import static potenday.app.global.cache.CacheConst.CAT_CONTENT_FOLLOW_COUNT;
 
@@ -21,7 +21,7 @@ public class CachingConfig {
         CAT_CONTENT_COMMENTS_COUNT,
         CAT_CONTENT_FOLLOW_COUNT,
         CAT_CONTENT_COMMENT_LIKE_COUNT,
-        CAT_CONTENT_COMMENTS_LIST_WITH_PAGE
+        CAT_CONTENT_COMMENTS
     );
   }
 }

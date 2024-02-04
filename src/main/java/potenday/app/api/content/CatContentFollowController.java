@@ -24,7 +24,7 @@ public class CatContentFollowController {
       @AuthenticationPrincipal AppUser appUser,
       @Valid @RequestBody CatFollowAndCancelRequest catFollowAndCancelRequest
   ) {
-    catFollowService.catFollow(appUser, catFollowAndCancelRequest.toAddFollow());
+    catFollowService.followContent(appUser, catFollowAndCancelRequest.toAddFollow());
     return ApiResponse.success("ok");
   }
 
@@ -33,7 +33,7 @@ public class CatContentFollowController {
       @AuthenticationPrincipal AppUser appUser,
       @Valid @RequestBody CatFollowAndCancelRequest catFollowAndCancelRequest
   ) {
-    catFollowService.cancelCatFollow(appUser, catFollowAndCancelRequest.toCancelFollow());
+    catFollowService.unfollowContent(appUser, catFollowAndCancelRequest.toCancelFollow());
     return ApiResponse.success("ok");
   }
 }

@@ -19,7 +19,7 @@ import potenday.app.domain.auth.AuthenticationPrincipal;
 import potenday.app.domain.auth.OptionalAuthenticationPrincipal;
 import potenday.app.domain.cat.content.AddCatContentService;
 import potenday.app.query.model.content.CatContentDetails;
-import potenday.app.query.model.content.CatContentSummariesResponse;
+import potenday.app.query.model.content.CatContentSummaries;
 import potenday.app.query.repository.CoordinationCondition;
 import potenday.app.query.service.ReadCatContentService;
 
@@ -61,7 +61,7 @@ public class CatContentController {
   }
 
   @GetMapping("/contents")
-  public ApiResponse<CatContentSummariesResponse> getCatContents(
+  public ApiResponse<CatContentSummaries> getCatContents(
       @OptionalAuthenticationPrincipal AppUser appUser,
       @RequestParam(name = "lat") Double centerLat,
       @RequestParam(name = "lng") Double centerLon,
@@ -81,8 +81,7 @@ public class CatContentController {
             .range(range)
             .build())
         .build();
-    CatContentSummariesResponse contentSummariesResponse = readCatContentService.findContentsWithSearchCondition(
-        appUser, searchCondition, PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize()));
+    CatContentSummaries contentSummariesResponse = readCatContentService.findContentsWithSearchCondition(searchCondition, PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize()));
     return ApiResponse.success(contentSummariesResponse);
   }
 }
