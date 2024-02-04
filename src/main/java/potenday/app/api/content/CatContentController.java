@@ -58,7 +58,6 @@ public class CatContentController {
       CatContentDetails contentDetail = readCatContentService.findContent(contentId);
       return ApiResponse.success(CatContentResponse.from(contentDetail));
     }
-    log.info("logined user = {}", appUser);
     CatContentDetails content = readCatContentService.findContent(appUser, contentId);
     return ApiResponse.success(CatContentResponse.from(content));
   }

@@ -7,6 +7,9 @@ import potenday.app.domain.cat.comment.CatComment;
 import potenday.app.domain.cat.comment.CatCommentRepository;
 import potenday.app.domain.user.User;
 import potenday.app.domain.user.UserRepository;
+import potenday.app.event.action.CommentLikeEvent;
+import potenday.app.event.action.CommentUnlikeEvent;
+import potenday.app.event.publisher.CommentLikeEventPublisher;
 import potenday.app.global.error.ErrorCode;
 import potenday.app.global.error.PotendayException;
 
@@ -16,13 +19,15 @@ public class CatCommentLikeService {
   private final CatCommentLikeRepository catCommentLikeRepository;
   private final CatCommentRepository catCommentRepository;
   private final UserRepository userRepository;
+  private final CommentLikeEventPublisher commentLikeEventPublisher;
 
   public CatCommentLikeService(CatCommentLikeRepository catCommentLikeRepository,
       CatCommentRepository catCommentRepository,
-      UserRepository userRepository) {
+      UserRepository userRepository, CommentLikeEventPublisher commentLikeEventPublisher) {
     this.catCommentLikeRepository = catCommentLikeRepository;
     this.catCommentRepository = catCommentRepository;
     this.userRepository = userRepository;
+    this.commentLikeEventPublisher = commentLikeEventPublisher;
   }
 
   @Transactional
@@ -35,6 +40,7 @@ public class CatCommentLikeService {
     }
     CatCommentLike catCommentLike = new CatCommentLike(commentLikeId);
     saveLike(catCommentLike);
+    commentLikeEventPublisher.publishEvent(new CommentLikeEvent(commentLikeId));
   }
 
   @Transactional
@@ -46,6 +52,7 @@ public class CatCommentLikeService {
       return;
     }
     catCommentLikeRepository.deleteByCatCommentLikeId(commentLikeId);
+    commentLikeEventPublisher.publishUnlikeEvent(new CommentUnlikeEvent(commentLikeId));
   }
 
   private void saveLike(CatCommentLike catCommentLike) {

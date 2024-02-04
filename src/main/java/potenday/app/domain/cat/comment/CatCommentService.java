@@ -6,6 +6,8 @@ import potenday.app.domain.auth.AppUser;
 import potenday.app.domain.cat.content.CatContentRepository;
 import potenday.app.domain.user.User;
 import potenday.app.domain.user.UserRepository;
+import potenday.app.event.action.CommentAddEvent;
+import potenday.app.event.publisher.CommentEventPublisher;
 import potenday.app.global.error.ErrorCode;
 import potenday.app.global.error.PotendayException;
 
@@ -16,14 +18,17 @@ public class CatCommentService {
   private final CatCommentImageRepository catCommentImageRepository;
   private final CatContentRepository catContentRepository;
   private final UserRepository userRepository;
+  private final CommentEventPublisher commentEventPublisher;
 
   public CatCommentService(CatCommentRepository catCommentRepository,
       CatCommentImageRepository catCommentImageRepository,
-      CatContentRepository catContentRepository, UserRepository userRepository) {
+      CatContentRepository catContentRepository, UserRepository userRepository,
+      CommentEventPublisher commentEventPublisher) {
     this.catCommentRepository = catCommentRepository;
     this.catCommentImageRepository = catCommentImageRepository;
     this.catContentRepository = catContentRepository;
     this.userRepository = userRepository;
+    this.commentEventPublisher = commentEventPublisher;
   }
 
   public long addComment(AppUser appUser, AddCatComment addCatComment, AddCatCommentImages addCatCommentImages) {
@@ -31,6 +36,7 @@ public class CatCommentService {
     checkExisted(addCatComment.contentId());
     CatComment catComment = catCommentRepository.save(createCatComment(user, addCatComment));
     catCommentImageRepository.saveAllAndFlush(createCommentImages(addCatComment.contentId(), catComment.getId(), user, addCatCommentImages));
+    commentEventPublisher.publishEvent(new CommentAddEvent(catComment.getCatContentId()));
     return catComment.getId();
   }
 

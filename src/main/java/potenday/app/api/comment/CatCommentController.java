@@ -18,6 +18,7 @@ import potenday.app.domain.auth.AuthenticationPrincipal;
 import potenday.app.domain.auth.OptionalAuthenticationPrincipal;
 import potenday.app.domain.cat.comment.CatCommentService;
 import potenday.app.domain.cat.commentlikes.CatCommentLikeService;
+import potenday.app.domain.cat.support.CatCommentEngagementsCalculator;
 import potenday.app.query.service.ReadCatCommentService;
 
 @RestController
@@ -26,12 +27,15 @@ public class CatCommentController {
   private final CatCommentService catCommentService;
   private final CatCommentLikeService catCommentLikeService;
   private final ReadCatCommentService readCatCommentService;
+  private final CatCommentEngagementsCalculator catCommentEngagementsCalculator;
 
   public CatCommentController(CatCommentService catCommentService,
-      CatCommentLikeService catCommentLikeService, ReadCatCommentService readCatCommentService) {
+      CatCommentLikeService catCommentLikeService, ReadCatCommentService readCatCommentService,
+      CatCommentEngagementsCalculator catCommentEngagementsCalculator) {
     this.catCommentService = catCommentService;
     this.catCommentLikeService = catCommentLikeService;
     this.readCatCommentService = readCatCommentService;
+    this.catCommentEngagementsCalculator = catCommentEngagementsCalculator;
   }
 
   @GetMapping("/contents/{contentId}/comments")
@@ -43,9 +47,8 @@ public class CatCommentController {
     PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize());
     var catCommentWithUserNicknameAndImages = readCatCommentService.findCatComments(contentId, pageRequest);
 
-    // TODO commentLikeCount, isCatCommentLiked <- 캐시에서 가져오기
     List<CatCommentResponse> catCommentResponses = catCommentWithUserNicknameAndImages.stream()
-        .map(it -> CatCommentResponse.of(it, 0, false))
+        .map(it -> CatCommentResponse.of(it, catCommentEngagementsCalculator.getCommentLikesCount(it.catCommentId()), false))
         .toList();
 
     // createResponse
