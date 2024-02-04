@@ -61,7 +61,7 @@ public class WebConfig implements WebMvcConfigurer {
     registry.addInterceptor(authenticationInterceptor())
         .excludePathPatterns(
             "/auth/**/oauth-uri",
-            "/contents/**",
+            "/contents",
             "/contents/follow/**",
             "/contents/**/comments/**",
             "/auth/**/token",

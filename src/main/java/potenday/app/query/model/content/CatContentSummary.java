@@ -32,6 +32,9 @@ public class CatContentSummary {
   @JsonProperty("countOfFollowed")
   private long countOfFollowed;
 
+  @JsonProperty("isFollowed")
+  private boolean follow;
+
   @JsonProperty("createdAt")
   private LocalDateTime catCreatedAt;
 

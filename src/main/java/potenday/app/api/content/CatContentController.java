@@ -83,7 +83,15 @@ public class CatContentController {
             .range(range)
             .build())
         .build();
-    CatContentSummaries contentSummariesResponse = readCatContentService.findContentsWithSearchCondition(searchCondition, PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize()));
+    CatContentSummaries contentSummariesResponse = readCatContentService.findContentsWithSearchCondition(
+        appUser,
+        searchCondition,
+        generatePageable(pageable)
+    );
     return ApiResponse.success(contentSummariesResponse);
+  }
+
+  private PageRequest generatePageable(Pageable pageable) {
+    return PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize());
   }
 }

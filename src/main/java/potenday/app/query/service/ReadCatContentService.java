@@ -63,8 +63,8 @@ public class ReadCatContentService {
   }
 
   @Transactional(readOnly = true)
-  public CatContentSummaries findContentsWithSearchCondition(ContentSearchCondition searchCondition, Pageable pageable) {
-    Page<CatContent> catContents = catContentQuery.fetchContentsBySearchCondition(searchCondition, pageable);
+  public CatContentSummaries findContentsWithSearchCondition(AppUser appUser, ContentSearchCondition searchCondition, Pageable pageable) {
+    Page<CatContent> catContents = catContentQuery.fetchContentsBySearchCondition(appUser, searchCondition, pageable);
 
     List<CatContentSummary> catContentSummaries = catContents.stream()
         .map(it -> CatContentSummary.of(it, createEngagementSummary(it.getId())))
@@ -74,7 +74,8 @@ public class ReadCatContentService {
         .items(catContentSummaries)
         .totalItems(catContents.getTotalElements())
         .pageSize(catContents.getPageable().getPageSize())
-        .currentPage(catContents.getPageable().getPageNumber())
+        .currentPage(catContents.getPageable().getPageNumber() + 1)
+        .isEnd(catContents.isLast())
         .build();
   }
 

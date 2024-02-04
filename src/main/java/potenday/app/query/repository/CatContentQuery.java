@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import potenday.app.api.content.search.ContentSearchCondition;
 import potenday.app.api.content.search.DistanceOrder;
+import potenday.app.domain.auth.AppUser;
 import potenday.app.domain.cat.content.CatContent;
 import potenday.app.domain.cat.content.CatContentImage;
 
@@ -60,11 +61,16 @@ public class CatContentQuery {
     return catContent.isDeleted.isFalse();
   }
 
-  public Page<CatContent> fetchContentsBySearchCondition(ContentSearchCondition searchCondition,
+  public Page<CatContent> fetchContentsBySearchCondition(AppUser appUser, ContentSearchCondition searchCondition,
       Pageable pageable) {
+
     var jpaQuery = queryFactory
         .selectFrom(catContent)
-        .where(withInDistance(searchCondition.coordinationCondition()));
+        .join(catFollow).on(catFollow.catContentId.eq(catContent.id))
+        .where(
+            onlyFollow(appUser, searchCondition.follow()),
+            withInDistance(searchCondition.coordinationCondition())
+        );
 
     // 거리순 정렬
     if (searchCondition.distanceOrder() != null) {
@@ -91,6 +97,14 @@ public class CatContentQuery {
         .sqrt();
 
     return searchCondition.distanceOrder() == DistanceOrder.ASC ? distance.asc() : distance.desc();
+  }
+
+  private BooleanExpression onlyFollow(AppUser appUser, Boolean follow) {
+    if (appUser == null || follow == null || !follow) {
+      System.out.println("onlyFollow 선택하지 않았어!!");
+      return null;
+    }
+    return catFollow.userId.eq(appUser.id());
   }
 
   private BooleanExpression withInDistance(CoordinationCondition coordinationCondition) {
