@@ -61,12 +61,11 @@ public class CatContentQuery {
     return catContent.isDeleted.isFalse();
   }
 
-  public Page<CatContent> fetchContentsBySearchCondition(AppUser appUser, ContentSearchCondition searchCondition,
-      Pageable pageable) {
+  public Page<CatContent> fetchContentsBySearchCondition(AppUser appUser, ContentSearchCondition searchCondition, Pageable pageable) {
 
     var jpaQuery = queryFactory
         .selectFrom(catContent)
-        .join(catFollow).on(catFollow.catContentId.eq(catContent.id))
+        .leftJoin(catFollow).on(catFollow.catContentId.eq(catContent.id))
         .where(
             onlyFollow(appUser, searchCondition.follow()),
             withInDistance(searchCondition.coordinationCondition())
