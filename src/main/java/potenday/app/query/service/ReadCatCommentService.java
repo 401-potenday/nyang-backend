@@ -1,8 +1,5 @@
 package potenday.app.query.service;
 
-import static potenday.app.global.cache.CacheConst.CAT_CONTENT_COMMENTS;
-
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,10 +22,10 @@ public class ReadCatCommentService {
   }
 
   @Transactional(readOnly = true)
-  @Cacheable(
-      cacheNames = CAT_CONTENT_COMMENTS,
-      key = "#contentId + '_' + #pageable.getPageNumber() + '_' +#pageable.getPageSize()"
-  )
+//  @Cacheable(
+//      cacheNames = CAT_CONTENT_COMMENTS,
+//      key = "#contentId + '_' + #pageable.getPageNumber() + '_' +#pageable.getPageSize()"
+//  )
   public Page<CatCommentWithUserNicknameAndImages> findCatComments(Long contentId, Pageable pageable) {
     boolean existed = catContentQuery.existsByContentId(contentId);
     if (!existed) {

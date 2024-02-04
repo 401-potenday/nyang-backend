@@ -15,7 +15,8 @@ import potenday.app.domain.cat.support.CatContentFollowingCountCalculator;
 import potenday.app.global.error.ErrorCode;
 import potenday.app.global.error.PotendayException;
 import potenday.app.query.model.content.CatContentDetails;
-import potenday.app.query.model.content.CatContentSummariesResponse;
+import potenday.app.query.model.content.CatContentSummaries;
+import potenday.app.query.model.content.CatContentSummary;
 import potenday.app.query.model.user.UserNickname;
 import potenday.app.query.repository.CatContentQuery;
 import potenday.app.query.repository.UserQuery;
@@ -62,11 +63,19 @@ public class ReadCatContentService {
   }
 
   @Transactional(readOnly = true)
-  public CatContentSummariesResponse findContentsWithSearchCondition(AppUser appUser,
-      ContentSearchCondition searchCondition, Pageable pageable) {
-    Page<CatContent> catContents = catContentQuery.fetchContentsBySearchCondition(searchCondition,
-        pageable);
-    return CatContentSummariesResponse.of(catContents);
+  public CatContentSummaries findContentsWithSearchCondition(ContentSearchCondition searchCondition, Pageable pageable) {
+    Page<CatContent> catContents = catContentQuery.fetchContentsBySearchCondition(searchCondition, pageable);
+
+    List<CatContentSummary> catContentSummaries = catContents.stream()
+        .map(it -> CatContentSummary.of(it, createEngagementSummary(it.getId())))
+        .toList();
+
+    return CatContentSummaries.builder()
+        .items(catContentSummaries)
+        .totalItems(catContents.getTotalElements())
+        .pageSize(catContents.getPageable().getPageSize())
+        .currentPage(catContents.getPageable().getPageNumber())
+        .build();
   }
 
   @Transactional(readOnly = true)

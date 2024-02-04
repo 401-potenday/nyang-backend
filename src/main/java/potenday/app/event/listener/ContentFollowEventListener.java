@@ -1,5 +1,6 @@
 package potenday.app.event.listener;
 
+import static potenday.app.global.cache.CacheConst.CAT_CONTENT_FOLLOWED;
 import static potenday.app.global.cache.CacheConst.CAT_CONTENT_FOLLOW_COUNT;
 
 import org.springframework.cache.Cache;
@@ -25,6 +26,16 @@ public class ContentFollowEventListener {
 
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
   public void onFollow(FollowEvent followEvent) {
+    updateContentFollowCountCache(followEvent);
+    Cache cache = cacheManager.getCache(CAT_CONTENT_FOLLOWED);
+
+
+
+    cache.put(followEvent.userId() + "-" + followEvent.contentId(), String.class);
+    cache.put(followEvent.contentId(), followEvent.userId());
+  }
+
+  private void updateContentFollowCountCache(FollowEvent followEvent) {
     Cache cache = cacheManager.getCache(CAT_CONTENT_FOLLOW_COUNT);
     Long currentCount = cache.get(followEvent.contentId(), Long.class);
     // cache miss

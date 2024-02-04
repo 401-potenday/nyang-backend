@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
+import potenday.app.api.content.CatContentEngagementSummary;
 import potenday.app.domain.cat.content.CatContent;
 
 @Getter
@@ -25,11 +26,11 @@ public class CatContentSummary {
   @JsonProperty("lng")
   private double catLon;
 
-  @JsonProperty("numberOfComments")
-  private int catCommentCount;
+  @JsonProperty("countOfComments")
+  private long countOfComments;
 
-  @JsonProperty("numberOfCatSlaves")
-  private int catFollowerCount;
+  @JsonProperty("countOfFollowed")
+  private long countOfFollowed;
 
   @JsonProperty("createdAt")
   private LocalDateTime catCreatedAt;
@@ -40,7 +41,10 @@ public class CatContentSummary {
   @JsonProperty("catEmoji")
   private int catEmoji;
 
-  public static CatContentSummary of(CatContent content) {
+  public static CatContentSummary of(
+      CatContent content,
+      CatContentEngagementSummary catContentEngagementSummary
+  ) {
     return CatContentSummary.builder()
         .catContentId(content.getId())
         .catName(content.getName())
@@ -50,6 +54,9 @@ public class CatContentSummary {
         .catCreatedAt(content.getCreatedAt())
         .catUpdatedAt(content.getUpdatedAt())
         .catEmoji(content.getCatEmoji())
+        .countOfFollowed(catContentEngagementSummary.countOfFollowed())
+        .countOfComments(catContentEngagementSummary.countOfComments())
         .build();
   }
+
 }
