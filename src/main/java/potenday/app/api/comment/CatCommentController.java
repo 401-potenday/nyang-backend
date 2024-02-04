@@ -2,6 +2,7 @@ package potenday.app.api.comment;
 
 import jakarta.validation.Valid;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -19,8 +20,10 @@ import potenday.app.domain.auth.OptionalAuthenticationPrincipal;
 import potenday.app.domain.cat.comment.CatCommentService;
 import potenday.app.domain.cat.commentlikes.CatCommentLikeService;
 import potenday.app.domain.cat.support.CatCommentEngagementsCalculator;
+import potenday.app.query.model.comment.CatCommentWithUserNicknameAndImages;
 import potenday.app.query.service.ReadCatCommentService;
 
+@Slf4j
 @RestController
 public class CatCommentController {
 
@@ -48,7 +51,14 @@ public class CatCommentController {
     var catCommentWithUserNicknameAndImages = readCatCommentService.findCatComments(contentId, pageRequest);
 
     List<CatCommentResponse> catCommentResponses = catCommentWithUserNicknameAndImages.stream()
-        .map(it -> CatCommentResponse.of(it, catCommentEngagementsCalculator.getCommentLikesCount(it.catCommentId()), false))
+        .map(it -> {
+          long commentLikesCount = catCommentEngagementsCalculator.getCommentLikesCount(it.catCommentId());
+          if (appUser != null) {
+            boolean commentLiked = catCommentEngagementsCalculator.isCommentLiked(appUser.id(), it.catCommentId());
+            return CatCommentResponse.of(it, commentLikesCount, commentLiked);
+          }
+          return CatCommentResponse.of(it, commentLikesCount, false);
+        })
         .toList();
 
     // createResponse
@@ -62,6 +72,10 @@ public class CatCommentController {
     );
 
     return ApiResponse.success(pageContent);
+  }
+
+  private boolean isCommentLiked(AppUser appUser, CatCommentWithUserNicknameAndImages it) {
+    return catCommentEngagementsCalculator.isCommentLiked(appUser.id(), it.catCommentId());
   }
 
   @PostMapping("/contents/{contentId}/comments")

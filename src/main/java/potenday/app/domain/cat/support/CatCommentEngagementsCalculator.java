@@ -1,5 +1,6 @@
 package potenday.app.domain.cat.support;
 
+import static potenday.app.global.cache.CacheConst.CAT_COMMENT_USER_LIKED;
 import static potenday.app.global.cache.CacheConst.CAT_CONTENT_COMMENTS_COUNT;
 import static potenday.app.global.cache.CacheConst.CAT_CONTENT_COMMENT_LIKE_COUNT;
 
@@ -34,5 +35,14 @@ public class CatCommentEngagementsCalculator {
       return 0;
     }
     return catCommentQuery.countContentComments(catContentId);
+  }
+
+  @Transactional(readOnly = true)
+  @Cacheable(cacheNames = CAT_COMMENT_USER_LIKED, key = "#userId + '_' + #catCommentId")
+  public boolean isCommentLiked(Long userId,Long catCommentId) {
+    if (userId == null || catCommentId == null) {
+      return false;
+    }
+    return catCommentQuery.isCommentLiked(userId, catCommentId);
   }
 }

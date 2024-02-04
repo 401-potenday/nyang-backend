@@ -152,4 +152,15 @@ public class CatCommentQuery {
         .fetchOne();
     return fetchResult != null ? fetchResult : 0;
   }
+
+  public boolean isCommentLiked(Long userId, Long catCommentId) {
+    long count = queryFactory
+        .select(catCommentLike.count())
+        .from(catCommentLike)
+        .where(
+            catCommentLike.catCommentLikeId.userId.eq(userId),
+            catCommentLike.catCommentLikeId.catCommentId.eq(catCommentId)
+        ).fetchFirst();
+    return count != 0;
+  }
 }

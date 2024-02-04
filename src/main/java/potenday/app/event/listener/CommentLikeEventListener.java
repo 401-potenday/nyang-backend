@@ -1,7 +1,9 @@
 package potenday.app.event.listener;
 
+import static potenday.app.global.cache.CacheConst.CAT_COMMENT_USER_LIKED;
 import static potenday.app.global.cache.CacheConst.CAT_CONTENT_COMMENT_LIKE_COUNT;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Component;
@@ -11,6 +13,7 @@ import potenday.app.domain.cat.support.CatCommentEngagementsCalculator;
 import potenday.app.event.action.CommentLikeEvent;
 import potenday.app.event.action.CommentUnlikeEvent;
 
+@Slf4j
 @Component
 public class CommentLikeEventListener {
 
@@ -26,11 +29,22 @@ public class CommentLikeEventListener {
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
   public void onCommentLike(CommentLikeEvent commentLikeEvent) {
     incrementCommentLikeCount(commentLikeEvent);
+
+    Cache cache = cacheManager.getCache(CAT_COMMENT_USER_LIKED);
+    String key = generateIsLikedKey(commentLikeEvent.catCommentLikeId().getUserId(), commentLikeEvent.catCommentLikeId().getCatCommentId());
+    cache.put(key, true);
   }
 
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
   public void onCommentUnLike(CommentUnlikeEvent commentUnlikeEvent) {
     decreaseCommentLikeCount(commentUnlikeEvent);
+    Cache cache = cacheManager.getCache(CAT_COMMENT_USER_LIKED);
+    String key = generateIsLikedKey(commentUnlikeEvent.catCommentLikeId().getUserId(), commentUnlikeEvent.catCommentLikeId().getCatCommentId());
+    cache.put(key, false);
+  }
+
+  private static String generateIsLikedKey(long userId, long catCommentId) {
+    return userId + "_" + catCommentId;
   }
 
   private void decreaseCommentLikeCount(CommentUnlikeEvent commentUnlikeEvent) {

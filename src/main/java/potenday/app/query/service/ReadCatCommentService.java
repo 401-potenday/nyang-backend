@@ -22,10 +22,6 @@ public class ReadCatCommentService {
   }
 
   @Transactional(readOnly = true)
-//  @Cacheable(
-//      cacheNames = CAT_CONTENT_COMMENTS,
-//      key = "#contentId + '_' + #pageable.getPageNumber() + '_' +#pageable.getPageSize()"
-//  )
   public Page<CatCommentWithUserNicknameAndImages> findCatComments(Long contentId, Pageable pageable) {
     boolean existed = catContentQuery.existsByContentId(contentId);
     if (!existed) {
