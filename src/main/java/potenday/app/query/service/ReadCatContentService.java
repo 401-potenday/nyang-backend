@@ -67,7 +67,7 @@ public class ReadCatContentService {
     Page<CatContent> catContents = catContentQuery.fetchContentsBySearchCondition(appUser, searchCondition, pageable);
 
     List<CatContentSummary> catContentSummaries = catContents.stream()
-        .map(it -> CatContentSummary.of(it, createEngagementSummary(it.getId()), false))
+        .map(it -> CatContentSummary.of(it, createEngagementSummary(it.getId()), appUser != null))
         .toList();
 
     return CatContentSummaries.builder()
