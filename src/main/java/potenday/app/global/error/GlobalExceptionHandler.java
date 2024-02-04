@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import potenday.app.api.common.ApiResponse;
@@ -13,6 +14,16 @@ import potenday.app.api.common.ApiResponse;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+  @ExceptionHandler(MissingServletRequestParameterException.class)
+  public ResponseEntity<ApiResponse<ErrorContent>> handleMissingServletRequestParameterException(
+      HttpServletRequest request, MissingServletRequestParameterException e) {
+    ErrorCode ec = ErrorCode.X001;
+    String authorization = request.getHeader("Authorization");
+    log.error("[uncaught error] errCode = {}, message = {}, status = {}, instance = {}, authorization = {}",
+        ec.getCode(), ec.getMessage(), ec.getHttpStatus().value(), request.getRequestURI(), authorization);
+    return ResponseEntity.status(ec.getHttpStatus()).body(ApiResponse.error(ErrorContent.from(ec)));
+  }
 
   @ExceptionHandler(PotendayException.class)
   public ResponseEntity<ApiResponse<ErrorContent>> handleInternalException(
