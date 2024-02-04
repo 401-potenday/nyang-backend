@@ -1,6 +1,7 @@
 package potenday.app.api.content;
 
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -23,6 +24,7 @@ import potenday.app.query.model.content.CatContentSummaries;
 import potenday.app.query.repository.CoordinationCondition;
 import potenday.app.query.service.ReadCatContentService;
 
+@Slf4j
 @RestController
 public class CatContentController {
 
@@ -56,6 +58,7 @@ public class CatContentController {
       CatContentDetails contentDetail = readCatContentService.findContent(contentId);
       return ApiResponse.success(CatContentResponse.from(contentDetail));
     }
+    log.info("logined user = {}", appUser);
     CatContentDetails content = readCatContentService.findContent(appUser, contentId);
     return ApiResponse.success(CatContentResponse.from(content));
   }
