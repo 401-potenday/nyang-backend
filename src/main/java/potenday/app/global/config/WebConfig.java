@@ -62,6 +62,7 @@ public class WebConfig implements WebMvcConfigurer {
         .excludePathPatterns(
             "/auth/**/oauth-uri",
             "/contents/**",
+            "/contents/follow/**",
             "/contents/**/comments/**",
             "/auth/**/token",
             "/user/nickname/available-check/**"
