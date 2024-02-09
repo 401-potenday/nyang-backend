@@ -77,7 +77,7 @@ public class CatCommentQuery {
         .select(catComment, user.nickname, catCommentImage)
         .from(catComment)
         .join(catContent).on(catContent.id.eq(catComment.catContentId))
-        .join(user).on(catContent.userId.eq(user.id))
+        .join(user).on(catComment.userId.eq(user.id))
         .leftJoin(catCommentImage).on(catComment.id.eq(catCommentImage.catCommentId))
         .where(
             catComment.catContentId.eq(contentId),
