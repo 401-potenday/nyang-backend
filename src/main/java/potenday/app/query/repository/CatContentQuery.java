@@ -100,7 +100,6 @@ public class CatContentQuery {
 
   private BooleanExpression onlyFollow(AppUser appUser, Boolean follow) {
     if (appUser == null || follow == null || !follow) {
-      System.out.println("onlyFollow 선택하지 않았어!!");
       return null;
     }
     return catFollow.userId.eq(appUser.id());
