@@ -1,6 +1,10 @@
 spring:
+  datasource:
+    url: ENC(GcGrgOnI6WEIm1yt4hCqMvNJrmDjnF/wPHTskMPoB5Ke0FQBzTlBJx5EnpjGbjt90sr+GV01lFQNBKl6wLs8Xg==)
+    username: ENC(dltaReNsKvakVzwihkixNLVnwIrN4Hrf)
+    password: ENC(G1jv1nj5+8IT556IHyRvUhjpTtH6fuuI)
+
   jpa:
-    generate-ddl: true
     hibernate:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
@@ -9,9 +13,7 @@ spring:
         jdbc.batch_size: 10
         order_inserts: true
         order_updates: true
-        format_sql: true
         dialect: org.hibernate.dialect.MySQL8Dialect
-    show-sql: true
 
 oauth:
   kakao:
@@ -21,3 +23,7 @@ oauth:
     oauth-token-issue-uri: https://kauth.kakao.com/oauth/token
     oauth-userinfo-uri: https://kapi.kakao.com/v2/user/me
     response-type: code
+
+sentry:
+  dsn: https://25cf3f99285ebea612c50d5db8be16c1@o4506655666864128.ingest.sentry.io/4506655671844864
+  traces-sample-rate: 1.0
