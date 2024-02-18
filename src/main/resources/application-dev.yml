@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ENC(wEolLcEd0JsyUAZ+fI2kdORHn8Jy1m5XIv4O4Vi+osY99pnq6OjQoq6cA/YMxf0XOe/7VQl9xTXOkriCKIdjVw==)
-    username: ENC(0hEgKCaUbJNV2ahkEYg5IpctJu6JijZW)
-    password: ENC(+ooqAAaQf/Xt3Qq6IVT7uPLFtiOgYaC4)
+    url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DB_NAME}
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
 
   jpa:
     hibernate:
