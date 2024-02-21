@@ -59,6 +59,7 @@ public enum ErrorCode {
   // 컨텐츠 - 이미지
   CI01("CI01", "잘못된 형식의 이미지 업로드입니다. 이미지의 uri 주소는 http:// 또는 https:// 로 시작해야 합니다.", HttpStatus.BAD_REQUEST),
   CI02("CI02", "최소 하나 이상의 고양이 사진이 필요합니다.", HttpStatus.BAD_REQUEST),
+  CI03("CI03", "이미지 Key 는 UUID(v4) 포맷이어야 합니다.", HttpStatus.BAD_REQUEST),
 
   F001("F001", "이미 팔로우를 했어요", HttpStatus.BAD_REQUEST),
   F002("F002", "컨텐츠 번호 (contentId) 는 필수입니다.", HttpStatus.BAD_REQUEST),
