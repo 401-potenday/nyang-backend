@@ -15,16 +15,16 @@ public class AddCatCommentRequest {
 
   @NotNull(message = "C006")
   @Size(max = 3, message = "C007")
-  private List<String> commentImageUris;
+  private List<String> commentImageKeys;
 
   @Length(max = 300, message = "C008")
   private String commentDesc;
 
   public AddCatComment toAddCatComment(long contentId) {
-    return new AddCatComment(contentId, commentDesc, commentImageUris);
+    return new AddCatComment(contentId, commentDesc, commentImageKeys);
   }
 
   public AddCatCommentImages toAddCatCommentImages() {
-    return new AddCatCommentImages(commentImageUris);
+    return new AddCatCommentImages(commentImageKeys);
   }
 }
