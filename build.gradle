@@ -29,13 +29,13 @@ dependencies {
     // jwt
     implementation 'com.auth0:java-jwt:4.4.0'
 
+    // lombok
     compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
     // encrypt properties
     implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
 
-    //Querydsl 추가
+    // query dsl
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
@@ -44,10 +44,20 @@ dependencies {
     // Spring Cache
     implementation 'org.springframework.boot:spring-boot-starter-cache'
 
+    // mysql for production
     runtimeOnly 'com.mysql:mysql-connector-j'
+
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
+
+    // for test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    runtimeOnly 'com.h2database:h2:2.2.224'
+
+    // Rest Assured
+    testImplementation 'io.rest-assured:spring-mock-mvc:5.4.0'
+
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
 
 tasks.named('test') {
