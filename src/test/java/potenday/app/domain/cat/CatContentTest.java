@@ -15,7 +15,6 @@ class CatContentTest {
   @Test
   @DisplayName("Builer 를 이용해서 CatContent 객체 생성 - 성공")
   void builder() {
-    // create builder
     CatContent catContent = CatContent.builder()
         .id(1L)
         .name("Fluffy")
@@ -25,12 +24,11 @@ class CatContentTest {
         .neuter(CatNeuter.UNSURE)
         .build();
 
-    // check values
     assertEquals(1L, catContent.getId());
     assertEquals("Fluffy", catContent.getName());
     assertEquals(CatFriends.YES, catContent.getHasFriends());
     assertEquals("Fluffy is a cute and cuddly cat.", catContent.getDescription());
-    assertEquals("LIKES_PEOPLE", catContent.getCatPersonalities());
+    assertEquals(CatPersonalities.of(List.of("LIKES_PEOPLE")), catContent.getCatPersonalities());
     assertEquals(CatNeuter.UNSURE, catContent.getNeuter());
   }
 

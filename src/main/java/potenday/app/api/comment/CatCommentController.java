@@ -20,7 +20,6 @@ import potenday.app.domain.auth.OptionalAuthenticationPrincipal;
 import potenday.app.domain.cat.comment.CatCommentService;
 import potenday.app.domain.cat.commentlikes.CatCommentLikeService;
 import potenday.app.domain.cat.support.CatCommentEngagementsCalculator;
-import potenday.app.query.model.comment.CatCommentWithUserNicknameAndImages;
 import potenday.app.query.service.ReadCatCommentService;
 
 @Slf4j
@@ -72,10 +71,6 @@ public class CatCommentController {
     );
 
     return ApiResponse.success(pageContent);
-  }
-
-  private boolean isCommentLiked(AppUser appUser, CatCommentWithUserNicknameAndImages it) {
-    return catCommentEngagementsCalculator.isCommentLiked(appUser.id(), it.catCommentId());
   }
 
   @PostMapping("/contents/{contentId}/comments")

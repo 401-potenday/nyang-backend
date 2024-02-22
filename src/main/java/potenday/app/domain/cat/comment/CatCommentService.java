@@ -2,6 +2,7 @@ package potenday.app.domain.cat.comment;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import potenday.app.domain.auth.AppUser;
 import potenday.app.domain.cat.content.CatContentRepository;
 import potenday.app.domain.user.User;
@@ -31,11 +32,12 @@ public class CatCommentService {
     this.commentEventPublisher = commentEventPublisher;
   }
 
+  @Transactional
   public long addComment(AppUser appUser, AddCatComment addCatComment, AddCatCommentImages addCatCommentImages) {
     User user = findUser(appUser);
     checkExisted(addCatComment.contentId());
     CatComment catComment = catCommentRepository.save(createCatComment(user, addCatComment));
-    catCommentImageRepository.saveAllAndFlush(createCommentImages(addCatComment.contentId(), catComment.getId(), user, addCatCommentImages));
+    catCommentImageRepository.saveAllAndFlush(createCommentImages(addCatCommentImages, addCatComment.contentId(), catComment.getId(), user.getId()));
     commentEventPublisher.publishEvent(new CommentAddEvent(catComment.getCatContentId()));
     return catComment.getId();
   }
@@ -58,12 +60,12 @@ public class CatCommentService {
   }
 
   private List<CatCommentImage> createCommentImages(
-      Long contentId,
+      AddCatCommentImages addCatCommentImages,
+      long contentId,
       long commentId,
-      User user,
-      AddCatCommentImages addCatCommentImages
+      long userId
   ) {
     CatCommentImages commentImages = addCatCommentImages.toContentImages();
-    return commentImages.toTargetImages(contentId, commentId, user);
+    return commentImages.toTargetImages(contentId, commentId, userId);
   }
 }
