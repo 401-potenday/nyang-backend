@@ -1,5 +1,6 @@
 package potenday.app.domain.cat.content;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -26,12 +27,26 @@ class CatContentImageTest {
   @ParameterizedTest
   @ValueSource(strings = {"237beb84-eca4-4746-bd9e-19640dd8ccff.jpg", "237beb84-eca4-4746-bd9e-19640dd",})
   @DisplayName("Builder 로 객체 생성 시 ImageKey 가 UUID 포멧이 아니면 예외 던진다. - 실패")
-  void throwExceptionNotUUIDImageFormat(String value) {
+  void checkUUIDImageKeyFormat(String value) {
     assertThatThrownBy(() -> CatContentImage.builder()
         .imageKey(value)
         .catContentId(1L)
         .imageOrder(1)
         .build())
         .isInstanceOf(PotendayException.class);
+  }
+
+  @Test
+  @DisplayName("contentId 가 이미 있는 경우 setCatContentId 는 무시 된다.  - 성공")
+  void setCatContentId() {
+    CatContentImage contentImage = CatContentImage.builder()
+        .imageKey(UUID.randomUUID().toString())
+        .catContentId(1L)
+        .imageOrder(1)
+        .build();
+
+    contentImage.setCatContentId(2L);
+
+    assertThat(contentImage.getCatContentId()).isEqualTo(1L);
   }
 }
