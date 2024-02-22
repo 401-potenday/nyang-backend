@@ -56,7 +56,7 @@ public class AddCatContentRequest {
   private String jibunSubAddrNo;
 
   @NotEmpty(message = "CI02")
-  private List<String> imagesKeys;
+  private List<String> imageKeys;
 
   @NotNull(message = "C003")
   private CatNeuter neuter;
@@ -85,6 +85,6 @@ public class AddCatContentRequest {
   }
 
   public AddCatContentImages toAddCatImages() {
-    return new AddCatContentImages(imagesKeys);
+    return new AddCatContentImages(imageKeys);
   }
 }
