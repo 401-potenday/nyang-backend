@@ -34,7 +34,7 @@ public class CommentAcceptanceTest extends AcceptanceTest {
   private CatContentRepository catContentRepository;
 
   @Test
-  @DisplayName("고양이 컨텐츠를 성공적으로 등록한다. - 성공")
+  @DisplayName("고양이 컨텐츠 댓글을 성공적으로 등록한다. - 성공")
   void registerCourse() {
     saveMember();
     saveContent(1L);

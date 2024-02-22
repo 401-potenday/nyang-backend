@@ -17,7 +17,7 @@ import potenday.app.domain.user.User;
 import potenday.app.domain.user.UserOAuthProvider;
 import potenday.app.domain.user.UserRepository;
 
-@DisplayName("고양이 컨텐츠 등록하기 인수 테스트")
+@DisplayName("고양이 컨텐츠 인수 테스트")
 public class ContentAcceptanceTest extends AcceptanceTest {
 
   @Autowired
