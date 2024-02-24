@@ -36,10 +36,10 @@ pipeline {
             }
         }
         stage('BE - Push Development Image to ECR') {
+            when {
+                branch 'develop'
+            }
             steps {
-                when {
-                  branch 'develop'
-                }
                 script {
                     def image = docker.image("${env.DOCKER_IMAGE_ID}")
                     docker.withRegistry("https://${env.ECR_REPOSITORY}", "ecr:ap-northeast-2:potenday-ecr-credentials") {
@@ -51,7 +51,7 @@ pipeline {
         }
         stage("BE - Development Deploy") {
             when {
-              branch 'develop'
+                branch 'develop'
             }
             steps {
                 sshagent(credentials: ['jenkins-deploy-server-credentials']) {
