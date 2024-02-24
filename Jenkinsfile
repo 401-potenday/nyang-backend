@@ -6,9 +6,13 @@ pipeline {
         TARGET_HOST = "ubuntu@dev-api.itthatcat.xyz"
         SERVER = "https://dev-api.itthatcat.xyz"
     }
-  
+    
     stages {
-        stage('BE - Test') {
+        
+        stage('BE - PR Test before merge') {
+            when {
+                branch 'PR-*'
+            }
             steps {
                 script {
                     sh '''
@@ -17,24 +21,42 @@ pipeline {
                 }
             }
         }
-        stage('BE - Build') {
+
+        stage('BE - Test') {
+            when {
+                not {
+                    anyOf {
+                        branch 'PR-*'
+                        branch 'devops'
+                        branch pattern: "feature/*", comparator: "ANT"
+                    }
+                }
+            }
             steps {
                 script {
                     sh '''
-                        ./gradlew clean
+                        ./gradlew test
+                    '''
+                }
+            }
+        }
+
+        stage('BE - Build jar file') {
+            when {
+                allOf {
+                    branch 'develop'
+                    branch 'main'
+                }
+            }
+            steps {
+                script {
+                    sh '''
                         ./gradlew build --exclude-task=test
                     '''
                 }
             }
         }
-        stage('BE - Docker Build') {
-            steps {
-                script {
-                    def image = docker.build("${env.DOCKER_IMAGE}")
-                    env.DOCKER_IMAGE_ID = image.id
-                }
-            }
-        }
+
         stage('BE - Push Development Image to ECR') {
             when {
                 branch 'develop'
@@ -49,6 +71,7 @@ pipeline {
                 }
             }
         }
+
         stage("BE - Development Deploy") {
             when {
                 branch 'develop'
