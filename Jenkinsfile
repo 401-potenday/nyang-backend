@@ -57,7 +57,16 @@ pipeline {
             }
         }
 
-        stage('BE - Push Development Image to ECR') {
+        stage('BE - Docker Build Image') {
+            steps {
+                script {
+                    def image = docker.build("${env.DOCKER_IMAGE}")
+                    env.DOCKER_IMAGE_ID = image.id
+                }
+            }
+        }
+        
+        stage('BE - Docker Push Image to ECR Dev') {
             when {
                 branch 'develop'
             }
@@ -72,7 +81,7 @@ pipeline {
             }
         }
 
-        stage("BE - Development Deploy") {
+        stage("BE - Deploy in Dev") {
             when {
                 branch 'develop'
             }
