@@ -43,10 +43,7 @@ pipeline {
 
         stage('BE - Build jar file') {
             when {
-                allOf {
-                    branch 'develop'
-                    branch 'main'
-                }
+                branch 'develop'
             }
             steps {
                 script {
