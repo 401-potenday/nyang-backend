@@ -86,7 +86,7 @@ pipeline {
                 branch 'develop'
             }
             steps {
-                sshagent(credentials: ['jenkins-deploy-server-credentials']) {
+                sshagent(credentials: ['jenkins-deploy-dev-server-credentials']) {
                     sh 'ssh -o StrictHostKeyChecking=no ${TARGET_HOST} '
                     sh "ssh ${TARGET_HOST} 'aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${ECR_REPOSITORY}'"
                     sh "ssh ${TARGET_HOST} 'cd /home/kmss69052 && docker compose pull && docker compose up -d'"
