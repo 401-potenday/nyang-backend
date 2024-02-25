@@ -35,7 +35,7 @@ public class WebConfig implements WebMvcConfigurer {
         .allowedOriginPatterns(
             "http://localhost:3000",
             "https://it-that-cat.vercel.app",
-            "https:/dev.itthatcat.xyz"
+            "https://dev.itthatcat.xyz"
         );
   }
 

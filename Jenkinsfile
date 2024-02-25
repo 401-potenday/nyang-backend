@@ -3,8 +3,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'potenday-dev'
         ECR_REPOSITORY = '276943215323.dkr.ecr.ap-northeast-2.amazonaws.com'
-        TARGET_HOST = "ubuntu@dev-api.itthatcat.xyz"
-        SERVER = "https://dev-api.itthatcat.xyz"
+        TARGET_HOST = "ubuntu@dev.itthatcat.xyz"
     }
     
     stages {
