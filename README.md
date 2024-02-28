@@ -1,22 +1,24 @@
-![표지](https://github.com/401-potenday/backend/assets/43781484/adbd21f3-6769-4074-89b6-fd5b009edee9)
+## 🖥 서비스 화면
 
-### ERD
-<img width="970" alt="스크린샷 2024-02-28 오전 2 34 08" src="https://github.com/401-potenday/backend/assets/43781484/c0a1228e-24a1-4d24-b723-92c7eb58d299">
+|                                       |                                      | 					   |					   
+|:-------------------------------------:|:-------------------------------------: | :-------------------------------------: |
+| ![](https://github.com/401-potenday/backend/assets/43781484/cdffb1a9-1f5d-4b9b-9cdd-4e588c4c7a04) | ![](https://github.com/401-potenday/backend/assets/43781484/4cc2ddb6-5fdf-4328-80fc-4a4123d19173) | ![](https://github.com/401-potenday/backend/assets/43781484/6e055f35-4584-445c-ba94-bdbd44e11e91)
 
-### API 문서
-https://documenter.getpostman.com/view/32562644/2s9YypFPYx
-
-### Sequence Diagram
-
-#### 소셜 회원가입 및 로그인
-<img width="553" alt="스크린샷 2024-02-28 오전 2 30 09" src="https://github.com/401-potenday/backend/assets/43781484/28bb419d-a74d-4b1a-8be4-bfae35a52075">
-
-#### 이미지 프로세싱 과정
-<img width="967" alt="스크린샷 2024-02-28 오전 2 32 26" src="https://github.com/401-potenday/backend/assets/43781484/dfc8dc2f-fb6e-48b1-8b13-c885466aac48">
+|                                       |                                      | 					   |
+|:-------------------------------------:|:-------------------------------------: | :-------------------------------------: |
+| ![](https://github.com/401-potenday/backend/assets/43781484/c9e70c8f-97e2-4296-b8cb-67a4ae41e25a) | ![](https://github.com/401-potenday/backend/assets/43781484/95c1a2fd-87f3-4587-89de-4e1dd1fce3aa) | ![](https://github.com/401-potenday/backend/assets/43781484/8932c6d8-4387-4c9c-a091-cf177af0ac0e)
 
 
-### Teck Stack
-<div align="center">
+
+## ⏳ Sequence Diagram
+### 소셜 회원가입 및 로그인
+<img width="800" alt="스크린샷 2024-02-28 오전 2 30 09" src="https://github.com/401-potenday/backend/assets/43781484/28bb419d-a74d-4b1a-8be4-bfae35a52075">
+
+### 이미지 프로세싱 과정
+<img width="800" alt="스크린샷 2024-02-28 오전 2 32 26" src="https://github.com/401-potenday/backend/assets/43781484/dfc8dc2f-fb6e-48b1-8b13-c885466aac48">
+
+## 🛠 Teck Stack
+<div align="left">
 	<code><img width="50" src="https://user-images.githubusercontent.com/25181517/192108890-200809d1-439c-4e23-90d3-b090cf9a4eea.png" alt="IntelliJ" title="IntelliJ"/></code>
 	<code><img width="50" src="https://user-images.githubusercontent.com/25181517/183912952-83784e94-629d-4c34-a961-ae2ae795b662.png" alt="Jira" title="Jira"/></code>
 	<code><img width="50" src="https://user-images.githubusercontent.com/25181517/117201156-9a724800-adec-11eb-9a9d-3cd0f67da4bc.png" alt="Java" title="Java"/></code>
@@ -31,10 +33,11 @@ https://documenter.getpostman.com/view/32562644/2s9YypFPYx
 	<code><img width="50" src="https://user-images.githubusercontent.com/25181517/183896132-54262f2e-6d98-41e3-8888-e40ab5a17326.png" alt="AWS" title="AWS"/></code>
 </div>
 
-### Architecture && CI/CD Pipeline
+## ⚙️ Architecture
+<img width="800" alt="스크린샷 2024-02-28 오전 2 36 55" src="https://github.com/401-potenday/backend/assets/43781484/dc1833aa-5511-43cd-961d-5e59c93113a8">
 
-<img width="485" alt="스크린샷 2024-02-28 오전 2 36 55" src="https://github.com/401-potenday/backend/assets/43781484/dc1833aa-5511-43cd-961d-5e59c93113a8">
-<img width="930" alt="스크린샷 2024-02-28 오전 2 36 35" src="https://github.com/401-potenday/backend/assets/43781484/17712556-63c4-46d3-a52e-b454d2a6cd7b">
+## 🔀 CI/CD
+<img width="800" alt="스크린샷 2024-02-28 오전 2 36 35" src="https://github.com/401-potenday/backend/assets/43781484/17712556-63c4-46d3-a52e-b454d2a6cd7b">
 
 
 
