@@ -3,7 +3,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'potenday-dev'
         ECR_REPOSITORY = '276943215323.dkr.ecr.ap-northeast-2.amazonaws.com'
-        TARGET_HOST = 'kmss6905@dev.itthatcat.xyz'
+        TARGET_HOST = 'kmss69052@dev.itthatcat.xyz'
     }
     
     stages {
