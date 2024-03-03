@@ -40,7 +40,7 @@ public class TokenProvider {
 
   public TokenProvider(TokenProperty jwtProperties) {
     this.jwtProperties = jwtProperties;
-    this.AL = Algorithm.HMAC512(jwtProperties.getSecret());
+    this.AL = Algorithm.HMAC512(jwtProperties.secret());
   }
 
   private String generate(long userId, TokenType tokenType) {
@@ -78,8 +78,8 @@ public class TokenProvider {
 
   private long getLifeTime(TokenType tokenType) {
     return switch (tokenType) {
-      case ACCESS -> this.jwtProperties.getTokenLifeTime();
-      default -> this.jwtProperties.getTokenRefreshTime();
+      case ACCESS -> this.jwtProperties.accessTokenLifeTime();
+      default -> this.jwtProperties.refreshTokenLifeTime();
     };
   }
 
