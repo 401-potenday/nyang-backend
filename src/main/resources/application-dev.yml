@@ -28,5 +28,5 @@ oauth:
 
 jwt:
   secret: ${JWT_SECRET}
-  access-time-sec: 600
-  refresh-time-sec: 86400
+  access-time-sec: 86400
+  refresh-time-sec: 1209600
