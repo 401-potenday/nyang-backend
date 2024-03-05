@@ -13,7 +13,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(initializers = ConfigDataApplicationContextInitializer.class, classes = TokenProperty.class)
-@TestPropertySource(value = {"classpath:application-local.yml"})
+@TestPropertySource(value = {"classpath:application.yaml"})
 class TokenPropertyTest {
 
   @Autowired

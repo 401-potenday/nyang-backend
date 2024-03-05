@@ -27,5 +27,5 @@ jasypt:
 
 jwt:
   secret: potenday
-  access-time-sec: 10
+  access-time-sec: 600
   refresh-time-sec: 86400
