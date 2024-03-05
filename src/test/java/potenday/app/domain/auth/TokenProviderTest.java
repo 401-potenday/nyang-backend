@@ -22,7 +22,7 @@ import potenday.app.domain.auth.TokenProvider.TokenType;
     classes = {TokenProperty.class, TokenProvider.class}
 )
 @TestPropertySource(
-    locations = "classpath:application-local.yml",
+    locations = "classpath:application.yaml",
     properties = {
         "jwt.access-time-sec = 1",
         "jwt.refresh-time-sec = 2"
@@ -92,7 +92,7 @@ class TokenProviderTest {
     String accessToken = tokenProvider.issueAccessToken(userId);
 
     // 1초후
-    Thread.sleep(100);
+    Thread.sleep(10);
 
     DecodedJWT decodedJWT = JWT.decode(accessToken);
     Date expiresAt = decodedJWT.getExpiresAt();
