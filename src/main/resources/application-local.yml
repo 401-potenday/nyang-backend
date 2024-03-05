@@ -2,6 +2,7 @@ spring:
   jpa:
     generate-ddl: true
     hibernate:
+      ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
@@ -21,3 +22,8 @@ oauth:
     oauth-token-issue-uri: https://kauth.kakao.com/oauth/token
     oauth-userinfo-uri: https://kapi.kakao.com/v2/user/me
     response-type: code
+
+jwt:
+  secret: potenday
+  access-time-sec: 600
+  refresh-time-sec: 86400

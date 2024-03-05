@@ -24,3 +24,17 @@ spring:
 jasypt:
   encryptor:
     password: test-password
+
+oauth:
+  kakao:
+    client-id: client-id-sample
+    client-secret: client-secret-sample
+    oauth-endpoint-uri: https://kauth.kakao.com/oauth/authorize
+    oauth-token-issue-uri: https://kauth.kakao.com/oauth/token
+    oauth-userinfo-uri: https://kapi.kakao.com/v2/user/me
+    response-type: code
+
+jwt:
+  secret: potenday
+  access-time-sec: 600
+  refresh-time-sec: 86400

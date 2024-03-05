@@ -21,7 +21,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @NoArgsConstructor
-public class OAuthTokenResponse implements Serializable {
+public class OAuthToken implements Serializable {
 
   @JsonProperty("access_token")
   private String accessToken;

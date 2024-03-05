@@ -20,7 +20,7 @@ public class OAuthClientTest {
   @DisplayName("code 와 redirectUri 를 통해 OAuthClient 로 부터 사용자 정보를 가져온다")
   void test() {
     TokenRequest tokenRequest = new TokenRequest("code", "redirectUri");
-    OAuthMember oAuthMember = new OAuthMember("oauth-uuid");
+    OAuthMember oAuthMember = new OAuthMember("oauth-uuid", null);
 
     given(oAuthClient.findOAuthMember(tokenRequest)).willReturn(oAuthMember);
 
@@ -33,7 +33,7 @@ public class OAuthClientTest {
   @DisplayName("code 와 redirectUri 를 통해 OAuthClient 로 부터 사용자 정보를 가져온다")
   void throwException() {
     TokenRequest tokenRequest = new TokenRequest("code", "redirectUri");
-    OAuthMember oAuthMember = new OAuthMember("oauth-uuid");
+    OAuthMember oAuthMember = new OAuthMember("oauth-uuid", null);
 
     given(oAuthClient.findOAuthMember(tokenRequest)).willReturn(oAuthMember);
 
@@ -46,10 +46,10 @@ public class OAuthClientTest {
   @Test
   @DisplayName("code 와 redirectUri 를 이용해서 OAuth Token 정보를 가져온다.")
   void getOauthToken() {
-    OAuthTokenResponse oAuthTokenResponse = new OAuthTokenResponse();
-    given(oAuthClient.getToken(anyString(), anyString())).willReturn(oAuthTokenResponse);
+    OAuthToken oAuthToken = new OAuthToken();
+    given(oAuthClient.getToken(anyString(), anyString())).willReturn(oAuthToken);
 
-    OAuthTokenResponse oAuthClientToken = oAuthClient.getToken("code", "redirectUri");
+    OAuthToken oAuthClientToken = oAuthClient.getToken("code", "redirectUri");
 
     assertThat(oAuthClientToken).isNotNull();
   }
