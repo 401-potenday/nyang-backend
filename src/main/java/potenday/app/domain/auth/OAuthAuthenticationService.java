@@ -14,25 +14,37 @@ public class OAuthAuthenticationService {
 
   private final UserRepository userRepository;
   private final TokenProvider tokenProvider;
+  private final TokenRepository tokenRepository;
 
   public OAuthAuthenticationService(UserRepository userRepository,
-      TokenProvider tokenProvider) {
+      TokenProvider tokenProvider, TokenRepository tokenRepository) {
     this.userRepository = userRepository;
     this.tokenProvider = tokenProvider;
+    this.tokenRepository = tokenRepository;
   }
 
 
+  @Transactional
   public AccessRefreshTokenResponse generateAccessRefreshToken(OAuthMember oAuthMember, String oauthProvider) {
     User user = findUser(oAuthMember, oauthProvider);
     String accessToken = tokenProvider.issueAccessToken(user.getId());
     String refreshToken = tokenProvider.issueRefreshToken(user.getId());
+    saveOrUpdateToken(oAuthMember, refreshToken);
     if (user.getNickname() == null) {
       return AccessRefreshTokenResponse.newUser(accessToken, refreshToken);
     }
     return AccessRefreshTokenResponse.of(accessToken, refreshToken, user.getNickname());
   }
 
-  @Transactional
+  private void saveOrUpdateToken(OAuthMember oAuthMember, String refreshToken) {
+    Optional<Token> token = tokenRepository.findToken(oAuthMember.oauthUid());
+    if (token.isEmpty()) {
+      tokenRepository.save(new Token(oAuthMember.oauthUid(), oAuthMember.refreshToken(), refreshToken));
+    } else {
+      token.get().updateRt(refreshToken);
+    }
+  }
+
   public User findUser(OAuthMember oAuthMember, String oauthProvider) {
     Optional<User> user = userRepository.findOauthUser(oAuthMember.oauthUid());
     if (user.isEmpty()) {
