@@ -58,8 +58,7 @@ dependencies {
     testImplementation 'io.rest-assured:spring-mock-mvc:5.4.0'
 
     // docker compose support
-    implementation 'org.springframework.boot:spring-boot-docker-compose'
-
+    developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
 
