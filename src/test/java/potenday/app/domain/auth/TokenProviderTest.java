@@ -23,6 +23,8 @@ import potenday.app.domain.auth.TokenProvider.TokenType;
 )
 @TestPropertySource(
     locations = "classpath:application.yaml",
+
+    // 빠른 테스트를 위해 만료시간은 기존 properties 값을 override 함
     properties = {
         "jwt.access-time-sec = 1",
         "jwt.refresh-time-sec = 2"

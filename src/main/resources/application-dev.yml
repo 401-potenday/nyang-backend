@@ -3,6 +3,10 @@ spring:
     url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DB_NAME}
     username: ${MYSQL_USER}
     password: ${MYSQL_PASSWORD}
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: 6379
 
   jpa:
     hibernate:
