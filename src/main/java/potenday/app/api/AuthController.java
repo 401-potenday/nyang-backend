@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import potenday.app.api.auth.AccessRefreshTokenResponse;
+import potenday.app.api.auth.AccessTokenResponse;
 import potenday.app.api.auth.OAuthUriResponse;
 import potenday.app.api.auth.TokenRequest;
 import potenday.app.api.common.ApiResponse;
