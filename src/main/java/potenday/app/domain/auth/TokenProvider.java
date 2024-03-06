@@ -21,6 +21,11 @@ public class TokenProvider {
   private static final String EXP = "exp";
   private static final String IAT = "iat";
 
+  public String issueAccessTokenFromRefreshToken(String refreshToken) {
+    Long userId = JWT.decode(refreshToken).getClaim(UID).asLong();
+    return issueAccessToken(userId);
+  }
+
   public enum TokenType {
     ACCESS,
     REFRESH;

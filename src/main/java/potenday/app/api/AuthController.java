@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import potenday.app.api.auth.AccessRefreshTokenResponse;
+import potenday.app.api.auth.AccessTokenResponse;
 import potenday.app.api.auth.OAuthUriResponse;
 import potenday.app.api.auth.TokenRequest;
 import potenday.app.api.common.ApiResponse;
+import potenday.app.domain.AppTokenService;
 import potenday.app.domain.auth.OAuthAuthenticationService;
 import potenday.app.oauth.OAuthClient;
 import potenday.app.oauth.OAuthMember;
@@ -24,12 +26,14 @@ public class AuthController {
   private final OAuthUri oAuthUri;
   private final OAuthClient oAuthClient;
   private final OAuthAuthenticationService oAuthAuthenticationService;
+  private final AppTokenService appTokenService;
 
   public AuthController(OAuthUri oAuthUri, OAuthClient oAuthClient,
-      OAuthAuthenticationService oAuthAuthenticationService) {
+      OAuthAuthenticationService oAuthAuthenticationService, AppTokenService appTokenService) {
     this.oAuthUri = oAuthUri;
     this.oAuthClient = oAuthClient;
     this.oAuthAuthenticationService = oAuthAuthenticationService;
+    this.appTokenService = appTokenService;
   }
 
   @GetMapping("/auth/{oAuthProvider}/oauth-uri")
@@ -52,5 +56,13 @@ public class AuthController {
     AccessRefreshTokenResponse tokenResponse = oAuthAuthenticationService
         .generateAccessRefreshToken(oAuthMember, oAuthProvider);
     return ApiResponse.success(tokenResponse);
+  }
+
+  @GetMapping("/auth/issue/access-token")
+  public ApiResponse<AccessTokenResponse> issueAccessToken(
+      @RequestParam(name = "refresh_token") String refreshToken
+  ) {
+    String accessToken = appTokenService.reIssueAccessToken(refreshToken);
+    return ApiResponse.success(AccessTokenResponse.from(accessToken));
   }
 }

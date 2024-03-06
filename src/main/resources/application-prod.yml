@@ -3,6 +3,10 @@ spring:
     url: ENC(GcGrgOnI6WEIm1yt4hCqMvNJrmDjnF/wPHTskMPoB5Ke0FQBzTlBJx5EnpjGbjt90sr+GV01lFQNBKl6wLs8Xg==)
     username: ENC(dltaReNsKvakVzwihkixNLVnwIrN4Hrf)
     password: ENC(G1jv1nj5+8IT556IHyRvUhjpTtH6fuuI)
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: 6379
 
   jpa:
     hibernate:
