@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import potenday.app.domain.auth.AppUser;
 import potenday.app.domain.auth.AuthenticationPrincipal;
 import potenday.app.domain.auth.OptionalAuthenticationPrincipal;
 import potenday.app.domain.cat.content.AddCatContentService;
+import potenday.app.domain.cat.content.DeleteCatContentService;
 import potenday.app.query.model.content.CatContentDetails;
 import potenday.app.query.model.content.CatContentSummaries;
 import potenday.app.query.repository.CoordinationCondition;
@@ -30,11 +32,13 @@ public class CatContentController {
 
   private final AddCatContentService addCatContentService;
   private final ReadCatContentService readCatContentService;
+  private final DeleteCatContentService deleteCatContentService;
 
   public CatContentController(AddCatContentService addCatContentService,
-      ReadCatContentService readCatContentService) {
+      ReadCatContentService readCatContentService, DeleteCatContentService deleteCatContentService) {
     this.addCatContentService = addCatContentService;
     this.readCatContentService = readCatContentService;
+    this.deleteCatContentService = deleteCatContentService;
   }
 
   @PostMapping("/contents")
@@ -60,6 +64,14 @@ public class CatContentController {
     }
     CatContentDetails content = readCatContentService.findContent(appUser, contentId);
     return ApiResponse.success(CatContentResponse.from(content));
+  }
+
+  @DeleteMapping("/contents/{contentId}")
+  public ApiResponse<?> deleteCatContent(
+      @AuthenticationPrincipal AppUser appUser,
+      @PathVariable long contentId) {
+    deleteCatContentService.deleteContent(appUser, contentId);
+    return ApiResponse.success("ok");
   }
 
   @GetMapping("/contents")
