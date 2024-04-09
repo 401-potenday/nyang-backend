@@ -43,6 +43,8 @@ public enum ErrorCode {
   C012("C012", "이모지 번호는 필수입니다. 이모지 번호 1 ~ 18", HttpStatus.BAD_REQUEST),
   C016("C016", "글은 300자를 넘을 수 없습니다.", HttpStatus.BAD_REQUEST),
 
+  C017("C017", "이미 삭제된 컨텐츠 입니다.", HttpStatus.BAD_REQUEST),
+
   // 컨텐츠 - 위도,경도
   CG01("CG01", "위도(lat)는 -90과 90 사이어야 합니다.", HttpStatus.BAD_REQUEST),
   CG02("CG02", "경도(lng)는 -180과 180 사이어야 합니다.", HttpStatus.BAD_REQUEST),
