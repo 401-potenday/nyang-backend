@@ -23,6 +23,8 @@ import potenday.app.domain.cat.status.CatNeuter;
 import potenday.app.domain.cat.status.CatPersonalities;
 import potenday.app.domain.cat.vo.Coordinate;
 import potenday.app.domain.cat.vo.JibunAddress;
+import potenday.app.global.error.ErrorCode;
+import potenday.app.global.error.PotendayException;
 
 @Getter
 @Entity
@@ -72,6 +74,9 @@ public class CatContent extends BaseTimeEntity {
   @Column(name = "is_deleted", nullable = false, columnDefinition = "TINYINT")
   private boolean isDeleted;
 
+  @Column(name = "is_marked", nullable = false, columnDefinition = "TINYINT")
+  private boolean isMarked;
+
   @Builder
   public CatContent(final Long id, final String name, final CatFriends hasFriends, final String description,
       final CatPersonalities catPersonalities, final CatNeuter neuter, final JibunAddress jibunAddress,
@@ -85,6 +90,7 @@ public class CatContent extends BaseTimeEntity {
     this.jibunAddress = jibunAddress;
     this.coordinate = coordinate;
     this.catEmoji = catEmoji;
+    this.isMarked = false;
   }
 
   public void setOwner(final long userId) {
@@ -92,5 +98,19 @@ public class CatContent extends BaseTimeEntity {
       return; // 이미 있는 사용자인 경우 처리하지 않음. 예외 처리
     }
     this.userId = userId;
+  }
+
+  public void setMark() {
+    if (this.isMarked || this.isDeleted) {
+      throw new PotendayException(ErrorCode.C017);
+    }
+    this.isMarked = true;
+  }
+
+  public void setDeleted() {
+    if (this.isMarked || this.isDeleted) {
+      throw new PotendayException(ErrorCode.C017);
+    }
+    this.isDeleted = true;
   }
 }
