@@ -106,6 +106,7 @@ public class CatContent extends BaseTimeEntity {
       throw new PotendayException(ErrorCode.C017);
     }
     this.isMarked = true;
+    this.deletedAt = LocalDateTime.now();
   }
 
   public void setDeleted() {
@@ -113,5 +114,6 @@ public class CatContent extends BaseTimeEntity {
       throw new PotendayException(ErrorCode.C017);
     }
     this.isDeleted = true;
+    this.deletedAt = LocalDateTime.now();
   }
 }
