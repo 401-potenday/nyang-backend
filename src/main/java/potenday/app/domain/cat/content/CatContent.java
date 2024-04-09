@@ -91,6 +91,7 @@ public class CatContent extends BaseTimeEntity {
     this.coordinate = coordinate;
     this.catEmoji = catEmoji;
     this.isMarked = false;
+    this.isDeleted = false;
   }
 
   public void setOwner(final long userId) {
