@@ -66,7 +66,8 @@ public class WebConfig implements WebMvcConfigurer {
             "/contents/**/comments/**",
             "/auth/**/token",
             "/auth/issue/**",
-            "/user/nickname/available-check/**"
+            "/user/nickname/available-check/**",
+            "/addr"
         );
   }
 
