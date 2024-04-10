@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import potenday.app.domain.BaseTimeEntity;
+import potenday.app.domain.auth.AppUser;
 import potenday.app.domain.cat.status.CatFriends;
 import potenday.app.domain.cat.status.CatNeuter;
 import potenday.app.domain.cat.status.CatPersonalities;
@@ -115,5 +116,9 @@ public class CatContent extends BaseTimeEntity {
     }
     this.isDeleted = true;
     this.deletedAt = LocalDateTime.now();
+  }
+
+  public boolean isOwner(AppUser appUser) {
+    return userId == appUser.id();
   }
 }
