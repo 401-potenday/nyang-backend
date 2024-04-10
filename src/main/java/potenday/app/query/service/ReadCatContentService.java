@@ -38,6 +38,7 @@ public class ReadCatContentService {
     this.catContentFollowingCountCalculator = catContentFollowingCountCalculator;
   }
 
+  // 일반 사용자가 컨텐츠 조회
   @Transactional(readOnly = true)
   public CatContentDetails findContent(long contentId) {
     CatContent catContent = catContentQuery.fetchContent(contentId);
@@ -52,6 +53,8 @@ public class ReadCatContentService {
         catContentImages,
         userNickname,
         createEngagementSummary(contentId),
+        catContent.isMarked(),
+        false,
         false
     );
   }
@@ -79,6 +82,7 @@ public class ReadCatContentService {
         .build();
   }
 
+  // 로그인 한 사용자가 컨텐츠 조회
   @Transactional(readOnly = true)
   public CatContentDetails findContent(AppUser appUser, long contentId) {
     CatContent catContent = catContentQuery.fetchContent(contentId);
@@ -93,6 +97,8 @@ public class ReadCatContentService {
         catContentImages,
         userNickname,
         createEngagementSummary(contentId),
+        catContent.isMarked(),
+        catContent.isOwner(appUser),
         followed
     );
   }
