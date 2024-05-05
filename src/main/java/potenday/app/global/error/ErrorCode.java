@@ -66,6 +66,13 @@ public enum ErrorCode {
   F001("F001", "이미 팔로우를 했어요", HttpStatus.BAD_REQUEST),
   F002("F002", "컨텐츠 번호 (contentId) 는 필수입니다.", HttpStatus.BAD_REQUEST),
 
+  // 컨텐츠 - 신고
+  R001("R001", "이미 처리 중인 신고입니다.", HttpStatus.BAD_REQUEST),
+  R002("R002", "신고 내용 입력은 필수입니다.", HttpStatus.BAD_REQUEST),
+  R003("R003", "신고 내용 입력은 최대 300자 까지 입니다.", HttpStatus.BAD_REQUEST),
+  R004("R004", "컨텐츠 번호(contentId)는 필수입니다.", HttpStatus.BAD_REQUEST),
+  R005("R005", "신고 카테고리는 지정은 필수입니다.", HttpStatus.BAD_REQUEST),
+
   // 댓글
   D002("D001", "댓글 번호 (commentId) 는 필수입니다.", HttpStatus.BAD_REQUEST),
   D003("D002", "이미 삭제되었거나, 해당 댓글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
