@@ -1,7 +1,7 @@
 package potenday.app.domain.report;
 
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import potenday.app.api.report.CatContentReportRequest;
 import potenday.app.domain.auth.AppUser;
 import potenday.app.global.error.ErrorCode;
@@ -23,10 +23,22 @@ public class ReportService {
     catContentReportRepository.save(reportTarget.toReport());
   }
 
+  @Transactional(readOnly = true)
+  public void checkReportContent(long contentId) {
+    boolean isReported = isReportByContentId(contentId);
+    if (isReported) {
+      throw new PotendayException(ErrorCode.R006);
+    }
+  }
+
   private void validateNotPendingReport(long contentId) {
-    boolean existed= catContentReportRepository.findPendingReportByContentId(contentId);
+    boolean existed= isReportByContentId(contentId);
     if (existed) {
       throw new PotendayException(ErrorCode.R001);
     }
+  }
+
+  private boolean isReportByContentId(long contentId) {
+    return catContentReportRepository.findPendingReportByContentId(contentId);
   }
 }
