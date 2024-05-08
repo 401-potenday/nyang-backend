@@ -72,6 +72,7 @@ public enum ErrorCode {
   R003("R003", "신고 내용 입력은 최대 300자 까지 입니다.", HttpStatus.BAD_REQUEST),
   R004("R004", "컨텐츠 번호(contentId)는 필수입니다.", HttpStatus.BAD_REQUEST),
   R005("R005", "신고 카테고리는 지정은 필수입니다.", HttpStatus.BAD_REQUEST),
+  R006("R006", "신고가 접수된 게시물입니다.", HttpStatus.FORBIDDEN),
 
   // 댓글
   D002("D001", "댓글 번호 (commentId) 는 필수입니다.", HttpStatus.BAD_REQUEST),
