@@ -21,6 +21,7 @@ import potenday.app.domain.auth.AuthenticationPrincipal;
 import potenday.app.domain.auth.OptionalAuthenticationPrincipal;
 import potenday.app.domain.cat.content.AddCatContentService;
 import potenday.app.domain.cat.content.DeleteCatContentService;
+import potenday.app.domain.report.ReportService;
 import potenday.app.query.model.content.CatContentDetails;
 import potenday.app.query.model.content.CatContentSummaries;
 import potenday.app.query.repository.CoordinationCondition;
@@ -33,12 +34,15 @@ public class CatContentController {
   private final AddCatContentService addCatContentService;
   private final ReadCatContentService readCatContentService;
   private final DeleteCatContentService deleteCatContentService;
+  private final ReportService reportService;
 
   public CatContentController(AddCatContentService addCatContentService,
-      ReadCatContentService readCatContentService, DeleteCatContentService deleteCatContentService) {
+      ReadCatContentService readCatContentService, DeleteCatContentService deleteCatContentService,
+      ReportService reportService) {
     this.addCatContentService = addCatContentService;
     this.readCatContentService = readCatContentService;
     this.deleteCatContentService = deleteCatContentService;
+    this.reportService = reportService;
   }
 
   @PostMapping("/contents")
@@ -58,6 +62,9 @@ public class CatContentController {
   public ApiResponse<CatContentResponse> getCatContent(
       @OptionalAuthenticationPrincipal AppUser appUser,
       @PathVariable long contentId) {
+    // 신고여부 확인하기
+    reportService.checkReportContent(contentId);
+
     if (appUser == null) {
       CatContentDetails contentDetail = readCatContentService.findContent(contentId);
       return ApiResponse.success(CatContentResponse.from(contentDetail));
