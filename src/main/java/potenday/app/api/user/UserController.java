@@ -2,6 +2,7 @@ package potenday.app.api.user;
 
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import potenday.app.api.common.ApiResponse;
@@ -35,5 +36,14 @@ public class UserController {
   ) {
     String registeredNickname = userService.registerNickname(appUser, userNicknameRequest.toNickname());
     return ApiResponse.success(new RegisterNicknameResponse(registeredNickname));
+  }
+
+  @PutMapping("/user/nickname")
+  public ApiResponse<RegisterNicknameResponse> changeNickname(
+      @AuthenticationPrincipal AppUser appUser,
+      @Validated(value = NicknameValidationSequence.class) @RequestBody UserNicknameRequest userNicknameRequest
+  ) {
+    userService.changeNickName(appUser, userNicknameRequest.toNickname());
+    return ApiResponse.success();
   }
 }
