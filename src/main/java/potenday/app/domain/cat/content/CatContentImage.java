@@ -68,4 +68,8 @@ public class CatContentImage extends BaseTimeEntity {
   private String generateImageUri(String imageKey) {
     return IMAGE_HOST + "/" + imageKey + ".jpg";
   }
+
+  public String extractKeyFromUri() {
+    return this.imageUri.split(IMAGE_HOST + "/")[1].split(".jpg")[0];
+  }
 }

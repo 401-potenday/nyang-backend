@@ -99,4 +99,9 @@ public class ContentAcceptanceTest extends AcceptanceTest {
     user.updateNickname("nickname");
     return user;
   }
+
+  @Test
+  void issueAccessToken() {
+    System.out.println(userToken(1L));
+  }
 }

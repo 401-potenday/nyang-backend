@@ -121,4 +121,12 @@ public class CatContent extends BaseTimeEntity {
   public boolean isOwner(AppUser appUser) {
     return userId == appUser.id();
   }
+
+  public void updateFrom(UpdateCatContent updateCatContent) {
+    this.catEmoji = updateCatContent.getCatEmoji();
+    this.catPersonalities = new CatPersonalities(updateCatContent.getCatPersonality());
+    this.description = updateCatContent.getDescription();
+    this.neuter = CatNeuter.from(updateCatContent.getNeuter());
+    this.hasFriends = CatFriends.from(updateCatContent.getHasFriends());
+  }
 }
