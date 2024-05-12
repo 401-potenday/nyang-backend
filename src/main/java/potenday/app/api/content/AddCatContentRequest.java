@@ -32,6 +32,7 @@ public class AddCatContentRequest {
   private CatFriends group;
 
   @NotNull(message = "C013")
+  @NotEmpty(message = "C013")
   private List<CatPersonality> catPersonalities;
 
   @NotNull(message = "CG05")
