@@ -11,6 +11,10 @@ public record ApiResponse<T>(
     ErrorContent error
 ) {
 
+  public static <T> ApiResponse<T> success() {
+    return new ApiResponse<>("SUCCESS", null, null);
+  }
+
   public static <T> ApiResponse<T> success(T data) {
     return new ApiResponse<>("SUCCESS", data, null);
   }
