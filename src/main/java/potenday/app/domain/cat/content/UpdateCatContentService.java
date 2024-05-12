@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import potenday.app.api.content.UpdateCatContentImages;
 import potenday.app.domain.auth.AppUser;
+import potenday.app.domain.report.CatContentReportRepository;
 import potenday.app.domain.user.User;
 import potenday.app.domain.user.UserRepository;
 import potenday.app.global.error.ErrorCode;
@@ -16,21 +17,35 @@ public class UpdateCatContentService {
   private final CatContentRepository catContentRepository;
   private final UserRepository userRepository;
   private final CatContentImageRepository catContentImageRepository;
+  private final CatContentReportRepository catContentReportRepository;
 
   public UpdateCatContentService(CatContentRepository catContentRepository,
-      UserRepository userRepository, CatContentImageRepository catContentImageRepository) {
+      UserRepository userRepository, CatContentImageRepository catContentImageRepository,
+      CatContentReportRepository catContentReportRepository) {
     this.catContentRepository = catContentRepository;
     this.userRepository = userRepository;
     this.catContentImageRepository = catContentImageRepository;
+    this.catContentReportRepository = catContentReportRepository;
   }
 
   @Transactional
   public void updateContent(AppUser appUser, long contentId, UpdateCatContent updateCatContent, UpdateCatContentImages updateCatImages) {
     findUser(appUser);
     CatContent catContent = findUpdatableContent(contentId, appUser);
+    checkReportedContent(contentId);
     catContent.updateFrom(updateCatContent);
     catContentImageRepository.deleteAllByCatContentId(contentId);
     catContentImageRepository.saveAll(createCatContentImages(catContent.getId(), updateCatImages));
+  }
+
+  private void checkReportedContent(long contentId) {
+    if (isNotAccessibleReportedContent(contentId)) {
+      throw new PotendayException(ErrorCode.A002);
+    }
+  }
+
+  private boolean isNotAccessibleReportedContent(long contentId) {
+    return catContentReportRepository.findPendingOrCompletedReportByContentId(contentId);
   }
 
   private List<CatContentImage> createCatContentImages(Long contentId, UpdateCatContentImages addCatContentImages) {

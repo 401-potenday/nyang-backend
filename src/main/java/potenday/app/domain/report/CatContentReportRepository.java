@@ -13,4 +13,11 @@ public interface CatContentReportRepository extends JpaRepository<CatContentRepo
   )
   boolean findPendingReportByContentId(@Param("contentId") long contentId);
 
+  @Query(
+      "SELECT CASE WHEN COUNT(r) > 0 THEN true ELSE false END "
+          + "FROM CatContentReport r "
+          + "WHERE r.contentId = :contentId and r.status = 'COMPLETED' or r.status = 'PENDING'"
+  )
+  boolean findPendingOrCompletedReportByContentId(@Param("contentId") long contentId);
+
 }
