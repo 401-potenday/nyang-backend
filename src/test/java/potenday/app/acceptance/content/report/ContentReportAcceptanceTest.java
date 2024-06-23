@@ -92,10 +92,9 @@ public class ContentReportAcceptanceTest extends AcceptanceTest {
 
         // then
         .then()
-          .assertThat().body("result", is("ERROR"))
-          .assertThat().body("error.code", is("R006"))
-          .assertThat().body("error.message", is("신고가 접수된 게시물입니다."))
-          .assertThat().statusCode(403);
+          .assertThat().body("result", is("SUCCESS"))
+          .assertThat().body("data.contentId", is(0))
+          .assertThat().statusCode(200);
   }
 
   private void saveReport(long contentId) {
