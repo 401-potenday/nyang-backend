@@ -14,6 +14,9 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        if (request.getMethod().equalsIgnoreCase("OPTIONS")) {
+            return true;
+        }
         authenticationTokenService.checkAuthentication(request);
         return true;
     }
