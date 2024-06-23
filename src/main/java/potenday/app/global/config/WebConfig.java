@@ -15,16 +15,20 @@ import potenday.app.domain.auth.OptionalAuthenticationPrincipalArgumentResolver;
 import potenday.app.domain.auth.TokenProvider;
 import potenday.app.global.converter.CreateTimeOrderConverter;
 import potenday.app.global.converter.DistanceOrderConverter;
+import potenday.app.global.interceptor.RequestLoggingInterceptor;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
   private final AuthenticationTokenService authenticationTokenService;
+  private final RequestLoggingInterceptor requestLoggingInterceptor;
   private final TokenProvider tokenProvider;
 
   public WebConfig(AuthenticationTokenService authenticationTokenService,
+      RequestLoggingInterceptor requestLoggingInterceptor,
       TokenProvider tokenProvider) {
     this.authenticationTokenService = authenticationTokenService;
+    this.requestLoggingInterceptor = requestLoggingInterceptor;
     this.tokenProvider = tokenProvider;
   }
 
@@ -59,7 +63,12 @@ public class WebConfig implements WebMvcConfigurer {
   // register interceptor
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
+    registry.addInterceptor(requestLoggingInterceptor)
+        .order(1)
+        .addPathPatterns("/**");
+
     registry.addInterceptor(authenticationInterceptor())
+        .order(2)
         .excludePathPatterns(
             "/auth/**/oauth-uri",
             "/contents",
