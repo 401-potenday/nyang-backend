@@ -89,6 +89,9 @@ public class CatContentResponse {
   @JsonProperty(value = "isAuthor")
   private boolean author;
 
+  @JsonProperty(value = "isReported")
+  private boolean isReported;
+
   public static CatContentResponse from(CatContentDetails catContentDetails) {
     return CatContentResponse.builder()
 
@@ -126,6 +129,7 @@ public class CatContentResponse {
 
   public static CatContentResponse empty() {
     return CatContentResponse.builder()
+        .isReported(true)
         .build();
   }
 }
