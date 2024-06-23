@@ -38,7 +38,8 @@ public class ReportService {
     }
   }
 
-  private boolean isReportByContentId(long contentId) {
+  @Transactional(readOnly = true)
+  public boolean isReportByContentId(long contentId) {
     return catContentReportRepository.findPendingReportByContentId(contentId);
   }
 }

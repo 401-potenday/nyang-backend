@@ -81,8 +81,9 @@ public class CatContentController {
   public ApiResponse<CatContentResponse> getCatContent(
       @OptionalAuthenticationPrincipal AppUser appUser,
       @PathVariable long contentId) {
-    // 신고여부 확인하기
-    reportService.checkReportContent(contentId);
+    if (isReported(contentId)) {
+      return ApiResponse.success(CatContentResponse.empty());
+    }
 
     if (appUser == null) {
       CatContentDetails contentDetail = readCatContentService.findContent(contentId);
@@ -131,5 +132,9 @@ public class CatContentController {
 
   private PageRequest generatePageable(Pageable pageable) {
     return PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize());
+  }
+
+  private boolean isReported(long contentId) {
+    return reportService.isReportByContentId(contentId);
   }
 }
