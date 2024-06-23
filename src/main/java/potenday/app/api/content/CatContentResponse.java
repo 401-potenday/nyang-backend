@@ -90,7 +90,7 @@ public class CatContentResponse {
   private boolean author;
 
   @JsonProperty(value = "isReported")
-  private boolean isReported;
+  private Boolean isReported;
 
   public static CatContentResponse from(CatContentDetails catContentDetails) {
     return CatContentResponse.builder()
@@ -124,6 +124,7 @@ public class CatContentResponse {
         .archived(catContentDetails.isArchived())
         .author(catContentDetails.isAuthor())
         .countOfComments(catContentDetails.getCountOfComments())
+        .isReported(false)
         .build();
   }
 
