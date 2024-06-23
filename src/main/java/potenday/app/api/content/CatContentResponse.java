@@ -123,4 +123,9 @@ public class CatContentResponse {
         .countOfComments(catContentDetails.getCountOfComments())
         .build();
   }
+
+  public static CatContentResponse empty() {
+    return CatContentResponse.builder()
+        .build();
+  }
 }
