@@ -48,4 +48,10 @@ public class UserController {
     userService.changeNickName(appUser, userNicknameRequest.toNickname());
     return ApiResponse.success();
   }
+
+  @GetMapping("/user/nickname")
+  public ApiResponse<UserNicknameResponse> getNickname(@AuthenticationPrincipal AppUser appUser) {
+    String userNickname = userService.getUserNickname(appUser);
+    return ApiResponse.success(new UserNicknameResponse(userNickname));
+  }
 }
