@@ -68,18 +68,7 @@ public class ReadCatContentService {
   @Transactional(readOnly = true)
   public CatContentSummaries findContentsWithSearchCondition(AppUser appUser, ContentSearchCondition searchCondition, Pageable pageable) {
     Page<CatContent> catContents = catContentQuery.fetchContentsBySearchCondition(appUser, searchCondition, pageable);
-
-    List<CatContentSummary> catContentSummaries = catContents.stream()
-        .map(it -> CatContentSummary.of(it, createEngagementSummary(it.getId()), appUser != null))
-        .toList();
-
-    return CatContentSummaries.builder()
-        .items(catContentSummaries)
-        .totalItems(catContents.getTotalElements())
-        .pageSize(catContents.getPageable().getPageSize())
-        .currentPage(catContents.getPageable().getPageNumber() + 1)
-        .isEnd(catContents.isLast())
-        .build();
+    return getCatContentSummaries(appUser, catContents);
   }
 
   // 로그인 한 사용자가 컨텐츠 조회
@@ -101,5 +90,26 @@ public class ReadCatContentService {
         catContent.isOwner(appUser),
         followed
     );
+  }
+
+  @Transactional(readOnly = true)
+  public CatContentSummaries findMyContents(AppUser appUser, Pageable pageable) {
+    Page<CatContent> catContents = catContentQuery.fetchMyContentsByCondition(appUser, pageable);
+    return getCatContentSummaries(appUser, catContents);
+  }
+
+  private CatContentSummaries getCatContentSummaries(AppUser appUser,
+      Page<CatContent> catContents) {
+    List<CatContentSummary> catContentSummaries = catContents.stream()
+        .map(it -> CatContentSummary.of(it, createEngagementSummary(it.getId()), appUser != null))
+        .toList();
+
+    return CatContentSummaries.builder()
+        .items(catContentSummaries)
+        .totalItems(catContents.getTotalElements())
+        .pageSize(catContents.getPageable().getPageSize())
+        .currentPage(catContents.getPageable().getPageNumber() + 1)
+        .isEnd(catContents.isLast())
+        .build();
   }
 }
