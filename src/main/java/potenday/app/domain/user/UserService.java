@@ -48,4 +48,8 @@ public class UserService {
     return userRepository.findById(appUser.id())
         .orElseThrow(() -> new PotendayException(ErrorCode.U006));
   }
+
+  public String getUserNickname(AppUser appUser) {
+    return userRepository.findNicknameById(appUser.id());
+  }
 }
