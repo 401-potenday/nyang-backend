@@ -137,4 +137,13 @@ public class CatContentController {
   private boolean isReported(long contentId) {
     return reportService.isReportByContentId(contentId);
   }
+
+  @GetMapping("/contents/me")
+  public ApiResponse<CatContentSummaries> getMyCatContents(
+      @AuthenticationPrincipal AppUser appUser,
+      @PageableDefault(page = 1) Pageable pageable
+  ) {
+    return ApiResponse.success(readCatContentService.findMyContents(appUser, generatePageable(pageable)));
+  }
+
 }
