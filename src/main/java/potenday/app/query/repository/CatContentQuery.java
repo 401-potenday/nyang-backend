@@ -1,10 +1,13 @@
 package potenday.app.query.repository;
 
+import static potenday.app.domain.cat.content.QCatContent.*;
 import static potenday.app.domain.cat.content.QCatContent.catContent;
 import static potenday.app.domain.cat.content.QCatContentImage.catContentImage;
 import static potenday.app.domain.cat.follow.QCatFollow.catFollow;
+import static potenday.app.domain.report.QCatContentReport.*;
 import static potenday.app.domain.report.QCatContentReport.catContentReport;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -22,6 +25,8 @@ import potenday.app.api.content.search.DistanceOrder;
 import potenday.app.domain.auth.AppUser;
 import potenday.app.domain.cat.content.CatContent;
 import potenday.app.domain.cat.content.CatContentImage;
+import potenday.app.domain.cat.content.QCatContent;
+import potenday.app.domain.cat.follow.QCatFollow;
 import potenday.app.domain.report.CatContentReportStatus;
 import potenday.app.domain.report.QCatContentReport;
 
@@ -68,7 +73,6 @@ public class CatContentQuery {
   }
 
   public Page<CatContent> fetchContentsBySearchCondition(AppUser appUser, ContentSearchCondition searchCondition, Pageable pageable) {
-
     var jpaQuery = queryFactory
         .selectFrom(catContent)
         .leftJoin(catFollow).on(catFollow.catContentId.eq(catContent.id))
@@ -189,5 +193,43 @@ public class CatContentQuery {
 
     // 메인 쿼리에 서브쿼리를 사용하여 조건을 작성합니다.
     return catContent.id.notIn(subQuery);
+  }
+
+  private BooleanExpression isReported(QCatContent catContent) {
+    QCatContentReport subCatContentReport = new QCatContentReport("subCatContentReport");
+
+    return JPAExpressions
+        .selectOne()
+        .from(subCatContentReport)
+        .where(
+            subCatContentReport.contentId.eq(catContent.id)
+                .and(subCatContentReport.status.ne(CatContentReportStatus.REJECT))
+        )
+        .exists();
+  }
+
+  public Page<Tuple> fetchMyContents(AppUser appUser, Pageable pageable) {
+    var jpaQuery = queryFactory
+        .select(
+            catContent,
+            isReported(catContent).as("isReported")
+        )
+        .from(catContent)
+        .leftJoin(catFollow).on(catFollow.catContentId.eq(catContent.id))
+        .leftJoin(catContentReport).on(catContentReport.contentId.eq(catContent.id))
+        .where(
+            eqOwnerId(appUser),
+            notContentDeleted()
+        )
+        .groupBy(catContent.id)
+        .orderBy(catContent.createdAt.desc());
+
+    long totalCount = jpaQuery.fetchCount();
+    var contents = jpaQuery
+        .offset(pageable.getOffset())
+        .limit(pageable.getPageSize())
+        .fetch();
+
+    return new PageImpl<>(contents, pageable, totalCount);
   }
 }
