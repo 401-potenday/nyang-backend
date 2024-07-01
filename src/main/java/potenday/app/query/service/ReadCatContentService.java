@@ -1,6 +1,9 @@
 package potenday.app.query.service;
 
+import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Expression;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -94,12 +97,26 @@ public class ReadCatContentService {
 
   @Transactional(readOnly = true)
   public CatContentSummaries findMyContents(AppUser appUser, Pageable pageable) {
-    Page<CatContent> catContents = catContentQuery.fetchMyContentsByCondition(appUser, pageable);
-    return getCatContentSummaries(appUser, catContents);
+    Page<Tuple> myContents = catContentQuery.fetchMyContents(appUser, pageable);
+    List<CatContentSummary> catContentSummariesWithReport = myContents.getContent().stream()
+        .map(it -> {
+              final CatContent catContent = it.get(0, CatContent.class);
+              final Boolean isReported = it.get(1, Boolean.class);
+              return CatContentSummary.withIsReported(catContent,
+                  createEngagementSummary(catContent.getId()), Boolean.TRUE.equals(isReported), appUser != null);
+            })
+        .toList();
+
+    return CatContentSummaries.builder()
+        .items(catContentSummariesWithReport)
+        .totalItems(myContents.getTotalElements())
+        .pageSize(myContents.getPageable().getPageSize())
+        .currentPage(myContents.getPageable().getPageNumber() + 1)
+        .isEnd(myContents.isLast())
+        .build();
   }
 
-  private CatContentSummaries getCatContentSummaries(AppUser appUser,
-      Page<CatContent> catContents) {
+  private CatContentSummaries getCatContentSummaries(AppUser appUser, Page<CatContent> catContents) {
     List<CatContentSummary> catContentSummaries = catContents.stream()
         .map(it -> CatContentSummary.of(it, createEngagementSummary(it.getId()), appUser != null))
         .toList();

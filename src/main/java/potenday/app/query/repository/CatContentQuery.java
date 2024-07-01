@@ -1,10 +1,8 @@
 package potenday.app.query.repository;
 
-import static potenday.app.domain.cat.content.QCatContent.*;
 import static potenday.app.domain.cat.content.QCatContent.catContent;
 import static potenday.app.domain.cat.content.QCatContentImage.catContentImage;
 import static potenday.app.domain.cat.follow.QCatFollow.catFollow;
-import static potenday.app.domain.report.QCatContentReport.*;
 import static potenday.app.domain.report.QCatContentReport.catContentReport;
 
 import com.querydsl.core.Tuple;
@@ -154,27 +152,6 @@ public class CatContentQuery {
         .where(catFollow.catContentId.eq(catContentId))
         .fetchOne();
     return fetchResult != null ? fetchResult : 0;
-  }
-
-  public Page<CatContent> fetchMyContentsByCondition(AppUser appUser, Pageable pageable) {
-    var jpaQuery = queryFactory
-        .selectFrom(catContent)
-        .leftJoin(catFollow).on(catFollow.catContentId.eq(catContent.id))
-        .leftJoin(catContentReport).on(catContentReport.contentId.eq(catContent.id))
-        .where(
-            eqOwnerId(appUser),
-            notContentDeleted(),
-            isNotReportedOrAllRejected()
-        )
-        .orderBy(catContent.createdAt.desc());
-
-    long totalCount = jpaQuery.fetchCount();
-    var contents = jpaQuery
-        .offset(pageable.getOffset())
-        .limit(pageable.getPageSize())
-        .fetch();
-
-    return new PageImpl<>(contents, pageable, totalCount);
   }
 
   private Predicate eqOwnerId(AppUser appUser) {
