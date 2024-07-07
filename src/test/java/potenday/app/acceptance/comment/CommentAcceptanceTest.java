@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 
 import io.restassured.http.ContentType;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +35,43 @@ public class CommentAcceptanceTest extends AcceptanceTest {
   private CatContentRepository catContentRepository;
 
   @Test
+  @DisplayName("고양이 컨텐츠 댓글 삭제 - 성공")
+  void deleteCatComment() {
+    registerCourse();
+    given().log().all().contentType(ContentType.JSON)
+
+        // when
+        .when().header("Authorization", String.format("Bearer %s", userToken(1L)))
+          .delete("/comments/{commentId}", 1L)
+
+        // then
+        .then()
+          .log().all()
+          .assertThat().statusCode(200)
+          .assertThat().body("result", is("SUCCESS"));
+  }
+
+  @Test
+  @DisplayName("다른 유저가 컨텐츠 댓글 삭제 시 예외 발생 - 실패")
+  void notOwnerDeleteComment() {
+    registerCourse();
+    saveMember(2L);
+    given().log().all().contentType(ContentType.JSON)
+
+        // when
+        .when().header("Authorization", String.format("Bearer %s", userToken(2L)))
+          .delete("/comments/{commentId}", 1L)
+
+        // then
+        .then()
+          .log().all()
+          .assertThat().statusCode(404);
+  }
+
+  @Test
   @DisplayName("고양이 컨텐츠 댓글을 성공적으로 등록한다. - 성공")
   void registerCourse() {
-    saveMember();
+    saveMember(1L);
     saveContent(1L);
 
     given().log().all().contentType(ContentType.JSON)
@@ -62,8 +97,8 @@ public class CommentAcceptanceTest extends AcceptanceTest {
 
   }
 
-  private void saveMember() {
-    userRepository.saveAndFlush(activeUser());
+  private void saveMember(long userId) {
+    userRepository.saveAndFlush(activeUser(userId));
   }
 
   private void saveContent(long userId) {
@@ -97,9 +132,9 @@ public class CommentAcceptanceTest extends AcceptanceTest {
     return tokenProvider.issueAccessToken(id);
   }
 
-  private User activeUser() {
+  private User activeUser(long userId) {
     User user = User.builder()
-        .id(1L)
+        .id(userId)
         .userOAuthProvider(UserOAuthProvider.KAKAO)
         .oAuthUid("oauth-uid")
         .build();
