@@ -49,6 +49,20 @@ public class CommentAcceptanceTest extends AcceptanceTest {
           .log().all()
           .assertThat().statusCode(200)
           .assertThat().body("result", is("SUCCESS"));
+
+
+    given().log().all().contentType(ContentType.JSON)
+
+        // when
+        .when().header("Authorization", String.format("Bearer %s", userToken(1L)))
+          .delete("/comments/{commentId}", 1L)
+
+        // then
+        .then()
+          .log().all()
+          .assertThat().statusCode(404)
+          .assertThat().body("result", is("ERROR"));
+
   }
 
   @Test

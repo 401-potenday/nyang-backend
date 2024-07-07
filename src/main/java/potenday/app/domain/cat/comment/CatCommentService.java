@@ -42,6 +42,7 @@ public class CatCommentService {
     return catComment.getId();
   }
 
+  @Transactional
   public void deleteComment(AppUser appUser, long commentId) {
     User user = findUser(appUser);
     CatComment catComment = findOwnerComment(user, commentId);
