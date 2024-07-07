@@ -3,7 +3,12 @@ package potenday.app.domain.cat.comment;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import potenday.app.api.comment.UpdateCatComment;
+import potenday.app.api.comment.UpdateCatCommentImages;
+import potenday.app.api.content.UpdateCatContentImages;
 import potenday.app.domain.auth.AppUser;
+import potenday.app.domain.cat.content.CatContentImage;
+import potenday.app.domain.cat.content.CatContentImages;
 import potenday.app.domain.cat.content.CatContentRepository;
 import potenday.app.domain.user.User;
 import potenday.app.domain.user.UserRepository;
@@ -37,7 +42,7 @@ public class CatCommentService {
     User user = findUser(appUser);
     checkExisted(addCatComment.contentId());
     CatComment catComment = catCommentRepository.save(createCatComment(user, addCatComment));
-    catCommentImageRepository.saveAllAndFlush(createCommentImages(addCatCommentImages, addCatComment.contentId(), catComment.getId(), user.getId()));
+    catCommentImageRepository.saveAllAndFlush(createCommentImages(addCatCommentImages.toContentImages(), addCatComment.contentId(), catComment.getId(), user.getId()));
     commentEventPublisher.publishEvent(new CommentAddEvent(catComment.getCatContentId()));
     return catComment.getId();
   }
@@ -47,6 +52,24 @@ public class CatCommentService {
     User user = findUser(appUser);
     CatComment catComment = findOwnerComment(user, commentId);
     catComment.setDeleted();
+  }
+
+  @Transactional
+  public void updateCatComment(
+      AppUser appUser,
+      UpdateCatComment updateCatContent,
+      UpdateCatCommentImages updateCatCommentImages
+  ) {
+    User user = findUser(appUser);
+    CatComment catComment = findOwnerComment(user, updateCatContent.commentId());
+    catComment.updateFrom(updateCatContent);
+    catCommentImageRepository.deleteAllByCommentId(catComment.getId());
+    var commentImages = createCommentImages(
+        updateCatCommentImages.toCommentImages(),
+        catComment.getCatContentId(),
+        catComment.getId(),
+        user.getId());
+    catCommentImageRepository.saveAll(commentImages);
   }
 
   private CatComment findOwnerComment(User user, long commentId) {
@@ -72,12 +95,11 @@ public class CatCommentService {
   }
 
   private List<CatCommentImage> createCommentImages(
-      AddCatCommentImages addCatCommentImages,
+      CatCommentImages commentImages,
       long contentId,
       long commentId,
       long userId
   ) {
-    CatCommentImages commentImages = addCatCommentImages.toContentImages();
     return commentImages.toTargetImages(contentId, commentId, userId);
   }
 }

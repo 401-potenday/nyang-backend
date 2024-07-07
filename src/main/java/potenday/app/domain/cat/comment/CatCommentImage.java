@@ -14,13 +14,11 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLRestriction;
 import potenday.app.domain.BaseTimeEntity;
 
 @Getter
 @Entity
 @Table(name = "CAT_CONTENT_COMMENT_IMAGES")
-@SQLRestriction("is_deleted <> false")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CatCommentImage extends BaseTimeEntity {
 
