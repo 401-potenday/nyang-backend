@@ -42,6 +42,17 @@ public class CatCommentService {
     return catComment.getId();
   }
 
+  public void deleteComment(AppUser appUser, long commentId) {
+    User user = findUser(appUser);
+    CatComment catComment = findOwnerComment(user, commentId);
+    catComment.setDeleted();
+  }
+
+  private CatComment findOwnerComment(User user, long commentId) {
+    return catCommentRepository.findUserComment(user.getId(), commentId)
+        .orElseThrow(() -> new PotendayException(ErrorCode.D003));
+  }
+
   private CatComment createCatComment(User user, AddCatComment addCatComment) {
     return addCatComment.toCommentWithOwner(user);
   }
