@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+import potenday.app.api.comment.UpdateCatComment;
 import potenday.app.domain.BaseTimeEntity;
 import potenday.app.global.error.ErrorCode;
 import potenday.app.global.error.PotendayException;
@@ -19,8 +20,6 @@ import potenday.app.global.error.PotendayException;
 @Getter
 @Entity
 @Table(name = "CAT_CONTENT_COMMENT")
-@SQLRestriction("is_deleted=false")
-@SQLDelete(sql = "UPDATE CAT_CONTENT_COMMENT SET is_deleted = true WHERE id=?")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CatComment extends BaseTimeEntity {
 
@@ -55,5 +54,9 @@ public class CatComment extends BaseTimeEntity {
     }
     this.isDeleted = true;
     this.deletedAt = LocalDateTime.now();
+  }
+
+  public void updateFrom(UpdateCatComment updateCatContent) {
+    comment = updateCatContent.comment();
   }
 }
