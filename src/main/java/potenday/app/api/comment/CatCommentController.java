@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import potenday.app.api.common.ApiResponse;
 import potenday.app.api.common.PageContent;
@@ -85,6 +86,15 @@ public class CatCommentController {
         addCatCommentRequest.toAddCatCommentImages()
     );
     return ApiResponse.success(new AddCatCommentResponse(addedCommentId));
+  }
+
+  @DeleteMapping("/comments/{commentId}")
+  public ApiResponse<Void> deleteComment(
+      @AuthenticationPrincipal AppUser appUser,
+      @PathVariable long commentId
+  ) {
+    catCommentService.deleteComment(appUser, commentId);
+    return ApiResponse.success();
   }
 
   @PostMapping("/contents/{contentId}/comments/likes")
