@@ -10,10 +10,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import potenday.app.api.auth.AccessRefreshTokenResponse;
 import potenday.app.api.auth.AccessTokenResponse;
+import potenday.app.api.auth.LogoutTokenRequest;
 import potenday.app.api.auth.OAuthUriResponse;
 import potenday.app.api.auth.TokenRequest;
 import potenday.app.api.common.ApiResponse;
 import potenday.app.domain.AppTokenService;
+import potenday.app.domain.auth.AppUser;
+import potenday.app.domain.auth.AuthenticationPrincipal;
 import potenday.app.domain.auth.OAuthAuthenticationService;
 import potenday.app.oauth.OAuthClient;
 import potenday.app.oauth.OAuthMember;
@@ -64,5 +67,14 @@ public class AuthController {
   ) {
     String accessToken = appTokenService.reIssueAccessToken(refreshToken);
     return ApiResponse.success(AccessTokenResponse.from(accessToken));
+  }
+
+  @PostMapping("/auth/logout")
+  public ApiResponse<Void> removeRefreshToken(
+      @AuthenticationPrincipal AppUser appUser,
+      @Valid @RequestBody LogoutTokenRequest logoutTokenRequest
+  ) {
+    appTokenService.removeRefreshToken(appUser, logoutTokenRequest);
+    return ApiResponse.success();
   }
 }

@@ -17,11 +17,12 @@ public enum ErrorCode {
   U005("U005", "한글과 영문 문자만 허용됩니다.", HttpStatus.BAD_REQUEST),
   U006("U006", "존재하지 않는 유저입니다.", HttpStatus.NOT_FOUND),
 
-  // 로그인
+  // 로그인, 로그아웃
   L001("L001","지원하지 않는 OAuth Provider", HttpStatus.BAD_REQUEST),
   L002("L002", "내부 사용자 정보를 가져오는 데 문제가 발생하였습니다. ", HttpStatus.INTERNAL_SERVER_ERROR),
   L003("L003", "code 는 필수입니다.", HttpStatus.BAD_REQUEST),
   L004("L004", "redirectUri 는 필수입니다. ", HttpStatus.BAD_REQUEST),
+  L005("L005","refreeshToken 는 필수입니다. ", HttpStatus.BAD_REQUEST),
 
   // 컨텐츠
   C001("C001", "존재하지 않는 고양이 성격입니다.", HttpStatus.BAD_REQUEST),
