@@ -1,20 +1,21 @@
 package potenday.app.acceptance.auth;
 
 import static io.restassured.RestAssured.given;
-import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.Matchers.is;
 
 import io.restassured.http.ContentType;
 import java.time.Duration;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import potenday.app.EmbeddedRedisConfig;
 import potenday.app.acceptance.AcceptanceTest;
 import potenday.app.domain.auth.TokenProvider;
 
 @DisplayName("인증 인수테스트")
+@Import(EmbeddedRedisConfig.class)
 public class AuthAcceptanceTest extends AcceptanceTest {
 
   @Autowired
