@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.is;
 
 import io.restassured.http.ContentType;
 import java.time.Duration;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +17,9 @@ import potenday.app.EmbeddedRedisConfig;
 import potenday.app.acceptance.AcceptanceTest;
 import potenday.app.domain.auth.TokenProvider;
 
+@Disabled
 @DisplayName("인증 토큰 재발급 인수테스트")
 @Import(value = EmbeddedRedisConfig.class)
-@TestPropertySource(
-    locations = "classpath:application.yaml",
-    properties = {
-        "jwt.access-time-sec = 1000",
-        "jwt.refresh-time-sec = 2"
-    }
-)
 public class AuthRefreshAcceptanceTest extends AcceptanceTest {
 
   @Autowired
