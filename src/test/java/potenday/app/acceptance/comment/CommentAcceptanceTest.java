@@ -230,6 +230,34 @@ public class CommentAcceptanceTest extends AcceptanceTest {
           .assertThat().body("data.pageSize", is(size));
   }
 
+  @Test
+  @DisplayName("나의 댓글 조회시 삭제된 댓글은 조회되지 않는다. - 성공")
+  void readMyCommentsNotDeletedComment() {
+    deleteCatComment();
+
+    int page = 1;
+    int size = 10;
+
+    // 최초 페이지 요청
+    given().log().all()
+
+        // when
+        .when()
+          .header("Authorization", String.format("Bearer %s", userToken(1L)))
+          .get("/comments/me?page={page}&size={size}", page, size)
+
+        // then
+        .then()
+          .log().all()
+          .assertThat().statusCode(200)
+          .assertThat().body("result", is("SUCCESS"))
+          .assertThat().body("data.items", hasSize(0))
+          .assertThat().body("data.isLast", is(true))
+          .assertThat().body("data.isFirst", is(true))
+          .assertThat().body("data.currentPage", is(page))
+          .assertThat().body("data.pageSize", is(size));
+  }
+
   private void saveMember(long userId) {
     userRepository.saveAndFlush(activeUser(userId));
   }
