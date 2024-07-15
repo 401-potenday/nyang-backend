@@ -7,6 +7,7 @@ import static potenday.app.domain.cat.content.QCatContent.catContent;
 import static potenday.app.domain.user.QUser.user;
 
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -189,7 +190,8 @@ public class CatCommentQuery {
         .leftJoin(catCommentLike).on(catCommentLike.catCommentLikeId.catCommentId.eq(catComment.id))
         .where(
             eqActiveUserId(userId),
-            contentNotDeleted()
+            contentNotDeleted(),
+            commentNotDeleted()
         )
         .groupBy(
             catComment.id,
@@ -211,5 +213,9 @@ public class CatCommentQuery {
     }
 
     return new SliceImpl<>(fetchResult, pageable, hasNext);
+  }
+
+  private Predicate commentNotDeleted() {
+    return catComment.isDeleted.isFalse();
   }
 }
