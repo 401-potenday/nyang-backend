@@ -2,16 +2,18 @@ package potenday.app.domain.cat.comment;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
 import potenday.app.api.comment.UpdateCatComment;
 import potenday.app.domain.BaseTimeEntity;
 import potenday.app.global.error.ErrorCode;
@@ -41,6 +43,10 @@ public class CatComment extends BaseTimeEntity {
 
   @Column(name = "deleted_at")
   private LocalDateTime deletedAt;
+
+  @OneToMany(mappedBy = "catComment", fetch = FetchType.LAZY)
+  @OrderBy("imageOrder ASC")
+  private List<CatCommentImage> commentImages;
 
   public CatComment(final String comment,final Long catContentId,final Long userId) {
     this.comment = comment;

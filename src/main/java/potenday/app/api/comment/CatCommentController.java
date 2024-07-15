@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import potenday.app.api.common.ApiResponse;
 import potenday.app.api.common.PageContent;
+import potenday.app.api.common.ScrollContent;
 import potenday.app.domain.auth.AppUser;
 import potenday.app.domain.auth.AuthenticationPrincipal;
 import potenday.app.domain.auth.OptionalAuthenticationPrincipal;
@@ -130,5 +130,14 @@ public class CatCommentController {
   ) {
     catCommentLikeService.cancelCommentLike(appUser, cancelCommentLikeRequest.toCancelComment(contentId));
     return ApiResponse.success("ok");
+  }
+
+  @GetMapping("/comments/me")
+  public ApiResponse<ScrollContent<?>> getMyComments(
+      @AuthenticationPrincipal AppUser appUser,
+      @PageableDefault(page = 1) Pageable pageable
+  ) {
+    PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize());
+    return ApiResponse.success(readCatCommentService.findMyCatComments(appUser, pageRequest));
   }
 }
