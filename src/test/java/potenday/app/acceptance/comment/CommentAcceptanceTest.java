@@ -3,6 +3,7 @@ package potenday.app.acceptance.comment;
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.urlEncodingEnabled;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
 import io.restassured.http.ContentType;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -178,6 +180,54 @@ public class CommentAcceptanceTest extends AcceptanceTest {
 
     assertThat(catComment.getComment()).isEqualTo(newCommentDesc);
     assertThat(updatedImageKeys).containsAll(imgKeys);
+  }
+
+  @Test
+  @DisplayName("내가 남긴 컨텐츠 댓글을 성공적으로 조회한다. - 성공")
+  void readMyComments() {
+    // given
+    registerContent();
+
+    int page = 1;
+    int size = 10;
+
+    // 최초 페이지 요청
+    given().log().all()
+
+        // when
+        .when()
+          .header("Authorization", String.format("Bearer %s", userToken(1L)))
+          .get("/comments/me?page={page}&size={size}", page, size)
+
+        // then
+        .then()
+          .log().all()
+          .assertThat().statusCode(200)
+          .assertThat().body("result", is("SUCCESS"))
+          .assertThat().body("data.items", hasSize(1))
+          .assertThat().body("data.isLast", is(true))
+          .assertThat().body("data.isFirst", is(true))
+          .assertThat().body("data.currentPage", is(page))
+          .assertThat().body("data.pageSize", is(size));
+
+    // 그 다음 페이지 요청
+    given().log().all()
+
+        // when
+        .when()
+          .header("Authorization", String.format("Bearer %s", userToken(1L)))
+          .get("/comments/me?page={page}&size={size}", page+1, size)
+
+        // then
+        .then()
+          .log().all()
+          .assertThat().statusCode(200)
+          .assertThat().body("result", is("SUCCESS"))
+          .assertThat().body("data.items", hasSize(0))
+          .assertThat().body("data.isLast", is(true))
+          .assertThat().body("data.isFirst", is(false))
+          .assertThat().body("data.currentPage", is(page+1))
+          .assertThat().body("data.pageSize", is(size));
   }
 
   private void saveMember(long userId) {
