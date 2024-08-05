@@ -91,7 +91,8 @@ public class CatCommentQuery {
             catComment.catContentId.eq(contentId),
             imageNotDeleted(),
             activeUser(),
-            contentNotDeleted()
+            contentNotDeleted(),
+            commentNotDeleted()
         )
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
@@ -110,7 +111,8 @@ public class CatCommentQuery {
             catComment.catContentId.eq(contentId),
             imageNotDeleted(),
             activeUser(),
-            contentNotDeleted()
+            contentNotDeleted(),
+            commentNotDeleted()
         )
         .fetchOne();
   }
