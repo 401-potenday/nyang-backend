@@ -1,18 +1,18 @@
 package potenday.app.query.service;
 
-import java.util.List;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import potenday.app.api.comment.CatCommentResponse;
-import potenday.app.api.common.PageContent;
 import potenday.app.api.common.ScrollContent;
 import potenday.app.domain.auth.AppUser;
+import potenday.app.domain.cat.comment.CatComment;
 import potenday.app.global.error.ErrorCode;
+import potenday.app.global.error.ErrorContent;
 import potenday.app.global.error.PotendayException;
+import potenday.app.query.model.comment.CatCommentInfoDto;
 import potenday.app.query.model.comment.CatCommentWithIsLikedAndLikeCount;
 import potenday.app.query.model.comment.CatCommentWithUserNicknameAndImages;
 import potenday.app.query.repository.CatCommentQuery;
@@ -50,5 +50,13 @@ public class ReadCatCommentService {
         userCommentsWithPaging.getPageable().getPageNumber() + 1,
         userCommentsWithPaging.getPageable().getPageSize()
     );
+  }
+
+  public CatCommentInfoDto findComment(long contentId, long commentId) {
+    CatComment comment = catCommentQuery.findComment(contentId, commentId);
+    if (comment == null) {
+      throw new PotendayException(ErrorCode.D003);
+    }
+    return CatCommentInfoDto.of(comment);
   }
 }

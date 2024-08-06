@@ -11,6 +11,7 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,11 +21,13 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import potenday.app.domain.auth.AppUser;
 import potenday.app.domain.cat.comment.CatComment;
 import potenday.app.domain.cat.comment.CatCommentImage;
+import potenday.app.domain.cat.comment.QCatComment;
+import potenday.app.domain.cat.comment.QCatCommentImage;
 import potenday.app.domain.user.UserActivateStatus;
 import potenday.app.query.model.comment.CatCommentImageWithOrder;
 import potenday.app.query.model.comment.CatCommentWithIsLikedAndLikeCount;
@@ -38,6 +41,18 @@ public class CatCommentQuery {
 
   public CatCommentQuery(JPAQueryFactory queryFactory) {
     this.queryFactory = queryFactory;
+  }
+
+  public CatComment findComment(long contentId, long commentId) {
+    return queryFactory
+        .selectFrom(catComment)
+        .leftJoin(catComment.commentImages, catCommentImage).fetchJoin()
+        .join(user).on(user.id.eq(catComment.userId))
+        .where(
+            catComment.id.eq(commentId),
+            catComment.catContentId.eq(contentId),
+            commentNotDeleted()
+        ).fetchFirst();
   }
 
   public PageImpl<CatCommentWithUserNicknameAndImages> findAllCommentWithPaging(long contentId,

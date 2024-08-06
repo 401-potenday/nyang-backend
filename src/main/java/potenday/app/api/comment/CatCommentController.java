@@ -132,6 +132,15 @@ public class CatCommentController {
     return ApiResponse.success("ok");
   }
 
+  @GetMapping("/contents/{contentId}/comments/{commentId}")
+  public ApiResponse<CatCommentResponse> findComment(
+      @PathVariable long contentId,
+      @PathVariable long commentId
+  ) {
+    var catCommentInfoDto = readCatCommentService.findComment(contentId, commentId);
+    return ApiResponse.success(CatCommentResponse.of(catCommentInfoDto));
+  }
+
   @GetMapping("/comments/me")
   public ApiResponse<ScrollContent<?>> getMyComments(
       @AuthenticationPrincipal AppUser appUser,
