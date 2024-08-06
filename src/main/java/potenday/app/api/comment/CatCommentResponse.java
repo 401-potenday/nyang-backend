@@ -3,9 +3,12 @@ package potenday.app.api.comment;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+import potenday.app.domain.cat.comment.CatComment;
 import potenday.app.domain.cat.comment.CatCommentImage;
+import potenday.app.query.model.comment.CatCommentImageWithOrder;
+import potenday.app.query.model.comment.CatCommentInfoDto;
 import potenday.app.query.model.comment.CatCommentWithIsLikedAndLikeCount;
 import potenday.app.query.model.comment.CatCommentWithUserNicknameAndImages;
 
@@ -35,10 +38,12 @@ public record CatCommentResponse(
     String userNickname,
 
     @JsonProperty("commentLikeCount")
-    long commentLikeCount,
+    @JsonInclude(Include.NON_NULL)
+    Long commentLikeCount,
 
     @JsonProperty("isCatCommentLiked")
-    boolean isCatCommentLiked
+    @JsonInclude(Include.NON_NULL)
+    Boolean isCatCommentLiked
 ) {
 
   public static CatCommentResponse of(
@@ -74,6 +79,23 @@ public record CatCommentResponse(
         commentWithIsLikedAndLikeCount.commentLikedCount(),
         commentWithIsLikedAndLikeCount.isCatCommentLiked()
     );
+  }
+
+  public static CatCommentResponse of(CatCommentInfoDto commentInfoDto) {
+      return new CatCommentResponse(
+          commentInfoDto.catCommentId(),
+          commentInfoDto.catCommentDesc(),
+          commentInfoDto.catCommentImageWithOrders()
+              .stream()
+              .map(CatCommentImageWithOrder::commentImageUri)
+              .collect(Collectors.toList()),
+          commentInfoDto.catCommentCreatedAt().toString(),
+          commentInfoDto.catCommentUpdatedAt().toString(),
+          null,
+          null,
+          null,
+          null
+      );
   }
 
 }
