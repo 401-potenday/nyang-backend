@@ -5,10 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import potenday.app.api.comment.UpdateCatComment;
 import potenday.app.api.comment.UpdateCatCommentImages;
-import potenday.app.api.content.UpdateCatContentImages;
 import potenday.app.domain.auth.AppUser;
-import potenday.app.domain.cat.content.CatContentImage;
-import potenday.app.domain.cat.content.CatContentImages;
 import potenday.app.domain.cat.content.CatContentRepository;
 import potenday.app.domain.user.User;
 import potenday.app.domain.user.UserRepository;
@@ -40,10 +37,9 @@ public class CatCommentService {
   @Transactional
   public long addComment(AppUser appUser, AddCatComment addCatComment, AddCatCommentImages addCatCommentImages) {
     User user = findUser(appUser);
-    checkExisted(addCatComment.contentId());
+    validateContentExisted(addCatComment.contentId());
     CatComment catComment = catCommentRepository.save(createCatComment(user, addCatComment));
     catCommentImageRepository.saveAllAndFlush(createCommentImages(addCatCommentImages.toContentImages(), addCatComment.contentId(), catComment.getId(), user.getId()));
-    commentEventPublisher.publishEvent(new CommentAddEvent(catComment.getCatContentId()));
     return catComment.getId();
   }
 
@@ -81,7 +77,7 @@ public class CatCommentService {
     return addCatComment.toCommentWithOwner(user);
   }
 
-  private void checkExisted(Long contentId) {
+  private void validateContentExisted(Long contentId) {
     if (!catContentRepository.existsById(contentId)) {
       throw new PotendayException(ErrorCode.C004);
     }
