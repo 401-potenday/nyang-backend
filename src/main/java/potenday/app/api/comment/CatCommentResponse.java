@@ -62,7 +62,7 @@ public record CatCommentResponse(
             .toList(),
         catCommentWithIsLikedAndAuthor.catComment().getCreatedAt().toString(),
         catCommentWithIsLikedAndAuthor.catComment().getUpdatedAt().toString(),
-        catCommentWithIsLikedAndAuthor.contentId(),
+        null,
         catCommentWithIsLikedAndAuthor.userNickName(),
         catCommentWithIsLikedAndAuthor.commentLikedCount(),
         catCommentWithIsLikedAndAuthor.isCatCommentLiked(),
