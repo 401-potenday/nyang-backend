@@ -4,20 +4,24 @@ import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.Matchers.is;
 
+import com.redis.testcontainers.RedisContainer;
 import io.restassured.http.ContentType;
 import java.time.Duration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.TestPropertySource;
-import potenday.app.EmbeddedRedisConfig;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 import potenday.app.acceptance.AcceptanceTest;
 import potenday.app.domain.auth.TokenProvider;
 
 @DisplayName("인증 인수테스트")
-@Import(EmbeddedRedisConfig.class)
+@Testcontainers
 @TestPropertySource(
     locations = "classpath:application.yaml",
     properties = {
@@ -26,6 +30,15 @@ import potenday.app.domain.auth.TokenProvider;
     }
 )
 public class AuthAcceptanceTest extends AcceptanceTest {
+
+  @Container
+  private static final RedisContainer REDIS_CONTAINER = new RedisContainer(DockerImageName.parse("redis:5.0.3-alpine")).withExposedPorts(6379);
+
+  @DynamicPropertySource
+  private static void registerRedisProperties(DynamicPropertyRegistry registry) {
+    registry.add("spring.data.redis.host", REDIS_CONTAINER::getHost);
+    registry.add("spring.data.redis.port", () -> REDIS_CONTAINER.getMappedPort(6379).toString());
+  }
 
   @Autowired
   StringRedisTemplate redisTemplate;
