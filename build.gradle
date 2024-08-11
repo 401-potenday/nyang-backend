@@ -58,7 +58,9 @@ dependencies {
     // test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'com.h2database:h2:2.2.224'
-    testImplementation ('it.ozimov:embedded-redis:0.7.3') { exclude group: "org.slf4j", module: "slf4j-simple" }
+
+    testImplementation 'org.testcontainers:junit-jupiter:1.17.6'
+    testImplementation 'com.redis.testcontainers:testcontainers-redis-junit-jupiter:1.4.6'
 
     // Rest Assured
     testImplementation 'io.rest-assured:spring-mock-mvc:5.4.0'
