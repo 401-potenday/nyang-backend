@@ -11,12 +11,13 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
-import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -26,10 +27,9 @@ import org.springframework.transaction.annotation.Transactional;
 import potenday.app.domain.auth.AppUser;
 import potenday.app.domain.cat.comment.CatComment;
 import potenday.app.domain.cat.comment.CatCommentImage;
-import potenday.app.domain.cat.comment.QCatComment;
-import potenday.app.domain.cat.comment.QCatCommentImage;
 import potenday.app.domain.user.UserActivateStatus;
 import potenday.app.query.model.comment.CatCommentImageWithOrder;
+import potenday.app.query.model.comment.CatCommentWithIsLikedAndAuthor;
 import potenday.app.query.model.comment.CatCommentWithIsLikedAndLikeCount;
 import potenday.app.query.model.comment.CatCommentWithUserNicknameAndImages;
 
@@ -65,14 +65,15 @@ public class CatCommentQuery {
       CatComment commentEntity = tuple.get(catComment);
       String nickname = tuple.get(user.nickname);
       CatCommentImage commentImageEntity = tuple.get(catCommentImage);
-      CatCommentWithUserNicknameAndImages comment = commentMap.computeIfAbsent(commentEntity.getId(), id -> new CatCommentWithUserNicknameAndImages(
-          commentEntity.getId(),
-          new ArrayList<>(),
-          commentEntity.getComment(),
-          commentEntity.getCreatedAt(),
-          commentEntity.getUpdatedAt(),
-          nickname
-      ));
+      CatCommentWithUserNicknameAndImages comment = commentMap.computeIfAbsent(
+          commentEntity.getId(), id -> new CatCommentWithUserNicknameAndImages(
+              commentEntity.getId(),
+              new ArrayList<>(),
+              commentEntity.getComment(),
+              commentEntity.getCreatedAt(),
+              commentEntity.getUpdatedAt(),
+              nickname
+          ));
       if (hasImageInComment(commentImageEntity)) {
         comment.catCommentImageWithOrders().add(
             new CatCommentImageWithOrder(
@@ -82,7 +83,6 @@ public class CatCommentQuery {
         );
       }
     });
-
 
     // 전체 댓글 수를 조회하는 쿼리
     long total = countQuery(contentId);
@@ -133,7 +133,8 @@ public class CatCommentQuery {
   }
 
   private BooleanExpression imageNotDeleted() {
-    return catCommentImage.isNull().or(catCommentImage.isDeleted.isFalse()); // 이미지가 삭제되지 않은 경우에만 조회합니다.
+    return catCommentImage.isNull()
+        .or(catCommentImage.isDeleted.isFalse()); // 이미지가 삭제되지 않은 경우에만 조회합니다.
   }
 
   private BooleanExpression contentNotDeleted() {
@@ -161,9 +162,11 @@ public class CatCommentQuery {
     Long fetchResult = queryFactory
         .select(catComment.count())
         .from(catComment)
+        .join(catContent).on(catContent.id.eq(catComment.catContentId))
         .where(
-            catComment.isDeleted.isFalse(),
-            catComment.catContentId.eq(catContentId)
+            contentNotDeleted(),
+            commentNotDeleted(),
+            eqContentId(catContentId)
         )
         .fetchOne();
     return fetchResult != null ? fetchResult : 0;
@@ -182,6 +185,90 @@ public class CatCommentQuery {
 
   private BooleanExpression eqActiveUserId(long userId) {
     return user.id.eq(userId).and(activeUser());
+  }
+
+  public Page<CatCommentWithIsLikedAndAuthor> findCommentsNoAuth(long contentId, Pageable pageable) {
+    List<CatCommentWithIsLikedAndAuthor> fetchResult = queryFactory
+        .select(
+            Projections.constructor(CatCommentWithIsLikedAndAuthor.class,
+                catComment,
+                catContent.id,
+                catContent.name,
+                catCommentLike.count().as("commentLikedCount"),
+                catCommentLike.isNotNull().as("isCatCommentLiked"),
+                user.nickname.as("userNickName")
+            )
+        )
+        .from(catComment)
+        .join(catContent).on(catContent.id.eq(catComment.catContentId))
+        .join(user).on(catComment.userId.eq(user.id))
+        .leftJoin(catCommentLike).on(catCommentLike.catCommentLikeId.catCommentId.eq(catComment.id))
+        .where(
+            contentNotDeleted(),
+            commentNotDeleted(),
+            eqContentId(contentId)
+        )
+        .groupBy(
+            catComment.id,
+            catContent.name
+        )
+        .offset(pageable.getOffset())
+        .limit(pageable.getPageSize() + 1)
+        .orderBy(catComment.createdAt.desc())
+        .fetch();
+
+    long totalCount = countContentComments(contentId);
+
+    return new PageImpl<>(fetchResult, pageable, totalCount);
+  }
+
+  public Page<CatCommentWithIsLikedAndAuthor> findComments(long userId, long contentId, Pageable pageable) {
+    List<CatCommentWithIsLikedAndAuthor> fetchResult = queryFactory
+        .select(
+            Projections.constructor(CatCommentWithIsLikedAndAuthor.class,
+                catComment,
+                catContent.id,
+                catContent.name,
+                catCommentLike.count().as("commentLikedCount"),
+                catCommentLike.isNotNull().as("isCatCommentLiked"),
+                user.nickname.as("userNickName"),
+                catComment.userId.eq(userId)
+            )
+        )
+        .from(catComment)
+        .join(catContent).on(catContent.id.eq(catComment.catContentId))
+        .join(user).on(catComment.userId.eq(user.id))
+        // 나의 댓글 좋아요 유무
+        .leftJoin(catCommentLike).on(
+            catCommentLike.catCommentLikeId.catCommentId.eq(catComment.id)
+                .and(catCommentLike.catCommentLikeId.userId.eq(userId)))
+        // 댓글 좋아요 수
+        .leftJoin(catCommentLike).on(catCommentLike.catCommentLikeId.catCommentId.eq(catComment.id))
+        .where(
+            contentNotDeleted(),
+            commentNotDeleted(),
+            eqContentId(contentId)
+        )
+        .groupBy(
+            catComment.id,
+            catContent.name,
+            new CaseBuilder()
+                .when(catCommentLike.isNotNull())
+                .then(true)
+                .otherwise(false)
+        )
+        .offset(pageable.getOffset())
+        .limit(pageable.getPageSize() + 1)
+        .orderBy(catComment.createdAt.desc())
+        .fetch();
+
+    long totalCount = countContentComments(contentId);
+
+    return new PageImpl<>(fetchResult, pageable, totalCount);
+  }
+
+  private static BooleanExpression eqContentId(long contentId) {
+    return catContent.id.eq(contentId);
   }
 
   // scroll

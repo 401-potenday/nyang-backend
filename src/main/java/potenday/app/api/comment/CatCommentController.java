@@ -1,7 +1,6 @@
 package potenday.app.api.comment;
 
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -48,30 +47,16 @@ public class CatCommentController {
       @PathVariable long contentId,
       @PageableDefault(page = 1) Pageable pageable
   ) {
-    PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize());
-    var catCommentWithUserNicknameAndImages = readCatCommentService.findCatComments(contentId, pageRequest);
-
-    List<CatCommentResponse> catCommentResponses = catCommentWithUserNicknameAndImages.stream()
-        .map(it -> {
-          long commentLikesCount = catCommentEngagementsCalculator.getCommentLikesCount(it.catCommentId());
-          if (appUser != null) {
-            boolean commentLiked = catCommentEngagementsCalculator.isCommentLiked(appUser.id(), it.catCommentId());
-            return CatCommentResponse.of(it, commentLikesCount, commentLiked);
-          }
-          return CatCommentResponse.of(it, commentLikesCount, false);
-        })
-        .toList();
-
-    // createResponse
+    Pageable pageRequest = PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize());
+    var catComments = readCatCommentService.findCatComments(appUser, contentId, pageRequest);
     PageContent<CatCommentResponse> pageContent = new PageContent<>(
-        catCommentResponses,
-        catCommentWithUserNicknameAndImages.getPageable().getPageNumber(),
-        catCommentWithUserNicknameAndImages.getPageable().getPageSize(),
-        catCommentWithUserNicknameAndImages.getTotalPages(),
-        catCommentWithUserNicknameAndImages.getTotalElements(),
-        catCommentWithUserNicknameAndImages.isLast()
+        catComments.map(CatCommentResponse::from).toList(),
+        catComments.getPageable().getPageNumber(),
+        catComments.getPageable().getPageSize(),
+        catComments.getTotalPages(),
+        catComments.getTotalElements(),
+        catComments.isLast()
     );
-
     return ApiResponse.success(pageContent);
   }
 

@@ -12,14 +12,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.test.context.TestPropertySource;
-import potenday.app.EmbeddedRedisConfig;
+import potenday.app.RedisTestContainerConfig;
 import potenday.app.acceptance.AcceptanceTest;
 import potenday.app.domain.auth.TokenProvider;
 
 @Disabled
 @DisplayName("인증 토큰 재발급 인수테스트")
-@Import(value = EmbeddedRedisConfig.class)
+@Import(value = RedisTestContainerConfig.class)
 public class AuthRefreshAcceptanceTest extends AcceptanceTest {
 
   @Autowired

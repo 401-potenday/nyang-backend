@@ -13,6 +13,7 @@ import potenday.app.global.error.ErrorCode;
 import potenday.app.global.error.ErrorContent;
 import potenday.app.global.error.PotendayException;
 import potenday.app.query.model.comment.CatCommentInfoDto;
+import potenday.app.query.model.comment.CatCommentWithIsLikedAndAuthor;
 import potenday.app.query.model.comment.CatCommentWithIsLikedAndLikeCount;
 import potenday.app.query.model.comment.CatCommentWithUserNicknameAndImages;
 import potenday.app.query.repository.CatCommentQuery;
@@ -37,6 +38,15 @@ public class ReadCatCommentService {
     }
     return catCommentQuery.findAllCommentWithPaging(contentId, pageable);
   }
+
+  @Transactional(readOnly = true)
+  public Page<CatCommentWithIsLikedAndAuthor> findCatComments(AppUser appUser, long contentId, Pageable pageable) {
+    if (appUser == null || appUser.id() == 0) {
+      return catCommentQuery.findCommentsNoAuth(contentId, pageable);
+    }
+    return catCommentQuery.findComments(appUser.id(), contentId, pageable);
+  }
+
 
   @Transactional(readOnly = true)
   public ScrollContent<?> findMyCatComments(AppUser appUser, Pageable pageable) {

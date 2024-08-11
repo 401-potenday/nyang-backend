@@ -5,10 +5,10 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.stream.Collectors;
-import potenday.app.domain.cat.comment.CatComment;
 import potenday.app.domain.cat.comment.CatCommentImage;
 import potenday.app.query.model.comment.CatCommentImageWithOrder;
 import potenday.app.query.model.comment.CatCommentInfoDto;
+import potenday.app.query.model.comment.CatCommentWithIsLikedAndAuthor;
 import potenday.app.query.model.comment.CatCommentWithIsLikedAndLikeCount;
 import potenday.app.query.model.comment.CatCommentWithUserNicknameAndImages;
 
@@ -43,13 +43,38 @@ public record CatCommentResponse(
 
     @JsonProperty("isCatCommentLiked")
     @JsonInclude(Include.NON_NULL)
-    Boolean isCatCommentLiked
+    Boolean isCatCommentLiked,
+
+    @JsonProperty("isAuthor")
+    @JsonInclude(Include.NON_NULL)
+    Boolean isAuthor
 ) {
+
+  public static CatCommentResponse from(
+      CatCommentWithIsLikedAndAuthor catCommentWithIsLikedAndAuthor
+  ) {
+    List<CatCommentImage> commentImages = catCommentWithIsLikedAndAuthor.catComment().getCommentImages();
+    return new CatCommentResponse(
+        catCommentWithIsLikedAndAuthor.catComment().getId(),
+        catCommentWithIsLikedAndAuthor.catComment().getComment(),
+        commentImages.stream()
+            .map(CatCommentImage::getImageUri)
+            .toList(),
+        catCommentWithIsLikedAndAuthor.catComment().getCreatedAt().toString(),
+        catCommentWithIsLikedAndAuthor.catComment().getUpdatedAt().toString(),
+        null,
+        catCommentWithIsLikedAndAuthor.userNickName(),
+        catCommentWithIsLikedAndAuthor.commentLikedCount(),
+        catCommentWithIsLikedAndAuthor.isCatCommentLiked(),
+        catCommentWithIsLikedAndAuthor.isAuthor()
+    );
+  }
 
   public static CatCommentResponse of(
       CatCommentWithUserNicknameAndImages commentWithUserNicknameAndImages,
       long commentLikeCount,
-      boolean isCatCommentLiked
+      boolean isCatCommentLiked,
+      boolean isAuthor
   ) {
     return new CatCommentResponse(
         commentWithUserNicknameAndImages.catCommentId(),
@@ -60,7 +85,8 @@ public record CatCommentResponse(
         null,
         commentWithUserNicknameAndImages.userNickname(),
         commentLikeCount,
-        isCatCommentLiked
+        isCatCommentLiked,
+        isAuthor
     );
   }
 
@@ -77,7 +103,8 @@ public record CatCommentResponse(
         commentWithIsLikedAndLikeCount.contentId(),
         null,
         commentWithIsLikedAndLikeCount.commentLikedCount(),
-        commentWithIsLikedAndLikeCount.isCatCommentLiked()
+        commentWithIsLikedAndLikeCount.isCatCommentLiked(),
+        null
     );
   }
 
@@ -91,6 +118,7 @@ public record CatCommentResponse(
               .collect(Collectors.toList()),
           commentInfoDto.catCommentCreatedAt().toString(),
           commentInfoDto.catCommentUpdatedAt().toString(),
+          null,
           null,
           null,
           null,
