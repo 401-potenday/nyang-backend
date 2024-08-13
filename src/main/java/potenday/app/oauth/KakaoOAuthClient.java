@@ -32,30 +32,30 @@ public class KakaoOAuthClient implements OAuthClient {
 
   @Override
   public OAuthMember findOAuthMember(TokenRequest tokenRequest) {
-    OAuthTokenResponse token = getKakaoToken(tokenRequest.getCode(), tokenRequest.getRedirectUri());
-    return findKakaoMember(token.getAccessToken());
+    OAuthToken oAuthToken = getKakaoToken(tokenRequest.getCode(), tokenRequest.getRedirectUri());
+    return findKakaoMember(oAuthToken);
   }
 
-  private OAuthMember findKakaoMember(String accessToken){
+  private OAuthMember findKakaoMember(OAuthToken oAuthToken){
     HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(
-        kakaoUserRequestBody(), kakaoUserRequestHeader(accessToken));
+        kakaoUserRequestBody(), kakaoUserRequestHeader(oAuthToken.getAccessToken()));
     ResponseEntity<String> response = kakaoUserRequest(httpEntity);
     try {
       JsonNode jsonNode = objectMapper.readTree(response.getBody());
       long id = jsonNode.get("id").asLong();
-      return OAuthMember.from(String.valueOf(id));
+      return OAuthMember.from(String.valueOf(id), oAuthToken.getRefreshToken());
     } catch (JsonProcessingException e) {
       throw new PotendayException(ErrorCode.L002);
     }
   }
 
   @Override
-  public OAuthTokenResponse getToken(String code, String redirectUri) {
+  public OAuthToken getToken(String code, String redirectUri) {
     return getKakaoToken(code, redirectUri);
   }
 
 
-  private OAuthTokenResponse getKakaoToken(String code, String redirectUri) {
+  private OAuthToken getKakaoToken(String code, String redirectUri) {
     // set header
     HttpHeaders headers = tokenRequestHeaders();
 
@@ -66,14 +66,14 @@ public class KakaoOAuthClient implements OAuthClient {
     HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(map, headers);
 
     // response
-    ResponseEntity<OAuthTokenResponse> response = tokenRequest(requestEntity);
+    ResponseEntity<OAuthToken> response = tokenRequest(requestEntity);
     return response.getBody();
   }
 
-  private ResponseEntity<OAuthTokenResponse> tokenRequest(
+  private ResponseEntity<OAuthToken> tokenRequest(
       HttpEntity<MultiValueMap<String, String>> requestEntity) {
     String tokenIssueUri = kakaoProperties.getOauthTokenIssueUri();
-    return restTemplate.postForEntity(tokenIssueUri, requestEntity, OAuthTokenResponse.class);
+    return restTemplate.postForEntity(tokenIssueUri, requestEntity, OAuthToken.class);
   }
 
   private HttpHeaders tokenRequestHeaders() {

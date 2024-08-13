@@ -83,6 +83,15 @@ public class CatContentResponse {
   @JsonProperty(value = "nickname")
   private String nickname;
 
+  @JsonProperty(value = "isArchived")
+  private boolean archived;
+
+  @JsonProperty(value = "isAuthor")
+  private boolean author;
+
+  @JsonProperty(value = "isReported")
+  private Boolean isReported;
+
   public static CatContentResponse from(CatContentDetails catContentDetails) {
     return CatContentResponse.builder()
 
@@ -112,6 +121,16 @@ public class CatContentResponse {
         .nickname(catContentDetails.getNickname())
         .updatedAt(catContentDetails.getUpdatedAt())
         .createdAt(catContentDetails.getCreatedAt())
+        .archived(catContentDetails.isArchived())
+        .author(catContentDetails.isAuthor())
+        .countOfComments(catContentDetails.getCountOfComments())
+        .isReported(false)
+        .build();
+  }
+
+  public static CatContentResponse empty() {
+    return CatContentResponse.builder()
+        .isReported(true)
         .build();
   }
 }

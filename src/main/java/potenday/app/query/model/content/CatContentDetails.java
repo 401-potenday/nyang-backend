@@ -9,10 +9,10 @@ import lombok.Getter;
 import lombok.ToString;
 import potenday.app.api.content.CatContentEngagementSummary;
 import potenday.app.domain.cat.content.CatContent;
+import potenday.app.domain.cat.content.CatContentImage;
 import potenday.app.domain.cat.status.CatFriends;
 import potenday.app.domain.cat.status.CatNeuter;
 import potenday.app.domain.cat.status.CatPersonality;
-import potenday.app.domain.cat.content.CatContentImage;
 import potenday.app.query.model.user.UserNickname;
 
 @Builder
@@ -47,14 +47,19 @@ public class CatContentDetails {
   private long userUid;
   private String nickname;
 
+  private boolean isArchived;
+  private boolean isAuthor;
+
   public static CatContentDetails of(
       CatContent content,
       List<CatContentImage> catContentImages,
       UserNickname userNickname,
       CatContentEngagementSummary contentEngagementSummary,
+      boolean isArchived,
+      boolean isAuthor,
       boolean isFollowed
   ) {
-    return CatContentDetails.builder()
+    CatContentDetailsBuilder catContentDetailsBuilder = CatContentDetails.builder()
         .contentId(content.getId())
         .name(content.getName())
         .description(content.getDescription())
@@ -74,8 +79,7 @@ public class CatContentDetails {
             .map(CatContentImage::getImageUri)
             .collect(Collectors.toList()))
         .neuter(content.getNeuter())
-        .userUid(userNickname.getUserId())
-        .nickname(userNickname.getNickname())
+
         .createdAt(content.getCreatedAt().toString())
         .updatedAt(content.getUpdatedAt().toString())
 
@@ -83,7 +87,19 @@ public class CatContentDetails {
         .countOfFollowed(contentEngagementSummary.countOfFollowed())
         .countOfComments(contentEngagementSummary.countOfComments())
         .isFollowed(isFollowed)
+        .isAuthor(isAuthor)
+        .isArchived(isArchived)
+        .userUid(userNickname.getUserId())
+        .countOfComments(contentEngagementSummary.countOfComments())
+        .nickname(userNickname.getNickname());
 
-        .build();
+    if (isArchived) {
+      catContentDetailsBuilder
+          .isAuthor(false)
+          .userUid(0)
+          .nickname(null);
+    }
+
+    return catContentDetailsBuilder.build();
   }
 }

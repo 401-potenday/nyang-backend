@@ -1,8 +1,12 @@
 spring:
   datasource:
-    url: ENC(wEolLcEd0JsyUAZ+fI2kdORHn8Jy1m5XIv4O4Vi+osY99pnq6OjQoq6cA/YMxf0XOe/7VQl9xTXOkriCKIdjVw==)
-    username: ENC(0hEgKCaUbJNV2ahkEYg5IpctJu6JijZW)
-    password: ENC(+ooqAAaQf/Xt3Qq6IVT7uPLFtiOgYaC4)
+    url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DB_NAME}?serverTimezone=Asia/Seoul
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: 6379
 
   jpa:
     hibernate:
@@ -10,11 +14,11 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate:
+        default_batch_fetch_size: 100
         jdbc.batch_size: 10
         order_inserts: true
         order_updates: true
         format_sql: true
-        dialect: org.hibernate.dialect.MySQL8Dialect
 
     show-sql: true
 
@@ -27,10 +31,7 @@ oauth:
     oauth-userinfo-uri: https://kapi.kakao.com/v2/user/me
     response-type: code
 
-sentry:
-  dsn: https://25cf3f99285ebea612c50d5db8be16c1@o4506655666864128.ingest.sentry.io/4506655671844864
-  traces-sample-rate: 1.0
-
-logging:
-  level:
-    org.hibernate.orm.jdbc.bind: trace
+jwt:
+  secret: ${JWT_SECRET}
+  access-time-sec: 86400
+  refresh-time-sec: 1209600

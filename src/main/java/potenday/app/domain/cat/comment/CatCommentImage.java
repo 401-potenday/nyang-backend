@@ -5,8 +5,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.time.LocalDateTime;
+import java.util.UUID;
+import java.util.regex.Pattern;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,9 +22,12 @@ import potenday.app.domain.BaseTimeEntity;
 @Getter
 @Entity
 @Table(name = "CAT_CONTENT_COMMENT_IMAGES")
-@SQLRestriction("is_deleted <> false")
+@SQLRestriction("is_deleted = false")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CatCommentImage extends BaseTimeEntity {
+
+  private static final String IMAGE_HOST = "https://image.itthatcat.xyz";
+  private static final Pattern UUID_REGEX = Pattern.compile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,11 +39,18 @@ public class CatCommentImage extends BaseTimeEntity {
   @Column(name = "cat_comment_id", nullable = false)
   private Long catCommentId;
 
+  @ManyToOne
+  @JoinColumn(name = "cat_comment_id", nullable = false, insertable = false, updatable = false)
+  private CatComment catComment;
+
   @Column(name = "user_id", nullable = false)
   private Long userId;
 
   @Column(name = "image_uri", nullable = false, columnDefinition = "VARCHAR(255)")
   private String imageUri;
+
+  @Transient
+  private UUID imageKey;
 
   @Column(name = "image_order", nullable = false, columnDefinition = "TINYINT")
   private int imageOrder;
@@ -51,20 +66,25 @@ public class CatCommentImage extends BaseTimeEntity {
       final long catContentId,
       final long catCommentId,
       final long userId,
-      final String imageUri,
+      final String imageKey,
       final int imageOrder
   ) {
-    validateImageHttpUri(imageUri);
+    checkImageKeyFormat(imageKey);
     this.catContentId = catContentId;
     this.catCommentId = catCommentId;
     this.userId = userId;
-    this.imageUri = imageUri;
+    this.imageKey = UUID.fromString(imageKey);
+    this.imageUri = generateImageUri(imageKey);
     this.imageOrder = imageOrder;
   }
 
-  void validateImageHttpUri(String imageUri) {
-    if (!imageUri.startsWith("http://") && !imageUri.startsWith("https://")) {
-      throw new IllegalArgumentException("CI01");
+  private void checkImageKeyFormat(String imageKey) {
+    if (!UUID_REGEX.matcher(imageKey).matches()) {
+      throw new IllegalArgumentException("CI03");
     }
+  }
+
+  private String generateImageUri(String imageKey) {
+    return IMAGE_HOST + "/" + imageKey + ".jpg";
   }
 }

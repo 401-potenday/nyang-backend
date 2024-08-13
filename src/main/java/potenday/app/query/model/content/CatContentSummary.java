@@ -1,5 +1,7 @@
 package potenday.app.query.model.content;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
 import lombok.Builder;
@@ -44,6 +46,10 @@ public class CatContentSummary {
   @JsonProperty("catEmoji")
   private int catEmoji;
 
+  @JsonProperty("isReported")
+  @JsonInclude(Include.NON_NULL)
+  private Boolean reported;
+
   public static CatContentSummary of(
       CatContent content,
       CatContentEngagementSummary catContentEngagementSummary,
@@ -61,6 +67,28 @@ public class CatContentSummary {
         .countOfFollowed(catContentEngagementSummary.countOfFollowed())
         .countOfComments(catContentEngagementSummary.countOfComments())
         .follow(isFollowed)
+        .build();
+  }
+
+  public static CatContentSummary withIsReported(
+      CatContent content,
+      CatContentEngagementSummary catContentEngagementSummary,
+      boolean isReported,
+      boolean isFollowed
+  ) {
+    return CatContentSummary.builder()
+        .catContentId(content.getId())
+        .catName(content.getName())
+        .catAddress(content.getJibunAddress().toString())
+        .catLat(content.getCoordinate().getLat())
+        .catLon(content.getCoordinate().getLon())
+        .catCreatedAt(content.getCreatedAt())
+        .catUpdatedAt(content.getUpdatedAt())
+        .catEmoji(content.getCatEmoji())
+        .countOfFollowed(catContentEngagementSummary.countOfFollowed())
+        .countOfComments(catContentEngagementSummary.countOfComments())
+        .follow(isFollowed)
+        .reported(isReported)
         .build();
   }
 

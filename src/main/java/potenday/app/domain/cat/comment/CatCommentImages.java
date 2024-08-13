@@ -3,7 +3,6 @@ package potenday.app.domain.cat.comment;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import potenday.app.domain.user.User;
 
 public class CatCommentImages {
 
@@ -15,20 +14,20 @@ public class CatCommentImages {
         .collect(Collectors.toList());
   }
 
-  private CatCommentImage createContentImage(int order, String uri) {
+  private CatCommentImage createContentImage(int order, String imageKey) {
     return CatCommentImage.builder()
         .imageOrder(order)
-        .imageUri(uri)
+        .imageKey(imageKey)
         .build();
   }
 
-  public List<CatCommentImage> toTargetImages(long contentId, long commentId, User userId) {
+  public List<CatCommentImage> toTargetImages(long contentId, long commentId, long userId) {
     return catCommentImages.stream().map(image ->
             CatCommentImage.builder()
                 .catContentId(contentId)
                 .catCommentId(commentId)
-                .userId(userId.getId())
-                .imageUri(image.getImageUri())
+                .userId(userId)
+                .imageKey(image.getImageKey().toString())
                 .imageOrder(image.getImageOrder())
                 .build())
         .toList();

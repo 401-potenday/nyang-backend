@@ -2,7 +2,6 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.2.2'
     id 'io.spring.dependency-management' version '1.1.4'
-    id "io.sentry.jvm.gradle" version "4.2.0"
 }
 
 group = 'potenday'
@@ -10,17 +9,6 @@ version = '0.0.1-SNAPSHOT'
 
 java {
     sourceCompatibility = '17'
-}
-
-sentry {
-    // Generates a JVM (Java, Kotlin, etc.) source bundle and uploads your source code to Sentry.
-    // This enables source context, allowing you to see your source
-    // code as part of your stack traces in Sentry.
-    includeSourceContext = true
-
-    org = "potenday"
-    projectName = "java-spring-boot"
-    authToken = System.getenv("SENTRY_AUTH_TOKEN")
 }
 
 configurations {
@@ -38,20 +26,21 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // redis
+    implementation 'org.springframework.data:spring-data-redis'
+    implementation 'io.lettuce:lettuce-core:6.3.1.RELEASE'
+
     // jwt
     implementation 'com.auth0:java-jwt:4.4.0'
 
+    // lombok
     compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
     // encrypt properties
     implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
 
-    // sentry
-    implementation 'io.sentry:sentry-spring-boot-starter:7.2.0'
-    implementation 'io.sentry:sentry-logback:7.2.0'
-
-    //Querydsl 추가
+    // query dsl
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
@@ -60,10 +49,25 @@ dependencies {
     // Spring Cache
     implementation 'org.springframework.boot:spring-boot-starter-cache'
 
+    // mysql for production
     runtimeOnly 'com.mysql:mysql-connector-j'
+
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
+
+    // test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'com.h2database:h2:2.2.224'
+
+    testImplementation 'org.testcontainers:junit-jupiter:1.17.6'
+    testImplementation 'com.redis.testcontainers:testcontainers-redis-junit-jupiter:1.4.6'
+
+    // Rest Assured
+    testImplementation 'io.rest-assured:spring-mock-mvc:5.4.0'
+
+    // docker compose support
+    developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
 
 tasks.named('test') {

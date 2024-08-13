@@ -30,8 +30,26 @@ public class UserService {
     return user.getNickname();
   }
 
+  @Transactional
+  public void changeNickName(AppUser appUser, String nickName) {
+    User user = findAppUser(appUser);
+    if (user.getNickname().equals(nickName)) {
+      throw new PotendayException(ErrorCode.U001);
+    }
+
+    if (!checkAvailableNickname(nickName)) {
+      throw new PotendayException(ErrorCode.U001);
+    }
+
+    user.updateNickname(nickName);
+  }
+
   private User findAppUser(AppUser appUser) {
     return userRepository.findById(appUser.id())
         .orElseThrow(() -> new PotendayException(ErrorCode.U006));
+  }
+
+  public String getUserNickname(AppUser appUser) {
+    return userRepository.findNicknameById(appUser.id());
   }
 }

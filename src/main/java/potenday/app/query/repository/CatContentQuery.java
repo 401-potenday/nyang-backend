@@ -3,10 +3,15 @@ package potenday.app.query.repository;
 import static potenday.app.domain.cat.content.QCatContent.catContent;
 import static potenday.app.domain.cat.content.QCatContentImage.catContentImage;
 import static potenday.app.domain.cat.follow.QCatFollow.catFollow;
+import static potenday.app.domain.report.QCatContentReport.catContentReport;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -18,6 +23,10 @@ import potenday.app.api.content.search.DistanceOrder;
 import potenday.app.domain.auth.AppUser;
 import potenday.app.domain.cat.content.CatContent;
 import potenday.app.domain.cat.content.CatContentImage;
+import potenday.app.domain.cat.content.QCatContent;
+import potenday.app.domain.cat.follow.QCatFollow;
+import potenday.app.domain.report.CatContentReportStatus;
+import potenday.app.domain.report.QCatContentReport;
 
 @Component
 public class CatContentQuery {
@@ -42,7 +51,7 @@ public class CatContentQuery {
   public CatContent fetchContent(long contentId) {
     return queryFactory
         .selectFrom(catContent)
-        .where(eqContentId(contentId), notDeleted())
+        .where(eqContentId(contentId), notContentDeleted())
         .fetchOne();
   }
 
@@ -57,18 +66,20 @@ public class CatContentQuery {
     return catContent.id.eq(contentId);
   }
 
-  private BooleanExpression notDeleted() {
+  private BooleanExpression notContentDeleted() {
     return catContent.isDeleted.isFalse();
   }
 
   public Page<CatContent> fetchContentsBySearchCondition(AppUser appUser, ContentSearchCondition searchCondition, Pageable pageable) {
-
     var jpaQuery = queryFactory
         .selectFrom(catContent)
         .leftJoin(catFollow).on(catFollow.catContentId.eq(catContent.id))
+        .leftJoin(catContentReport).on(catContentReport.contentId.eq(catContent.id))
         .where(
             onlyFollow(appUser, searchCondition.follow()),
-            withInDistance(searchCondition.coordinationCondition())
+            withInDistance(searchCondition.coordinationCondition()),
+            notContentDeleted(),
+            isNotReportedOrAllRejected()
         );
 
     // 거리순 정렬
@@ -100,7 +111,6 @@ public class CatContentQuery {
 
   private BooleanExpression onlyFollow(AppUser appUser, Boolean follow) {
     if (appUser == null || follow == null || !follow) {
-      System.out.println("onlyFollow 선택하지 않았어!!");
       return null;
     }
     return catFollow.userId.eq(appUser.id());
@@ -142,5 +152,61 @@ public class CatContentQuery {
         .where(catFollow.catContentId.eq(catContentId))
         .fetchOne();
     return fetchResult != null ? fetchResult : 0;
+  }
+
+  private Predicate eqOwnerId(AppUser appUser) {
+    return catContent.userId.eq(appUser.id());
+  }
+
+  private BooleanExpression isNotReportedOrAllRejected() {
+    // 서브쿼리 작성
+    QCatContentReport subCatContentReport = new QCatContentReport("subCatContentReport");
+
+    // 서브쿼리를 통해 모든 상태가 "REJECT"가 아닌 콘텐츠 ID를 가져옵니다.
+    JPQLQuery<Long> subQuery = JPAExpressions.select(subCatContentReport.contentId)
+        .from(subCatContentReport)
+        .where(subCatContentReport.status.ne(CatContentReportStatus.REJECT))
+        .groupBy(subCatContentReport.contentId);
+
+    // 메인 쿼리에 서브쿼리를 사용하여 조건을 작성합니다.
+    return catContent.id.notIn(subQuery);
+  }
+
+  private BooleanExpression isReported(QCatContent catContent) {
+    QCatContentReport subCatContentReport = new QCatContentReport("subCatContentReport");
+
+    return JPAExpressions
+        .selectOne()
+        .from(subCatContentReport)
+        .where(
+            subCatContentReport.contentId.eq(catContent.id)
+                .and(subCatContentReport.status.ne(CatContentReportStatus.REJECT))
+        )
+        .exists();
+  }
+
+  public Page<Tuple> fetchMyContents(AppUser appUser, Pageable pageable) {
+    var jpaQuery = queryFactory
+        .select(
+            catContent,
+            isReported(catContent).as("isReported")
+        )
+        .from(catContent)
+        .leftJoin(catFollow).on(catFollow.catContentId.eq(catContent.id))
+        .leftJoin(catContentReport).on(catContentReport.contentId.eq(catContent.id))
+        .where(
+            eqOwnerId(appUser),
+            notContentDeleted()
+        )
+        .groupBy(catContent.id)
+        .orderBy(catContent.createdAt.desc());
+
+    long totalCount = jpaQuery.fetchCount();
+    var contents = jpaQuery
+        .offset(pageable.getOffset())
+        .limit(pageable.getPageSize())
+        .fetch();
+
+    return new PageImpl<>(contents, pageable, totalCount);
   }
 }

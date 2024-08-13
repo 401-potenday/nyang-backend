@@ -5,12 +5,14 @@ import static potenday.app.global.cache.CacheConst.CAT_CONTENT_COMMENTS_COUNT;
 import static potenday.app.global.cache.CacheConst.CAT_CONTENT_COMMENTS;
 import static potenday.app.global.cache.CacheConst.CAT_CONTENT_COMMENT_LIKE_COUNT;
 import static potenday.app.global.cache.CacheConst.CAT_CONTENT_FOLLOW_COUNT;
+import static potenday.app.global.cache.CacheConst.SEARCH_ADDR;
 
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
 @EnableCaching
@@ -23,7 +25,8 @@ public class CachingConfig {
         CAT_CONTENT_FOLLOW_COUNT,
         CAT_CONTENT_COMMENT_LIKE_COUNT,
         CAT_CONTENT_COMMENTS,
-        CAT_COMMENT_USER_LIKED
+        CAT_COMMENT_USER_LIKED,
+        SEARCH_ADDR
     );
   }
 }
