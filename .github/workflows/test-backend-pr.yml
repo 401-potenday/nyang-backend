@@ -1,4 +1,4 @@
-name: backend-deploy-develop
+name: test-backend-pr
 on:
   pull_request:
       types:
