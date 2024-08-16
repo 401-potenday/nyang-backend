@@ -1,8 +1,5 @@
 name: backend-deploy-develop
 on: [push]
-env:
-  DOCKER_IMAGE: potenday-dev
-  ECR_REPOSITORY: 276943215323.dkr.ecr.ap-northeast-2.amazonaws.com
 jobs:
   code-test:
     runs-on: ubuntu-latest
@@ -52,8 +49,6 @@ jobs:
     steps:
       - name: Deploy to Dev
         uses: appleboy/ssh-action@master
-        env:
-          ECR_REGISTRY: ${{ needs.docker-build-and-push.outputs.ecr_registry }}
         with:
           host: ${{ secrets.DEV_TARGET_HOST }}
           username: ${{ secrets.DEV_SSH_USERNAME }}
