@@ -55,10 +55,10 @@ jobs:
         env:
           ECR_REGISTRY: ${{ needs.docker-build-and-push.outputs.ecr_registry }}
         with:
-          host: ${{ secrets.TARGET_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT }}
+          host: ${{ secrets.DEV_TARGET_HOST }}
+          username: ${{ secrets.DEV_SSH_USERNAME }}
+          key: ${{ secrets.DEV_SSH_PRIVATE_KEY }}
+          port: ${{ secrets.DEV_SSH_PORT }}
           script: |
             aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ needs.docker-build-and-push.outputs.ecr_registry }}
             docker compose pull && docker compose up -d
