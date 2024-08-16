@@ -1,5 +1,8 @@
 name: backend-deploy-develop
-on: [push]
+on:
+  push:
+    branches:
+      - develop
 jobs:
   code-test:
     runs-on: ubuntu-latest
