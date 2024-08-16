@@ -1,9 +1,6 @@
 name: backend-deploy-develop
 run-name: ${{ github.actor }} is learning GitHub Actions
-on:
-  push:
-    branches:
-      - 'develop'
+on: [push]
 env:
   DOCKER_IMAGE: potenday-dev
   ECR_REPOSITORY: 276943215323.dkr.ecr.ap-northeast-2.amazonaws.com
