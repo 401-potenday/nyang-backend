@@ -51,7 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to Dev
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.DEV_TARGET_HOST }}
           username: ${{ secrets.DEV_SSH_USERNAME }}
