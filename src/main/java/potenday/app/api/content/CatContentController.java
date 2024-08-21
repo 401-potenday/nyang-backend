@@ -110,6 +110,7 @@ public class CatContentController {
       @RequestParam(name = "distance_order", required = false) DistanceOrder distanceOrder,
       @RequestParam(name = "range", required = false, defaultValue = "1000") Double range,
       @RequestParam(name = "created_order", required = false, defaultValue = "desc") CreateTimeOrder createTimeOrder,
+      @RequestParam(name = "addr", required = false) String fullAddr,
       @PageableDefault(page = 1) Pageable pageable
   ) {
     ContentSearchCondition searchCondition = ContentSearchCondition.builder()
@@ -121,6 +122,7 @@ public class CatContentController {
             .centerLon(centerLon)
             .range(range)
             .build())
+        .fullAddrName(fullAddr)
         .build();
     CatContentSummaries contentSummariesResponse = readCatContentService.findContentsWithSearchCondition(
         appUser,
