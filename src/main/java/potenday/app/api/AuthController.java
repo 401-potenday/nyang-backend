@@ -2,6 +2,7 @@ package potenday.app.api;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,9 +19,12 @@ import potenday.app.domain.AppTokenService;
 import potenday.app.domain.auth.AppUser;
 import potenday.app.domain.auth.AuthenticationPrincipal;
 import potenday.app.domain.auth.OAuthAuthenticationService;
+import potenday.app.domain.auth.OptionalAuthenticationPrincipal;
+import potenday.app.domain.user.User;
 import potenday.app.oauth.OAuthClient;
 import potenday.app.oauth.OAuthMember;
 import potenday.app.oauth.OAuthUri;
+import potenday.app.oauth.OAuthUserId;
 
 @RestController
 @Slf4j
@@ -75,6 +79,15 @@ public class AuthController {
       @Valid @RequestBody LogoutTokenRequest logoutTokenRequest
   ) {
     appTokenService.removeRefreshToken(appUser, logoutTokenRequest);
+    return ApiResponse.success();
+  }
+
+  @DeleteMapping("/auth/leave/user")
+  public ApiResponse<Void> deleteAccount(
+      @AuthenticationPrincipal AppUser appUser,
+      @Valid @RequestBody TokenRequest tokenRequest
+  ) {
+    oAuthAuthenticationService.deleteAccount(appUser, tokenRequest);
     return ApiResponse.success();
   }
 }

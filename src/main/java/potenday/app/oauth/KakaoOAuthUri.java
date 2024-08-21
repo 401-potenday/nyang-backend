@@ -16,6 +16,7 @@ public class KakaoOAuthUri implements OAuthUri {
     return kakaoProperties.getOauthEndpointUri()
         + "?response_type=code"
         + "&client_id=" + kakaoProperties.getClientId()
-        + "&redirect_uri=" + redirectUri;
+        + "&redirect_uri=" + redirectUri
+        + "&prompt=login";
   }
 }

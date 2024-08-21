@@ -43,7 +43,11 @@ public class KakaoOAuthClient implements OAuthClient {
     try {
       JsonNode jsonNode = objectMapper.readTree(response.getBody());
       long id = jsonNode.get("id").asLong();
-      return OAuthMember.from(String.valueOf(id), oAuthToken.getRefreshToken());
+      return OAuthMember.from(
+          String.valueOf(id),
+          oAuthToken.getAccessToken(),
+          oAuthToken.getRefreshToken()
+      );
     } catch (JsonProcessingException e) {
       throw new PotendayException(ErrorCode.L002);
     }
@@ -54,6 +58,12 @@ public class KakaoOAuthClient implements OAuthClient {
     return getKakaoToken(code, redirectUri);
   }
 
+  @Override
+  public OAuthUserId unlink(String accessToken) {
+    var httpEntity = new HttpEntity<>(null, kakaoUserRequestHeader(accessToken));
+    var responseEntity = restTemplate.postForEntity(kakaoProperties.getOauthUnlinkUri(), httpEntity, OAuthUserId.class);
+    return responseEntity.getBody();
+  }
 
   private OAuthToken getKakaoToken(String code, String redirectUri) {
     // set header

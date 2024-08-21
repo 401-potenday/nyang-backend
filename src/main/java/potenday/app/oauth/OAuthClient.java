@@ -8,4 +8,5 @@ public interface OAuthClient {
 
   OAuthToken getToken(String code, String redirectUri);
 
+  OAuthUserId unlink(String accessToken);
 }
