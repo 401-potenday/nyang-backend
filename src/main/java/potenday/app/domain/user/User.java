@@ -1,5 +1,7 @@
 package potenday.app.domain.user;
 
+import static potenday.app.global.error.ErrorCode.*;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -81,6 +83,16 @@ public class User extends BaseTimeEntity {
     }
   }
 
+  public void markDelete() {
+    if (isWithDraw) {
+      throw new PotendayException(A001);
+    }
+
+    isWithDraw = true;
+    deletedAt = LocalDateTime.now();
+    activateStatus = UserActivateStatus.DELETED;
+  }
+
   private void setActive() {
     this.activateStatus = UserActivateStatus.ACTIVATE;
   }
@@ -91,11 +103,11 @@ public class User extends BaseTimeEntity {
 
   public void authorizationCheck() {
     if (!isActive() || this.nickname == null) {
-      throw new PotendayException(ErrorCode.A005);
+      throw new PotendayException(A005);
     }
 
     if (isWithDraw) {
-      throw new PotendayException(ErrorCode.A004);
+      throw new PotendayException(A004);
     }
   }
 }

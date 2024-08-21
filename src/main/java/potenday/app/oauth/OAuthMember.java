@@ -3,7 +3,11 @@ package potenday.app.oauth;
 import potenday.app.domain.user.User;
 import potenday.app.domain.user.UserOAuthProvider;
 
-public record OAuthMember(String oauthUid, String refreshToken) {
+public record OAuthMember(
+    String oauthUid,
+    String accessToken,
+    String refreshToken
+) {
 
   public User toUser(final String userOAuthProvider) {
     return User.builder()
@@ -12,7 +16,7 @@ public record OAuthMember(String oauthUid, String refreshToken) {
         .build();
   }
 
-  public static OAuthMember from(final String oauthUid, final String refreshToken) {
-    return new OAuthMember(oauthUid, refreshToken);
+  public static OAuthMember from(final String oauthUid,final String accessToken, final String refreshToken) {
+    return new OAuthMember(oauthUid, accessToken, refreshToken);
   }
 }

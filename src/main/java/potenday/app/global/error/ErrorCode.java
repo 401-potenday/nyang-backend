@@ -23,6 +23,7 @@ public enum ErrorCode {
   L003("L003", "code 는 필수입니다.", HttpStatus.BAD_REQUEST),
   L004("L004", "redirectUri 는 필수입니다. ", HttpStatus.BAD_REQUEST),
   L005("L005","refreeshToken 는 필수입니다. ", HttpStatus.BAD_REQUEST),
+  L006("L006", "이미 탈퇴한 유저거나, 잘못된 접근입니다. ", HttpStatus.BAD_REQUEST),
 
   // 컨텐츠
   C001("C001", "존재하지 않는 고양이 성격입니다.", HttpStatus.BAD_REQUEST),
