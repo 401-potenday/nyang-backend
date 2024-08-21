@@ -58,5 +58,5 @@ jobs:
           key: ${{ secrets.DEV_SSH_PRIVATE_KEY }}
           port: ${{ secrets.DEV_SSH_PORT }}
           script: |
-            aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ needs.docker-build-and-push.outputs.ecr_registry }}
+            sh awslogin.sh
             docker compose pull && docker compose up -d
