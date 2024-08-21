@@ -8,15 +8,6 @@ public record ContentSearchCondition(
     Boolean follow,
     DistanceOrder distanceOrder,
     CreateTimeOrder createTimeOrder,
-    CoordinationCondition coordinationCondition
-) {
-
-  public static ContentSearchCondition of(
-      Boolean follow,
-      DistanceOrder distanceOrder,
-      CreateTimeOrder createTimeOrder,
-      CoordinationCondition coordinationCondition
-  ) {
-    return new ContentSearchCondition(follow, distanceOrder, createTimeOrder, coordinationCondition);
-  }
-}
+    CoordinationCondition coordinationCondition,
+    String fullAddrName
+) { }

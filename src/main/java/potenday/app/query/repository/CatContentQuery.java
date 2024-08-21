@@ -12,6 +12,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -76,6 +77,7 @@ public class CatContentQuery {
         .leftJoin(catFollow).on(catFollow.catContentId.eq(catContent.id))
         .leftJoin(catContentReport).on(catContentReport.contentId.eq(catContent.id))
         .where(
+            eqAddr(searchCondition.fullAddrName()),
             onlyFollow(appUser, searchCondition.follow()),
             withInDistance(searchCondition.coordinationCondition()),
             notContentDeleted(),
@@ -94,6 +96,13 @@ public class CatContentQuery {
         .fetch();
 
     return new PageImpl<>(contents, pageable, totalCount);
+  }
+
+  private Predicate eqAddr(String addr) {
+    if (addr == null) {
+      return null;
+    }
+    return catContent.jibunAddress.jibunAddrName.contains(addr);
   }
 
   private OrderSpecifier<Double> orderByDistance(ContentSearchCondition searchCondition) {
