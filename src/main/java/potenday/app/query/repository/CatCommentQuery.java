@@ -12,6 +12,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.StringExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -162,11 +163,11 @@ public class CatCommentQuery {
     Long fetchResult = queryFactory
         .select(catComment.count())
         .from(catComment)
-        .join(catContent).on(catContent.id.eq(catComment.catContentId))
+        .join(catContent).on(catComment.catContentId.eq(catContent.id))
         .where(
-            contentNotDeleted(),
+            catComment.catContentId.eq(catContentId),
             commentNotDeleted(),
-            eqContentId(catContentId)
+            contentNotDeleted()
         )
         .fetchOne();
     return fetchResult != null ? fetchResult : 0;
@@ -230,7 +231,16 @@ public class CatCommentQuery {
                 catContent.id,
                 catContent.name,
                 catCommentLike.count().as("commentLikedCount"),
-                catCommentLike.isNotNull().as("isCatCommentLiked"),
+                new CaseBuilder()
+                    .when(JPAExpressions.selectOne()
+                        .from(catCommentLike)
+                        .where(
+                            catCommentLike.catCommentLikeId.catCommentId.eq(catComment.id)
+                                .and(catCommentLike.catCommentLikeId.userId.eq(userId))
+                        ).exists())
+                    .then(true)
+                    .otherwise(false)
+                    .as("isCatCommentLiked"),
                 user.nickname.as("userNickName"),
                 catComment.userId.eq(userId)
             )
@@ -238,10 +248,7 @@ public class CatCommentQuery {
         .from(catComment)
         .join(catContent).on(catContent.id.eq(catComment.catContentId))
         .join(user).on(catComment.userId.eq(user.id))
-        // 나의 댓글 좋아요 유무
-        .leftJoin(catCommentLike).on(
-            catCommentLike.catCommentLikeId.catCommentId.eq(catComment.id)
-                .and(catCommentLike.catCommentLikeId.userId.eq(userId)))
+
         // 댓글 좋아요 수
         .leftJoin(catCommentLike).on(catCommentLike.catCommentLikeId.catCommentId.eq(catComment.id))
         .where(
@@ -250,15 +257,10 @@ public class CatCommentQuery {
             eqContentId(contentId)
         )
         .groupBy(
-            catComment.id,
-            catContent.name,
-            new CaseBuilder()
-                .when(catCommentLike.isNotNull())
-                .then(true)
-                .otherwise(false)
+            catComment.id
         )
         .offset(pageable.getOffset())
-        .limit(pageable.getPageSize() + 1)
+        .limit(pageable.getPageSize())
         .orderBy(catComment.createdAt.desc())
         .fetch();
 

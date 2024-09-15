@@ -31,15 +31,6 @@ public class ReadCatCommentService {
   }
 
   @Transactional(readOnly = true)
-  public Page<CatCommentWithUserNicknameAndImages> findCatComments(Long contentId, Pageable pageable) {
-    boolean existed = catContentQuery.existsByContentId(contentId);
-    if (!existed) {
-      throw new PotendayException(ErrorCode.C004);
-    }
-    return catCommentQuery.findAllCommentWithPaging(contentId, pageable);
-  }
-
-  @Transactional(readOnly = true)
   public Page<CatCommentWithIsLikedAndAuthor> findCatComments(AppUser appUser, long contentId, Pageable pageable) {
     if (appUser == null || appUser.id() == 0) {
       return catCommentQuery.findCommentsNoAuth(contentId, pageable);
