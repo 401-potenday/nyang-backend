@@ -277,35 +277,37 @@ public class CatCommentQuery {
   public Slice<CatCommentWithIsLikedAndLikeCount> findUserComments(long userId, Pageable pageable) {
     int pageSize = pageable.getPageSize();
     List<CatCommentWithIsLikedAndLikeCount> fetchResult = queryFactory
-        .select(Projections.constructor(CatCommentWithIsLikedAndLikeCount.class,
+        .select(
+            Projections.constructor(CatCommentWithIsLikedAndLikeCount.class,
                 catComment,
                 catContent.id,
                 catContent.name,
                 catCommentLike.count().as("commentLikedCount"),
-                catCommentLike.isNotNull().as("isCatCommentLiked")
+                new CaseBuilder()
+                    .when(JPAExpressions.selectOne()
+                        .from(catCommentLike)
+                        .where(
+                            catCommentLike.catCommentLikeId.catCommentId.eq(catComment.id)
+                                .and(catCommentLike.catCommentLikeId.userId.eq(userId))
+                        ).exists())
+                    .then(true)
+                    .otherwise(false)
+                    .as("isCatCommentLiked")
             )
         )
         .from(catComment)
         .join(catContent).on(catContent.id.eq(catComment.catContentId))
         .join(user).on(catComment.userId.eq(user.id))
-        // 나의 댓글 좋아요 유무
-        .leftJoin(catCommentLike).on(
-            catCommentLike.catCommentLikeId.catCommentId.eq(catComment.id)
-                .and(catCommentLike.catCommentLikeId.userId.eq(userId)))
+
         // 댓글 좋아요 수
         .leftJoin(catCommentLike).on(catCommentLike.catCommentLikeId.catCommentId.eq(catComment.id))
         .where(
-            eqActiveUserId(userId),
             contentNotDeleted(),
-            commentNotDeleted()
+            commentNotDeleted(),
+            eqActiveUserId(userId)
         )
         .groupBy(
-            catComment.id,
-            catContent.name,
-            new CaseBuilder()
-                .when(catCommentLike.isNotNull())
-                .then(true)
-                .otherwise(false)
+            catComment.id
         )
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize() + 1)
