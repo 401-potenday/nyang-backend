@@ -47,7 +47,11 @@ public record CatCommentResponse(
 
     @JsonProperty("isAuthor")
     @JsonInclude(Include.NON_NULL)
-    Boolean isAuthor
+    Boolean isAuthor,
+
+    @JsonProperty("catName")
+    @JsonInclude(Include.NON_NULL)
+    String name
 ) {
 
   public static CatCommentResponse from(
@@ -66,7 +70,8 @@ public record CatCommentResponse(
         catCommentWithIsLikedAndAuthor.userNickName(),
         catCommentWithIsLikedAndAuthor.commentLikedCount(),
         catCommentWithIsLikedAndAuthor.isCatCommentLiked(),
-        catCommentWithIsLikedAndAuthor.isAuthor()
+        catCommentWithIsLikedAndAuthor.isAuthor(),
+        null
     );
   }
 
@@ -86,7 +91,8 @@ public record CatCommentResponse(
         commentWithUserNicknameAndImages.userNickname(),
         commentLikeCount,
         isCatCommentLiked,
-        isAuthor
+        isAuthor,
+        null
     );
   }
 
@@ -104,7 +110,8 @@ public record CatCommentResponse(
         null,
         commentWithIsLikedAndLikeCount.commentLikedCount(),
         commentWithIsLikedAndLikeCount.isCatCommentLiked(),
-        null
+        null,
+        commentWithIsLikedAndLikeCount.catName()
     );
   }
 
@@ -118,6 +125,7 @@ public record CatCommentResponse(
               .collect(Collectors.toList()),
           commentInfoDto.catCommentCreatedAt().toString(),
           commentInfoDto.catCommentUpdatedAt().toString(),
+          null,
           null,
           null,
           null,
