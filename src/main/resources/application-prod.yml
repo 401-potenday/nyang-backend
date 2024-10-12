@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ENC(GcGrgOnI6WEIm1yt4hCqMvNJrmDjnF/wPHTskMPoB5Ke0FQBzTlBJx5EnpjGbjt90sr+GV01lFQNBKl6wLs8Xg==)
-    username: ENC(dltaReNsKvakVzwihkixNLVnwIrN4Hrf)
-    password: ENC(G1jv1nj5+8IT556IHyRvUhjpTtH6fuuI)
+    url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DB_NAME}?serverTimezone=Asia/Seoul
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
   data:
     redis:
       host: ${REDIS_HOST}
@@ -27,6 +27,7 @@ oauth:
     oauth-endpoint-uri: https://kauth.kakao.com/oauth/authorize
     oauth-token-issue-uri: https://kauth.kakao.com/oauth/token
     oauth-userinfo-uri: https://kapi.kakao.com/v2/user/me
+    oauth-unlink-uri: https://kapi.kakao.com/v1/user/unlink
     response-type: code
 
 jwt:
