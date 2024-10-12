@@ -7,32 +7,44 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import java.time.Instant;
 import java.util.Date;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import potenday.app.domain.auth.TokenProvider.TokenType;
 
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(
+    classes = {TokenProperty.class, TokenProvider.class}
+)
+@TestPropertySource(
+    locations = "classpath:application.yaml",
+
+    // 빠른 테스트를 위해 만료시간은 기존 properties 값을 override 함
+    properties = {
+        "jwt.access-time-sec = 1",
+        "jwt.refresh-time-sec = 2"
+    }
+)
 class TokenProviderTest {
 
-  // 초 단위
-  public static final int TOKEN_LIFE_TIME = 2;
-  //  private final String userId = "jone@example.com";
   private final long userId = 1;
 
+  @Autowired
   TokenProperty tokenProperty;
-  TokenProvider tokenProvider;
 
-  @BeforeEach
-  void setUp() {
-    tokenProperty = new TokenProperty();
-    tokenProperty.setTokenLifeTime(TOKEN_LIFE_TIME);
-    tokenProvider = new TokenProvider(tokenProperty);
-  }
+  @Autowired
+  TokenProvider tokenProvider;
 
   @Test
   @DisplayName("TokenProvider 를 이용해 AccessToken 을 발행한다.")
   void issueAccessToken() {
+
+
     // When
     String accessToken = tokenProvider.issueAccessToken(userId);
 
@@ -82,7 +94,7 @@ class TokenProviderTest {
     String accessToken = tokenProvider.issueAccessToken(userId);
 
     // 1초후
-    Thread.sleep(100);
+    Thread.sleep(10);
 
     DecodedJWT decodedJWT = JWT.decode(accessToken);
     Date expiresAt = decodedJWT.getExpiresAt();

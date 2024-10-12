@@ -17,11 +17,13 @@ public enum ErrorCode {
   U005("U005", "한글과 영문 문자만 허용됩니다.", HttpStatus.BAD_REQUEST),
   U006("U006", "존재하지 않는 유저입니다.", HttpStatus.NOT_FOUND),
 
-  // 로그인
+  // 로그인, 로그아웃
   L001("L001","지원하지 않는 OAuth Provider", HttpStatus.BAD_REQUEST),
   L002("L002", "내부 사용자 정보를 가져오는 데 문제가 발생하였습니다. ", HttpStatus.INTERNAL_SERVER_ERROR),
   L003("L003", "code 는 필수입니다.", HttpStatus.BAD_REQUEST),
   L004("L004", "redirectUri 는 필수입니다. ", HttpStatus.BAD_REQUEST),
+  L005("L005","refreeshToken 는 필수입니다. ", HttpStatus.BAD_REQUEST),
+  L006("L006", "이미 탈퇴한 유저거나, 잘못된 접근입니다. ", HttpStatus.BAD_REQUEST),
 
   // 컨텐츠
   C001("C001", "존재하지 않는 고양이 성격입니다.", HttpStatus.BAD_REQUEST),
@@ -41,7 +43,10 @@ public enum ErrorCode {
   C010("C010",  "고양이 이름이 없어요. 고양이 이름은 필수입니다.", HttpStatus.BAD_REQUEST),
   C011("C011", "고양이 이름은 최소 2 글자, 최대 10 글자 사이어야 합니다.", HttpStatus.BAD_REQUEST),
   C012("C012", "이모지 번호는 필수입니다. 이모지 번호 1 ~ 18", HttpStatus.BAD_REQUEST),
+  C013("C013", "고양이 성격을 넣어주세요", HttpStatus.BAD_REQUEST),
   C016("C016", "글은 300자를 넘을 수 없습니다.", HttpStatus.BAD_REQUEST),
+
+  C017("C017", "이미 삭제된 컨텐츠 입니다.", HttpStatus.BAD_REQUEST),
 
   // 컨텐츠 - 위도,경도
   CG01("CG01", "위도(lat)는 -90과 90 사이어야 합니다.", HttpStatus.BAD_REQUEST),
@@ -59,13 +64,22 @@ public enum ErrorCode {
   // 컨텐츠 - 이미지
   CI01("CI01", "잘못된 형식의 이미지 업로드입니다. 이미지의 uri 주소는 http:// 또는 https:// 로 시작해야 합니다.", HttpStatus.BAD_REQUEST),
   CI02("CI02", "최소 하나 이상의 고양이 사진이 필요합니다.", HttpStatus.BAD_REQUEST),
+  CI03("CI03", "이미지 Key 는 UUID(v4) 포맷이어야 합니다.", HttpStatus.BAD_REQUEST),
 
   F001("F001", "이미 팔로우를 했어요", HttpStatus.BAD_REQUEST),
   F002("F002", "컨텐츠 번호 (contentId) 는 필수입니다.", HttpStatus.BAD_REQUEST),
 
+  // 컨텐츠 - 신고
+  R001("R001", "이미 처리 중인 신고입니다.", HttpStatus.CONFLICT),
+  R002("R002", "신고 내용 입력은 필수입니다.", HttpStatus.BAD_REQUEST),
+  R003("R003", "신고 내용 입력은 최대 300자 까지 입니다.", HttpStatus.BAD_REQUEST),
+  R004("R004", "컨텐츠 번호(contentId)는 필수입니다.", HttpStatus.BAD_REQUEST),
+  R005("R005", "신고 카테고리는 지정은 필수입니다.", HttpStatus.BAD_REQUEST),
+  R006("R006", "신고가 접수된 게시물입니다.", HttpStatus.FORBIDDEN),
+
   // 댓글
-  D002("D001", "댓글 번호 (commentId) 는 필수입니다.", HttpStatus.BAD_REQUEST),
-  D003("D002", "이미 삭제되었거나, 해당 댓글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+  D002("D002", "댓글 번호 (commentId) 는 필수입니다.", HttpStatus.BAD_REQUEST),
+  D003("D003", "이미 삭제되었거나, 해당 댓글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 
   // 인증, 권한
   A001("A001", "잘못된 접근입니다. ", HttpStatus.UNAUTHORIZED),

@@ -6,6 +6,7 @@ public interface OAuthClient {
 
   OAuthMember findOAuthMember(TokenRequest tokenRequest);
 
-  OAuthTokenResponse getToken(String code, String redirectUri);
+  OAuthToken getToken(String code, String redirectUri);
 
+  OAuthUserId unlink(String accessToken);
 }

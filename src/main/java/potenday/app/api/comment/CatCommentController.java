@@ -1,7 +1,6 @@
 package potenday.app.api.comment;
 
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -10,17 +9,18 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import potenday.app.api.common.ApiResponse;
 import potenday.app.api.common.PageContent;
+import potenday.app.api.common.ScrollContent;
 import potenday.app.domain.auth.AppUser;
 import potenday.app.domain.auth.AuthenticationPrincipal;
 import potenday.app.domain.auth.OptionalAuthenticationPrincipal;
 import potenday.app.domain.cat.comment.CatCommentService;
 import potenday.app.domain.cat.commentlikes.CatCommentLikeService;
 import potenday.app.domain.cat.support.CatCommentEngagementsCalculator;
-import potenday.app.query.model.comment.CatCommentWithUserNicknameAndImages;
 import potenday.app.query.service.ReadCatCommentService;
 
 @Slf4j
@@ -47,35 +47,17 @@ public class CatCommentController {
       @PathVariable long contentId,
       @PageableDefault(page = 1) Pageable pageable
   ) {
-    PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize());
-    var catCommentWithUserNicknameAndImages = readCatCommentService.findCatComments(contentId, pageRequest);
-
-    List<CatCommentResponse> catCommentResponses = catCommentWithUserNicknameAndImages.stream()
-        .map(it -> {
-          long commentLikesCount = catCommentEngagementsCalculator.getCommentLikesCount(it.catCommentId());
-          if (appUser != null) {
-            boolean commentLiked = catCommentEngagementsCalculator.isCommentLiked(appUser.id(), it.catCommentId());
-            return CatCommentResponse.of(it, commentLikesCount, commentLiked);
-          }
-          return CatCommentResponse.of(it, commentLikesCount, false);
-        })
-        .toList();
-
-    // createResponse
+    Pageable pageRequest = PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize());
+    var catComments = readCatCommentService.findCatComments(appUser, contentId, pageRequest);
     PageContent<CatCommentResponse> pageContent = new PageContent<>(
-        catCommentResponses,
-        catCommentWithUserNicknameAndImages.getPageable().getPageNumber(),
-        catCommentWithUserNicknameAndImages.getPageable().getPageSize(),
-        catCommentWithUserNicknameAndImages.getTotalPages(),
-        catCommentWithUserNicknameAndImages.getTotalElements(),
-        catCommentWithUserNicknameAndImages.isLast()
+        catComments.map(CatCommentResponse::from).toList(),
+        catComments.getPageable().getPageNumber(),
+        catComments.getPageable().getPageSize(),
+        catComments.getTotalPages(),
+        catComments.getTotalElements(),
+        catComments.isLast()
     );
-
     return ApiResponse.success(pageContent);
-  }
-
-  private boolean isCommentLiked(AppUser appUser, CatCommentWithUserNicknameAndImages it) {
-    return catCommentEngagementsCalculator.isCommentLiked(appUser.id(), it.catCommentId());
   }
 
   @PostMapping("/contents/{contentId}/comments")
@@ -90,6 +72,29 @@ public class CatCommentController {
         addCatCommentRequest.toAddCatCommentImages()
     );
     return ApiResponse.success(new AddCatCommentResponse(addedCommentId));
+  }
+
+  @PutMapping("/comments/{commentId}")
+  public ApiResponse<Void> updateComment(
+      @AuthenticationPrincipal AppUser appUser,
+      @PathVariable long commentId,
+      @Valid @RequestBody UpdateCatCommentRequest updateCatCommentRequest
+  ) {
+    catCommentService.updateCatComment(
+        appUser,
+        updateCatCommentRequest.toUpdateComment(commentId),
+        updateCatCommentRequest.toUpdateImages()
+    );
+    return ApiResponse.success();
+  }
+
+  @DeleteMapping("/comments/{commentId}")
+  public ApiResponse<Void> deleteComment(
+      @AuthenticationPrincipal AppUser appUser,
+      @PathVariable long commentId
+  ) {
+    catCommentService.deleteComment(appUser, commentId);
+    return ApiResponse.success();
   }
 
   @PostMapping("/contents/{contentId}/comments/likes")
@@ -110,5 +115,23 @@ public class CatCommentController {
   ) {
     catCommentLikeService.cancelCommentLike(appUser, cancelCommentLikeRequest.toCancelComment(contentId));
     return ApiResponse.success("ok");
+  }
+
+  @GetMapping("/contents/{contentId}/comments/{commentId}")
+  public ApiResponse<CatCommentResponse> findComment(
+      @PathVariable long contentId,
+      @PathVariable long commentId
+  ) {
+    var catCommentInfoDto = readCatCommentService.findComment(contentId, commentId);
+    return ApiResponse.success(CatCommentResponse.of(catCommentInfoDto));
+  }
+
+  @GetMapping("/comments/me")
+  public ApiResponse<ScrollContent<?>> getMyComments(
+      @AuthenticationPrincipal AppUser appUser,
+      @PageableDefault(page = 1) Pageable pageable
+  ) {
+    PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize());
+    return ApiResponse.success(readCatCommentService.findMyCatComments(appUser, pageRequest));
   }
 }
