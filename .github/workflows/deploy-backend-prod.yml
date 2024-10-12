@@ -59,4 +59,5 @@ jobs:
           port: ${{ secrets.PROD_SSH_PORT }}
           script: |
             sh awslogin.sh
+            cd application
             docker compose pull && docker compose up -d
