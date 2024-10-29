@@ -17,17 +17,20 @@ import potenday.app.domain.auth.OptionalAuthenticationPrincipalArgumentResolver;
 import potenday.app.domain.auth.TokenProvider;
 import potenday.app.global.converter.CreateTimeOrderConverter;
 import potenday.app.global.converter.DistanceOrderConverter;
+import potenday.app.global.filter.CustomRequestLoggingFilter;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
   private final AuthenticationTokenService authenticationTokenService;
   private final TokenProvider tokenProvider;
+  private final CustomRequestLoggingFilter filter;
 
   public WebConfig(AuthenticationTokenService authenticationTokenService,
-      TokenProvider tokenProvider) {
+      TokenProvider tokenProvider, CustomRequestLoggingFilter filter) {
     this.authenticationTokenService = authenticationTokenService;
     this.tokenProvider = tokenProvider;
+    this.filter = filter;
   }
 
   @Override
@@ -99,7 +102,6 @@ public class WebConfig implements WebMvcConfigurer {
 
   @Bean
   public CommonsRequestLoggingFilter logFilter() {
-    CommonsRequestLoggingFilter filter = new CommonsRequestLoggingFilter();
     filter.setIncludeQueryString(true);
     filter.setIncludeClientInfo(true);
     filter.setIncludePayload(true);
