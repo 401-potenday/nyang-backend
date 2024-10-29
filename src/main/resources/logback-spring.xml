@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+  <!-- OTEL Appender -->
+  <appender name="OTEL"
+    class="io.opentelemetry.instrumentation.logback.appender.v1_0.OpenTelemetryAppender">
+    <captureExperimentalAttributes>true</captureExperimentalAttributes>
+    <captureCodeAttributes>true</captureCodeAttributes>
+    <captureMarkerAttribute>true</captureMarkerAttribute>
+    <captureKeyValuePairAttributes>true</captureKeyValuePairAttributes>
+    <captureLoggerContext>true</captureLoggerContext>
+  </appender>
+
+  <!-- 콘솔로그 -->
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>
+        %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+      </pattern>
+    </encoder>
+  </appender>
+
+  <!-- 콘솔로그 + Trace  -->
+  <appender name="CONSOLE_OTEL" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>
+        logback : %d{HH:mm:ss.SSS} trace_id=%X{trace_id} span_id=%X{span_id} trace_flags=%X{trace_flags} %msg%n
+      </pattern>
+    </encoder>
+  </appender>
+
+  <springProfile name="local">
+    <logger name="org.springframework.web.filter.CommonsRequestLoggingFilter">
+      <level value="DEBUG" />
+    </logger>
+
+    <root level="DEBUG">
+      <appender-ref ref="CONSOLE"/>
+    </root>
+  </springProfile>
+
+  <springProfile name="dev">
+    <logger name="org.springframework.web.filter.CommonsRequestLoggingFilter">
+      <level value="DEBUG" />
+      <appender-ref ref="OTEL"/>
+    </logger>
+
+    <root level="INFO">
+      <appender-ref ref="OTEL"/>
+      <appender-ref ref="CONSOLE"/>
+    </root>
+  </springProfile>
+
+  <springProfile name="prod">
+    <appender-ref ref="OTEL"/>
+  </springProfile>
+
+</configuration>
