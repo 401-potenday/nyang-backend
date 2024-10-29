@@ -38,9 +38,6 @@ dependencies {
     // lombok
     compileOnly 'org.projectlombok:lombok'
 
-    implementation "ch.qos.logback.contrib:logback-json-classic:0.1.5"
-    implementation "ch.qos.logback.contrib:logback-jackson:0.1.5"
-
     // encrypt properties
     implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
 
@@ -75,7 +72,6 @@ dependencies {
 
     // observability
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:2.9.0'
 
     // logback appender
     runtimeOnly 'io.opentelemetry.instrumentation:opentelemetry-logback-appender-1.0:2.9.0-alpha'
