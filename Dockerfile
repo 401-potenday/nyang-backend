@@ -7,16 +7,19 @@ COPY build.gradle .
 COPY settings.gradle .
 
 COPY src src
-
 RUN chmod +x ./gradlew && \
+    ./gradlew clean && \
     ./gradlew build --exclude-task test
 
 RUN rm -rf /root/.gradle
 
-
-FROM amazoncorretto:17-alpine3.19-jdk
+FROM eclipse-temurin:17-jre
 WORKDIR /app
 
 COPY --from=build /workspace/app/build/libs/*.jar app.jar
+COPY --from=build /workspace/app/build/agent/*.jar opentelemetry-javaagent.jar
 
-ENTRYPOINT ["java","-jar","app.jar"]
+ENTRYPOINT [ \
+    "java", "-javaagent:/app/opentelemetry-javaagent.jar",\
+    "-jar",\
+    "app.jar"]

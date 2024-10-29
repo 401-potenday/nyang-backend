@@ -15,6 +15,7 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+    agent
 }
 
 repositories {
@@ -68,8 +69,28 @@ dependencies {
     // docker compose support
     developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // observability
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // logback appender
+    runtimeOnly 'io.opentelemetry.instrumentation:opentelemetry-logback-appender-1.0:2.9.0-alpha'
+    runtimeOnly 'io.opentelemetry.instrumentation:opentelemetry-logback-mdc-1.0:2.9.0-alpha'
+    agent 'io.opentelemetry.javaagent:opentelemetry-javaagent:2.9.0'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+tasks.register('copyAgent', Copy) {
+    from configurations.agent {
+        rename "opentelemetry-javaagent-.*\\.jar", "opentelemetry-javaagent.jar"
+    }
+    into layout.buildDirectory.dir("agent")
+}
+
+bootJar {
+    dependsOn copyAgent
+    archiveFileName = 'app.jar'
 }
