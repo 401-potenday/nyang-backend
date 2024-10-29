@@ -20,7 +20,6 @@
     </encoder>
   </appender>
 
-  <!-- 콘솔로그 + Trace  -->
   <appender name="CONSOLE_OTEL" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
       <pattern>
@@ -30,29 +29,30 @@
   </appender>
 
   <springProfile name="local">
-    <logger name="org.springframework.web.filter.CommonsRequestLoggingFilter">
-      <level value="DEBUG" />
-    </logger>
-
+    <logger name="potenday.app.global.filter.CustomRequestLoggingFilter" level="DEBUG"/>
     <root level="DEBUG">
       <appender-ref ref="CONSOLE"/>
     </root>
   </springProfile>
 
   <springProfile name="dev">
-    <logger name="org.springframework.web.filter.CommonsRequestLoggingFilter">
-      <level value="DEBUG" />
+    <logger name="potenday.app.global.filter.CustomRequestLoggingFilter" level="DEBUG">
       <appender-ref ref="OTEL"/>
     </logger>
 
     <root level="INFO">
       <appender-ref ref="OTEL"/>
-      <appender-ref ref="CONSOLE"/>
     </root>
   </springProfile>
 
   <springProfile name="prod">
-    <appender-ref ref="OTEL"/>
+    <logger name="potenday.app.global.filter.CustomRequestLoggingFilter" level="DEBUG">
+      <appender-ref ref="OTEL"/>
+    </logger>
+
+    <root level="INFO">
+      <appender-ref ref="OTEL"/>
+    </root>
   </springProfile>
 
 </configuration>
